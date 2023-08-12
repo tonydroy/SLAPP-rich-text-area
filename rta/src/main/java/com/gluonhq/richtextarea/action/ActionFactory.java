@@ -155,4 +155,11 @@ public class ActionFactory {
     public Action decorate(Decoration... decorations) {
         return new BasicAction(control, action -> ACTION_CMD_FACTORY.decorate(decorations));
     }
+
+    //my addition
+    public Action insertTestText(String text) {
+        return new BasicAction(control, action -> ACTION_CMD_FACTORY.insertText(text));
+    }
+    //
+
 }
