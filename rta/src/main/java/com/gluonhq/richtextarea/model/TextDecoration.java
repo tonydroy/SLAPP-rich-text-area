@@ -239,8 +239,9 @@ public class TextDecoration implements Decoration {
         public Builder presets() {
             foreground = Color.BLACK;
             background = Color.TRANSPARENT;
-            fontFamily = "System";
-            fontSize = 14.0;
+   //         fontFamily = "System";          original setting, changed by me
+            fontFamily = "Times New Roman";
+            fontSize = 16.0;                  //originally 14.0  see corresponding changes in view menus
             fontPosture = FontPosture.REGULAR;
             fontWeight = FontWeight.NORMAL;
             strikethrough = false;
