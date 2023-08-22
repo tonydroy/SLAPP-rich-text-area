@@ -111,23 +111,7 @@ import java.util.function.Function;
 
 import static com.gluonhq.richtextarea.viewmodel.RichTextAreaViewModel.Direction;
 import static java.util.Map.entry;
-import static javafx.scene.input.KeyCode.A;
-import static javafx.scene.input.KeyCode.B;
-import static javafx.scene.input.KeyCode.BACK_SPACE;
-import static javafx.scene.input.KeyCode.C;
-import static javafx.scene.input.KeyCode.DELETE;
-import static javafx.scene.input.KeyCode.DOWN;
-import static javafx.scene.input.KeyCode.END;
-import static javafx.scene.input.KeyCode.ENTER;
-import static javafx.scene.input.KeyCode.HOME;
-import static javafx.scene.input.KeyCode.I;
-import static javafx.scene.input.KeyCode.LEFT;
-import static javafx.scene.input.KeyCode.RIGHT;
-import static javafx.scene.input.KeyCode.TAB;
-import static javafx.scene.input.KeyCode.UP;
-import static javafx.scene.input.KeyCode.V;
-import static javafx.scene.input.KeyCode.X;
-import static javafx.scene.input.KeyCode.Z;
+import static javafx.scene.input.KeyCode.*;
 import static javafx.scene.input.KeyCombination.ALT_ANY;
 import static javafx.scene.input.KeyCombination.ALT_DOWN;
 import static javafx.scene.input.KeyCombination.CONTROL_ANY;
@@ -139,6 +123,7 @@ import static javafx.scene.text.FontPosture.REGULAR;
 import static javafx.scene.text.FontWeight.BOLD;
 import static javafx.scene.text.FontWeight.NORMAL;
 
+
 public class RichTextAreaSkin extends SkinBase<RichTextArea> {
 
     interface ActionBuilder extends Function<KeyEvent, ActionCmd>{}
@@ -148,6 +133,13 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
 
     private static final ActionCmdFactory ACTION_CMD_FACTORY = new ActionCmdFactory();
 
+    private Map<KeyCombination, String> keyPressedCharMap = KeyMaps.getInstance().getKeyPressedCharMap();
+    private Map<Character, String> keyTypedCharMap = KeyMaps.getInstance().getKeyTypedCharMap();
+
+    private void updateCharMaps() {
+        keyTypedCharMap = KeyMaps.getInstance().getKeyTypedCharMap();
+        keyPressedCharMap = KeyMaps.getInstance().getKeyPressedCharMap();
+    }
     private final Map<KeyCombination, ActionBuilder> INPUT_MAP = Map.ofEntries(
         entry( new KeyCodeCombination(RIGHT, SHIFT_ANY, ALT_ANY, CONTROL_ANY, SHORTCUT_ANY), e -> ACTION_CMD_FACTORY.caretMove(Direction.FORWARD, e)),
         entry( new KeyCodeCombination(LEFT,  SHIFT_ANY, ALT_ANY, CONTROL_ANY, SHORTCUT_ANY), e -> ACTION_CMD_FACTORY.caretMove(Direction.BACK, e)),
@@ -242,6 +234,43 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
             FontPosture fontPosture = decoration.getFontPosture() == ITALIC ? REGULAR : ITALIC;
             return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).fontPosture(fontPosture).build());
         }),
+        // to change keyboards
+        entry( new KeyCodeCombination(DIGIT5, SHORTCUT_DOWN),                                 e -> {
+            KeyMaps.getInstance().setMaps(KeyMaps.SetMaps.BASE);
+            updateCharMaps();
+            TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
+            String fontFamily = "Noto Sans";
+            return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).fontFamily(fontFamily).build());
+        }),
+        entry( new KeyCodeCombination(DIGIT6, SHORTCUT_DOWN),                                 e -> {
+            KeyMaps.getInstance().setMaps(KeyMaps.SetMaps.ITALIC_AND_SANS);
+            updateCharMaps();
+            TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
+            String fontFamily = "Noto Sans Math";
+            return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).fontFamily(fontFamily).build());
+        }),
+        entry( new KeyCodeCombination(DIGIT7, SHORTCUT_DOWN),                                 e -> {
+            KeyMaps.getInstance().setMaps(KeyMaps.SetMaps.SCRIPT_AND_SANS);
+            updateCharMaps();
+            TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
+            String fontFamily = "Noto Sans Math";
+            return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).fontFamily(fontFamily).build());
+        }),
+        entry( new KeyCodeCombination(DIGIT8, SHORTCUT_DOWN),                                 e -> {
+            KeyMaps.getInstance().setMaps(KeyMaps.SetMaps.ITALIC_AND_BLACKBOARD);
+            updateCharMaps();
+            TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
+            String fontFamily = "Noto Sans Math";
+            return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).fontFamily(fontFamily).build());
+        }),
+        entry( new KeyCodeCombination(DIGIT9, SHORTCUT_DOWN),                                 e -> {
+            KeyMaps.getInstance().setMaps(KeyMaps.SetMaps.GREEK_AND_FRAKTUR);
+            updateCharMaps();
+            TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
+            String fontFamily = "Noto Sans Math";
+            return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).fontFamily(fontFamily).build());
+        }),
+        //
         entry(new KeyCodeCombination(TAB, SHIFT_ANY),                                        e -> {
             ParagraphDecoration decoration = viewModel.getDecorationAtParagraph();
             Paragraph paragraph = viewModel.getParagraphWithCaret().orElse(null);
@@ -788,6 +817,15 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     }
 
     private void keyPressedListener(KeyEvent e) {
+        //Print character assigned to key
+        for (KeyCombination kc : keyPressedCharMap.keySet()) {
+            if (kc.match(e)) {
+                String text = keyPressedCharMap.get(kc);
+                sendKeyboardContent(text);
+                e.consume();
+                return;
+            }
+        }
         // Find an applicable action and execute it if found
         for (KeyCombination kc : INPUT_MAP.keySet()) {
             if (kc.match(e)) {
@@ -803,6 +841,17 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     }
 
     private void keyTypedListener(KeyEvent e) {
+        String text;
+        //Print character mapped to key
+        for (Character key : keyTypedCharMap.keySet()) {
+            boolean test = Character.toString(key).equals(e.getCharacter());
+            if (test) {
+                text = keyTypedCharMap.get(key);
+                sendKeyboardContent(text);
+                e.consume();
+                return;
+            }
+        }
         if (isCharOnly(e)) {
             if ("\t".equals(e.getCharacter())) {
                 ParagraphDecoration decoration = viewModel.getDecorationAtParagraph();
@@ -813,13 +862,18 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                     return;
                 }
             }
-            paragraphListView.resetCaret();
-            if (viewModel.getSelection().isDefined()) {
-                execute(ACTION_CMD_FACTORY.replaceText(e.getCharacter()));
-            } else {
-                execute(ACTION_CMD_FACTORY.insertText(e.getCharacter()));
-            }
+            text = e.getCharacter();
+            sendKeyboardContent(text);
             e.consume();
+        }
+    }
+
+    private void sendKeyboardContent(String s) {
+        paragraphListView.resetCaret();
+        if (viewModel.getSelection().isDefined()) {
+            execute(ACTION_CMD_FACTORY.replaceText(s));
+        } else {
+            execute(ACTION_CMD_FACTORY.insertText(s));
         }
     }
 

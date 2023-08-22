@@ -160,6 +160,10 @@ public class ActionFactory {
     public Action insertTestText(String text) {
         return new BasicAction(control, action -> ACTION_CMD_FACTORY.insertText(text));
     }
+
+    public Action insertUnicode(String codeString) {
+        return new BasicAction(control, action -> ACTION_CMD_FACTORY.insertUnicode(codeString));
+    }
     //
 
 }

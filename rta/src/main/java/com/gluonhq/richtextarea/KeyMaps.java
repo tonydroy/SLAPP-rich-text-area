@@ -34,12 +34,12 @@ public class KeyMaps {
     private static KeyMaps singletonKeyMaps;
 
     private Map<KeyCombination, String> keyPressedCharMap;
-    private Map<KeyCombination, String> keyTypedCharMap;
-    private final Map<KeyCombination, String> BASE_MAP = Collections.emptyMap();
+    private Map<Character, String> keyTypedCharMap;
+    private final Map<Character, String> BASE_MAP = Collections.emptyMap();
     private final Map<KeyCombination, String> BASE_ALT_MAP = initializeBaseAltMap();
-    private final Map<KeyCombination, String> ITALIC_MAP = initializeItalicMap();
-    private final Map<KeyCombination, String> SCRIPT_MAP = initializeScriptMap();
-    private final Map<KeyCombination, String> GREEK_MAP = initializeGreekMap();
+    private final Map<Character, String> ITALIC_MAP = initializeItalicMap();
+    private final Map<Character, String> SCRIPT_MAP = initializeScriptMap();
+    private final Map<Character, String> GREEK_MAP = initializeGreekMap();
     private final Map<KeyCombination, String> SANS_MAP = initializeSansMap();
     private final Map<KeyCombination, String> BLACKBOARD_MAP = initializeBlackboardMap();
     private final Map<KeyCombination, String> FRAKTUR_MAP = initializeFrakturMap();
@@ -60,14 +60,14 @@ public class KeyMaps {
         tempMap.putAll(SPECIAL_CHARACTER_MAP);
         tempMap.putAll(SANS_MAP);
         SPECIAL_WITH_SANS_MAP = Collections.unmodifiableMap(tempMap);
-        tempMap.clear();
-        tempMap.putAll(SPECIAL_CHARACTER_MAP);
-        tempMap.putAll(BLACKBOARD_MAP);
-        SPECIAL_WITH_BLACKBOARD_MAP = Collections.unmodifiableMap(tempMap);
-        tempMap.clear();
-        tempMap.putAll(SPECIAL_CHARACTER_MAP);
-        tempMap.putAll(FRAKTUR_MAP);
-        SPECIAL_WITH_FRAKTUR_MAP = Collections.unmodifiableMap(tempMap);
+        Map<KeyCombination, String> tempMap1 = new HashMap();
+        tempMap1.putAll(SPECIAL_CHARACTER_MAP);
+        tempMap1.putAll(BLACKBOARD_MAP);
+        SPECIAL_WITH_BLACKBOARD_MAP = Collections.unmodifiableMap(tempMap1);
+        Map<KeyCombination, String> tempMap2 = new HashMap();
+        tempMap2.putAll(SPECIAL_CHARACTER_MAP);
+        tempMap2.putAll(FRAKTUR_MAP);
+        SPECIAL_WITH_FRAKTUR_MAP = Collections.unmodifiableMap(tempMap2);
 
         setMaps(SetMaps.BASE);
     }
@@ -109,168 +109,172 @@ public class KeyMaps {
                 entry (new KeyCodeCombination(KeyCode.L, KeyCombination.ALT_DOWN), "\u2112")   //script L
         );
     }
-    private Map<KeyCombination, String> initializeItalicMap() {
+    private Map<Character, String> initializeItalicMap() {
         return Map.ofEntries(
-                entry (new KeyCodeCombination(KeyCode.A), "\ud835\udc4e"),
-                entry (new KeyCodeCombination(KeyCode.B), "\ud835\udc4f"),
-                entry (new KeyCodeCombination(KeyCode.C), "\ud835\udc50"),
-                entry (new KeyCodeCombination(KeyCode.D), "\ud835\udc51"),
-                entry (new KeyCodeCombination(KeyCode.E), "\ud835\udc52"),
-                entry (new KeyCodeCombination(KeyCode.F), "\ud835\udc53"),
-                entry (new KeyCodeCombination(KeyCode.G), "\ud835\udc54"),
-                entry (new KeyCodeCombination(KeyCode.H), "\u210e"),
-                entry (new KeyCodeCombination(KeyCode.I), "\ud835\udc56"),
-                entry (new KeyCodeCombination(KeyCode.J), "\ud835\udc57"),
-                entry (new KeyCodeCombination(KeyCode.K), "\ud835\udc58"),
-                entry (new KeyCodeCombination(KeyCode.L), "\ud835\udc59"),
-                entry (new KeyCodeCombination(KeyCode.M), "\ud835\udc5a"),
-                entry (new KeyCodeCombination(KeyCode.N), "\ud835\udc5b"),
-                entry (new KeyCodeCombination(KeyCode.O), "\ud835\udc5c"),
-                entry (new KeyCodeCombination(KeyCode.P), "\ud835\udc5d"),
-                entry (new KeyCodeCombination(KeyCode.Q), "\ud835\udc5e"),
-                entry (new KeyCodeCombination(KeyCode.R), "\ud835\udc5f"),
-                entry (new KeyCodeCombination(KeyCode.S), "\ud835\udc60"),
-                entry (new KeyCodeCombination(KeyCode.T), "\ud835\udc61"),
-                entry (new KeyCodeCombination(KeyCode.U), "\ud835\udc62"),
-                entry (new KeyCodeCombination(KeyCode.V), "\ud835\udc63"),
-                entry (new KeyCodeCombination(KeyCode.W), "\ud835\udc64"),
-                entry (new KeyCodeCombination(KeyCode.X), "\ud835\udc65"),
-                entry (new KeyCodeCombination(KeyCode.Y), "\ud835\udc66"),
-                entry (new KeyCodeCombination(KeyCode.Z), "\ud835\udc67"),
-                entry (new KeyCodeCombination(KeyCode.A, KeyCombination.SHIFT_DOWN), "\ud835\udc34"),
-                entry (new KeyCodeCombination(KeyCode.B, KeyCombination.SHIFT_DOWN), "\ud835\udc35"),
-                entry (new KeyCodeCombination(KeyCode.C, KeyCombination.SHIFT_DOWN), "\ud835\udc36"),
-                entry (new KeyCodeCombination(KeyCode.D, KeyCombination.SHIFT_DOWN), "\ud835\udc37"),
-                entry (new KeyCodeCombination(KeyCode.E, KeyCombination.SHIFT_DOWN), "\ud835\udc38"),
-                entry (new KeyCodeCombination(KeyCode.F, KeyCombination.SHIFT_DOWN), "\ud835\udc39"),
-                entry (new KeyCodeCombination(KeyCode.G, KeyCombination.SHIFT_DOWN), "\ud835\udc3a"),
-                entry (new KeyCodeCombination(KeyCode.H, KeyCombination.SHIFT_DOWN), "\ud835\udc3b"),
-                entry (new KeyCodeCombination(KeyCode.I, KeyCombination.SHIFT_DOWN), "\ud835\udc3c"),
-                entry (new KeyCodeCombination(KeyCode.J, KeyCombination.SHIFT_DOWN), "\ud835\udc3d"),
-                entry (new KeyCodeCombination(KeyCode.K, KeyCombination.SHIFT_DOWN), "\ud835\udc3e"),
-                entry (new KeyCodeCombination(KeyCode.L, KeyCombination.SHIFT_DOWN), "\ud835\udc3f"),
-                entry (new KeyCodeCombination(KeyCode.M, KeyCombination.SHIFT_DOWN), "\ud835\udc40"),
-                entry (new KeyCodeCombination(KeyCode.N, KeyCombination.SHIFT_DOWN), "\ud835\udc41"),
-                entry (new KeyCodeCombination(KeyCode.O, KeyCombination.SHIFT_DOWN), "\ud835\udc42"),
-                entry (new KeyCodeCombination(KeyCode.P, KeyCombination.SHIFT_DOWN), "\ud835\udc43"),
-                entry (new KeyCodeCombination(KeyCode.Q, KeyCombination.SHIFT_DOWN), "\ud835\udc44"),
-                entry (new KeyCodeCombination(KeyCode.R, KeyCombination.SHIFT_DOWN), "\ud835\udc45"),
-                entry (new KeyCodeCombination(KeyCode.S, KeyCombination.SHIFT_DOWN), "\ud835\udc46"),
-                entry (new KeyCodeCombination(KeyCode.T, KeyCombination.SHIFT_DOWN), "\ud835\udc47"),
-                entry (new KeyCodeCombination(KeyCode.U, KeyCombination.SHIFT_DOWN), "\ud835\udc48"),
-                entry (new KeyCodeCombination(KeyCode.V, KeyCombination.SHIFT_DOWN), "\ud835\udc49"),
-                entry (new KeyCodeCombination(KeyCode.W, KeyCombination.SHIFT_DOWN), "\ud835\udc4a"),
-                entry (new KeyCodeCombination(KeyCode.X, KeyCombination.SHIFT_DOWN), "\ud835\udc4b"),
-                entry (new KeyCodeCombination(KeyCode.Y, KeyCombination.SHIFT_DOWN), "\ud835\udc4c"),
-                entry (new KeyCodeCombination(KeyCode.Z, KeyCombination.SHIFT_DOWN), "\ud835\udc4d")
+                entry ('a', "\ud835\udc4e"),
+                entry ('b', "\ud835\udc4f"),
+                entry ('c', "\ud835\udc50"),
+                entry ('d', "\ud835\udc51"),
+                entry ('e', "\ud835\udc52"),
+                entry ('f', "\ud835\udc53"),
+                entry ('g', "\ud835\udc54"),
+                entry ('h', "\u210e"),
+                entry ('i', "\ud835\udc56"),
+                entry ('j', "\ud835\udc57"),
+                entry ('k', "\ud835\udc58"),
+                entry ('l', "\ud835\udc59"),
+                entry ('m', "\ud835\udc5a"),
+                entry ('n', "\ud835\udc5b"),
+                entry ('o', "\ud835\udc5c"),
+                entry ('p', "\ud835\udc5d"),
+                entry ('q', "\ud835\udc5e"),
+                entry ('r', "\ud835\udc5f"),
+                entry ('s', "\ud835\udc60"),
+                entry ('t', "\ud835\udc61"),
+                entry ('u', "\ud835\udc62"),
+                entry ('v', "\ud835\udc63"),
+                entry ('w', "\ud835\udc64"),
+                entry ('x', "\ud835\udc65"),
+                entry ('y', "\ud835\udc66"),
+                entry ('z', "\ud835\udc67"),
+                entry ('A', "\ud835\udc34"),
+                entry ('B', "\ud835\udc35"),
+                entry ('C', "\ud835\udc36"),
+                entry ('D', "\ud835\udc37"),
+                entry ('E', "\ud835\udc38"),
+                entry ('F', "\ud835\udc39"),
+                entry ('G', "\ud835\udc3a"),
+                entry ('H', "\ud835\udc3b"),
+                entry ('I', "\ud835\udc3c"),
+                entry ('J', "\ud835\udc3d"),
+                entry ('K', "\ud835\udc3e"),
+                entry ('L', "\ud835\udc3f"),
+                entry ('M', "\ud835\udc40"),
+                entry ('N', "\ud835\udc41"),
+                entry ('O', "\ud835\udc42"),
+                entry ('P', "\ud835\udc43"),
+                entry ('Q', "\ud835\udc44"),
+                entry ('R', "\ud835\udc45"),
+                entry ('S', "\ud835\udc46"),
+                entry ('T', "\ud835\udc47"),
+                entry ('U', "\ud835\udc48"),
+                entry ('V', "\ud835\udc49"),
+                entry ('W', "\ud835\udc4a"),
+                entry ('X', "\ud835\udc4b"),
+                entry ('Y', "\ud835\udc4c"),
+                entry ('Z', "\ud835\udc4d")
         );
     }
-    private Map<KeyCombination, String> initializeScriptMap() {
+    private Map<Character, String> initializeScriptMap() {
         return Map.ofEntries(
-                entry (new KeyCodeCombination(KeyCode.A), "\ud835\udcb6"),
-                entry (new KeyCodeCombination(KeyCode.B), "\ud835\udcb7"),
-                entry (new KeyCodeCombination(KeyCode.C), "\ud835\udcb8"),
-                entry (new KeyCodeCombination(KeyCode.D), "\ud835\udcb9"),
-                entry (new KeyCodeCombination(KeyCode.E), "\u212f"),
-                entry (new KeyCodeCombination(KeyCode.F), "\ud835\udcbb"),
-                entry (new KeyCodeCombination(KeyCode.G), "\u210a"),
-                entry (new KeyCodeCombination(KeyCode.H), "\ud835\udcbd"),
-                entry (new KeyCodeCombination(KeyCode.I), "\ud835\udcbe"),
-                entry (new KeyCodeCombination(KeyCode.J), "\ud835\udcbf"),
-                entry (new KeyCodeCombination(KeyCode.K), "\ud835\udcc0"),
-                entry (new KeyCodeCombination(KeyCode.L), "\ud835\udcc1"),
-                entry (new KeyCodeCombination(KeyCode.M), "\ud835\udcc2"),
-                entry (new KeyCodeCombination(KeyCode.N), "\ud835\udcc3"),
-                entry (new KeyCodeCombination(KeyCode.O), "\u2134"),
-                entry (new KeyCodeCombination(KeyCode.P), "\ud835\udcc5"),
-                entry (new KeyCodeCombination(KeyCode.Q), "\ud835\udcc6"),
-                entry (new KeyCodeCombination(KeyCode.R), "\ud835\udcc7"),
-                entry (new KeyCodeCombination(KeyCode.S), "\ud835\udcc8"),
-                entry (new KeyCodeCombination(KeyCode.T), "\ud835\udcc9"),
-                entry (new KeyCodeCombination(KeyCode.U), "\ud835\udcca"),
-                entry (new KeyCodeCombination(KeyCode.V), "\ud835\udccb"),
-                entry (new KeyCodeCombination(KeyCode.W), "\ud835\udccc"),
-                entry (new KeyCodeCombination(KeyCode.X), "\ud835\udccd"),
-                entry (new KeyCodeCombination(KeyCode.Y), "\ud835\udcce"),
-                entry (new KeyCodeCombination(KeyCode.Z), "\ud835\udccf"),
-                entry (new KeyCodeCombination(KeyCode.A, KeyCombination.SHIFT_DOWN), "\ud835\udc9c"),
-                entry (new KeyCodeCombination(KeyCode.B, KeyCombination.SHIFT_DOWN), "\u212c"),
-                entry (new KeyCodeCombination(KeyCode.C, KeyCombination.SHIFT_DOWN), "\ud835\udc9e"),
-                entry (new KeyCodeCombination(KeyCode.D, KeyCombination.SHIFT_DOWN), "\ud835\udc9f"),
-                entry (new KeyCodeCombination(KeyCode.E, KeyCombination.SHIFT_DOWN), "\u2130"),
-                entry (new KeyCodeCombination(KeyCode.F, KeyCombination.SHIFT_DOWN), "\u2131"),
-                entry (new KeyCodeCombination(KeyCode.G, KeyCombination.SHIFT_DOWN), "\ud835\udca2"),
-                entry (new KeyCodeCombination(KeyCode.H, KeyCombination.SHIFT_DOWN), "\u210b"),
-                entry (new KeyCodeCombination(KeyCode.I, KeyCombination.SHIFT_DOWN), "\u2110"),
-                entry (new KeyCodeCombination(KeyCode.J, KeyCombination.SHIFT_DOWN), "\ud835\udca5"),
-                entry (new KeyCodeCombination(KeyCode.K, KeyCombination.SHIFT_DOWN), "\ud835\udca6"),
-                entry (new KeyCodeCombination(KeyCode.L, KeyCombination.SHIFT_DOWN), "\u2112"),
-                entry (new KeyCodeCombination(KeyCode.M, KeyCombination.SHIFT_DOWN), "\u2133"),
-                entry (new KeyCodeCombination(KeyCode.N, KeyCombination.SHIFT_DOWN), "\ud835\udca9"),
-                entry (new KeyCodeCombination(KeyCode.O, KeyCombination.SHIFT_DOWN), "\ud835\udcaa"),
-                entry (new KeyCodeCombination(KeyCode.P, KeyCombination.SHIFT_DOWN), "\ud835\udcab"),
-                entry (new KeyCodeCombination(KeyCode.Q, KeyCombination.SHIFT_DOWN), "\ud835\udcac"),
-                entry (new KeyCodeCombination(KeyCode.R, KeyCombination.SHIFT_DOWN), "\u211b"),
-                entry (new KeyCodeCombination(KeyCode.S, KeyCombination.SHIFT_DOWN), "\ud835\udcae"),
-                entry (new KeyCodeCombination(KeyCode.T, KeyCombination.SHIFT_DOWN), "\ud835\udcaf"),
-                entry (new KeyCodeCombination(KeyCode.U, KeyCombination.SHIFT_DOWN), "\ud835\udcb0"),
-                entry (new KeyCodeCombination(KeyCode.V, KeyCombination.SHIFT_DOWN), "\ud835\udcb1"),
-                entry (new KeyCodeCombination(KeyCode.W, KeyCombination.SHIFT_DOWN), "\ud835\udcb2"),
-                entry (new KeyCodeCombination(KeyCode.X, KeyCombination.SHIFT_DOWN), "\ud835\udcb3"),
-                entry (new KeyCodeCombination(KeyCode.Y, KeyCombination.SHIFT_DOWN), "\ud835\udcb4"),
-                entry (new KeyCodeCombination(KeyCode.Z, KeyCombination.SHIFT_DOWN), "\ud835\udcb5")
+                entry ('a', "\ud835\udcb6"),
+                entry ('b', "\ud835\udcb7"),
+                entry ('c', "\ud835\udcb8"),
+                entry ('d', "\ud835\udcb9"),
+                entry ('e', "\u212f"),
+                entry ('f', "\ud835\udcbb"),
+                entry ('g', "\u210a"),
+                entry ('h', "\ud835\udcbd"),
+                entry ('i', "\ud835\udcbe"),
+                entry ('j', "\ud835\udcbf"),
+                entry ('k', "\ud835\udcc0"),
+                entry ('l', "\ud835\udcc1"),
+                entry ('m', "\ud835\udcc2"),
+                entry ('n', "\ud835\udcc3"),
+                entry ('o', "\u2134"),
+                entry ('p', "\ud835\udcc5"),
+                entry ('q', "\ud835\udcc6"),
+                entry ('r', "\ud835\udcc7"),
+                entry ('s', "\ud835\udcc8"),
+                entry ('t', "\ud835\udcc9"),
+                entry ('u', "\ud835\udcca"),
+                entry ('v', "\ud835\udccb"),
+                entry ('w', "\ud835\udccc"),
+                entry ('x', "\ud835\udccd"),
+                entry ('y', "\ud835\udcce"),
+                entry ('z', "\ud835\udccf"),
+                entry ('A', "\ud835\udc9c"),
+                entry ('B', "\u212c"),
+                entry ('C', "\ud835\udc9e"),
+                entry ('D', "\ud835\udc9f"),
+                entry ('E', "\u2130"),
+                entry ('F', "\u2131"),
+                entry ('G', "\ud835\udca2"),
+                entry ('H', "\u210b"),
+                entry ('I', "\u2110"),
+                entry ('J', "\ud835\udca5"),
+                entry ('K', "\ud835\udca6"),
+                entry ('L', "\u2112"),
+                entry ('M', "\u2133"),
+                entry ('N', "\ud835\udca9"),
+                entry ('O', "\ud835\udcaa"),
+                entry ('P', "\ud835\udcab"),
+                entry ('Q', "\ud835\udcac"),
+                entry ('R', "\u211b"),
+                entry ('S', "\ud835\udcae"),
+                entry ('T', "\ud835\udcaf"),
+                entry ('U', "\ud835\udcb0"),
+                entry ('V', "\ud835\udcb1"),
+                entry ('W', "\ud835\udcb2"),
+                entry ('X', "\ud835\udcb3"),
+                entry ('Y', "\ud835\udcb4"),
+                entry ('Z', "\ud835\udcb5")
         );
     }
-    private Map<KeyCombination, String> initializeGreekMap() {
+    private Map<Character, String> initializeGreekMap() {
         return Map.ofEntries(
-                entry (new KeyCodeCombination(KeyCode.A), "\u03b1"),
-                entry (new KeyCodeCombination(KeyCode.A, KeyCombination.SHIFT_DOWN), "\u0391"),
-                entry (new KeyCodeCombination(KeyCode.B), "\u03b2"),
-                entry (new KeyCodeCombination(KeyCode.B, KeyCombination.SHIFT_DOWN), "\u0392"),
-                entry (new KeyCodeCombination(KeyCode.G), "\u03b3"),
-                entry (new KeyCodeCombination(KeyCode.G, KeyCombination.SHIFT_DOWN), "\u0393"),
-                entry (new KeyCodeCombination(KeyCode.D), "\u03b4"),
-                entry (new KeyCodeCombination(KeyCode.D, KeyCombination.SHIFT_DOWN), "\u0394"),
-                entry (new KeyCodeCombination(KeyCode.E), "\u03b5"),
-                entry (new KeyCodeCombination(KeyCode.E, KeyCombination.SHIFT_DOWN), "\u0395"),
-                entry (new KeyCodeCombination(KeyCode.Z), "\u03b6"),
-                entry (new KeyCodeCombination(KeyCode.Z, KeyCombination.SHIFT_DOWN), "\u0396"),
-                entry (new KeyCodeCombination(KeyCode.H), "\u03b7"),
-                entry (new KeyCodeCombination(KeyCode.H, KeyCombination.SHIFT_DOWN), "\u0397"),
-                entry (new KeyCodeCombination(KeyCode.U), "\u03b8"),
-                entry (new KeyCodeCombination(KeyCode.U, KeyCombination.SHIFT_DOWN), "\u0398"),
-                entry (new KeyCodeCombination(KeyCode.I), "\u03b9"),
-                entry (new KeyCodeCombination(KeyCode.I, KeyCombination.SHIFT_DOWN), "\u0399"),
-                entry (new KeyCodeCombination(KeyCode.K), "\u03ba"),
-                entry (new KeyCodeCombination(KeyCode.K, KeyCombination.SHIFT_DOWN), "\u039a"),
-                entry (new KeyCodeCombination(KeyCode.L), "\u03bb"),
-                entry (new KeyCodeCombination(KeyCode.L, KeyCombination.SHIFT_DOWN), "\u039B"),
-                entry (new KeyCodeCombination(KeyCode.M), "\u03bc"),
-                entry (new KeyCodeCombination(KeyCode.M, KeyCombination.SHIFT_DOWN), "\u039c"),
-                entry (new KeyCodeCombination(KeyCode.N), "\u03bd"),
-                entry (new KeyCodeCombination(KeyCode.N, KeyCombination.SHIFT_DOWN), "\u039d"),
-                entry (new KeyCodeCombination(KeyCode.J), "\u03be"),
-                entry (new KeyCodeCombination(KeyCode.J, KeyCombination.SHIFT_DOWN), "\u039e"),
-                entry (new KeyCodeCombination(KeyCode.O), "\u03bf"),
-                entry (new KeyCodeCombination(KeyCode.O, KeyCombination.SHIFT_DOWN), "\u039f"),
-                entry (new KeyCodeCombination(KeyCode.P), "\u03c0"),
-                entry (new KeyCodeCombination(KeyCode.P, KeyCombination.SHIFT_DOWN), "\u03a0"),
-                entry (new KeyCodeCombination(KeyCode.R), "\u03c1"),
-                entry (new KeyCodeCombination(KeyCode.R, KeyCombination.SHIFT_DOWN), "\u03a1"),
-                entry (new KeyCodeCombination(KeyCode.S), "\u03c3"),
-                entry (new KeyCodeCombination(KeyCode.S, KeyCombination.SHIFT_DOWN), "\u03a3"),
-                entry (new KeyCodeCombination(KeyCode.T), "\u03c4"),
-                entry (new KeyCodeCombination(KeyCode.T, KeyCombination.SHIFT_DOWN), "\u03a4"),
-                entry (new KeyCodeCombination(KeyCode.Y), "\u03c5"),
-                entry (new KeyCodeCombination(KeyCode.Y, KeyCombination.SHIFT_DOWN), "\u03a5"),
-                entry (new KeyCodeCombination(KeyCode.F), "\u03c6"),
-                entry (new KeyCodeCombination(KeyCode.F, KeyCombination.SHIFT_DOWN), "\u03a6"),
-                entry (new KeyCodeCombination(KeyCode.X), "\u03c7"),
-                entry (new KeyCodeCombination(KeyCode.X, KeyCombination.SHIFT_DOWN), "\u03a7"),
-                entry (new KeyCodeCombination(KeyCode.C), "\u03c8"),
-                entry (new KeyCodeCombination(KeyCode.C, KeyCombination.SHIFT_DOWN), "\u03a8"),
-                entry (new KeyCodeCombination(KeyCode.V), "\u03c9"),
-                entry (new KeyCodeCombination(KeyCode.V, KeyCombination.SHIFT_DOWN), "\u03a9")
+                entry ('a', "\u03b1"),
+                entry ('A', "\u0391"),
+                entry ('b', "\u03b2"),
+                entry ('B', "\u0392"),
+                entry ('c', "\u03c8"),
+                entry ('C', "\u03a8"),
+                entry ('d', "\u03b4"),
+                entry ('D', "\u0394"),
+                entry ('e', "\u03b5"),
+                entry ('E', "\u0395"),
+                entry ('f', "\u03c6"),
+                entry ('F', "\u03a6"),
+                entry ('g', "\u03b3"),
+                entry ('G', "\u0393"),
+                entry ('h', "\u03b7"),
+                entry ('H', "\u0397"),
+                entry ('i', "\u03b9"),
+                entry ('I', "\u0399"),
+                entry ('j', "\u03be"),
+                entry ('J', "\u039e"),
+                entry ('k', "\u03ba"),
+                entry ('K', "\u039a"),
+                entry ('l', "\u03bb"),
+                entry ('L', "\u039B"),
+                entry ('m', "\u03bc"),
+                entry ('M', "\u039c"),
+                entry ('n', "\u03bd"),
+                entry ('N', "\u039d"),
+                entry ('o', "\u03bf"),
+                entry ('O', "\u039f"),
+                entry ('p', "\u03c0"),
+                entry ('P', "\u03a0"),
+                entry('q',""),
+                entry('Q',""),
+                entry ('r', "\u03c1"),
+                entry ('R', "\u03a1"),
+                entry ('s', "\u03c3"),
+                entry ('S', "\u03a3"),
+                entry ('t', "\u03c4"),
+                entry ('T', "\u03a4"),
+                entry ('u', "\u03b8"),
+                entry ('U', "\u0398"),
+                entry ('v', "\u03c9"),
+                entry ('V', "\u03a9"),
+                entry ('w',""),
+                entry ('W',""),
+                entry ('x', "\u03c7"),
+                entry ('X', "\u03a7"),
+                entry ('y', "\u03c5"),
+                entry ('Y', "\u03a5"),
+                entry ('z', "\u03b6"),
+                entry ('Z', "\u0396")
         );
     }
     private Map<KeyCombination, String> initializeSansMap() {
@@ -280,7 +284,7 @@ public class KeyMaps {
                 entry(new KeyCodeCombination(KeyCode.C, KeyCombination.ALT_DOWN), "\ud835\uddbc"),
                 entry(new KeyCodeCombination(KeyCode.D, KeyCombination.ALT_DOWN), "\ud835\uddbd"),
                 entry(new KeyCodeCombination(KeyCode.E, KeyCombination.ALT_DOWN), "\ud835\uddbe"),
-                entry(new KeyCodeCombination(KeyCode.F, KeyCombination.ALT_DOWN), "\ud835\uddbb"),
+                entry(new KeyCodeCombination(KeyCode.F, KeyCombination.ALT_DOWN), "\ud835\uddbf"),
                 entry(new KeyCodeCombination(KeyCode.G, KeyCombination.ALT_DOWN), "\ud835\uddc0"),
                 entry(new KeyCodeCombination(KeyCode.H, KeyCombination.ALT_DOWN), "\ud835\uddc1"),
                 entry(new KeyCodeCombination(KeyCode.I, KeyCombination.ALT_DOWN), "\ud835\uddc2"),
@@ -425,15 +429,15 @@ public class KeyMaps {
                 entry(new KeyCodeCombination(KeyCode.Y, KeyCombination.ALT_DOWN), "\ud835\udd6a"),
                 entry(new KeyCodeCombination(KeyCode.Z, KeyCombination.ALT_DOWN), "\ud835\udd6b"),
                 entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.ALT_DOWN), "\ud835\udfd8"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.ALT_DOWN), "\ud835\udfd9"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.ALT_DOWN), "\ud835\udfda"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.ALT_DOWN), "\ud835\udfdb"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.ALT_DOWN), "\ud835\udfdc"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.ALT_DOWN), "\ud835\udfdd"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.ALT_DOWN), "\ud835\udfde"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.ALT_DOWN), "\ud835\udfdf"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.ALT_DOWN), "\ud835\udfe0"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.ALT_DOWN), "\ud835\udfe1"),
+                entry(new KeyCodeCombination(KeyCode.DIGIT1, KeyCombination.ALT_DOWN), "\ud835\udfd9"),
+                entry(new KeyCodeCombination(KeyCode.DIGIT2, KeyCombination.ALT_DOWN), "\ud835\udfda"),
+                entry(new KeyCodeCombination(KeyCode.DIGIT3, KeyCombination.ALT_DOWN), "\ud835\udfdb"),
+                entry(new KeyCodeCombination(KeyCode.DIGIT4, KeyCombination.ALT_DOWN), "\ud835\udfdc"),
+                entry(new KeyCodeCombination(KeyCode.DIGIT5, KeyCombination.ALT_DOWN), "\ud835\udfdd"),
+                entry(new KeyCodeCombination(KeyCode.DIGIT6, KeyCombination.ALT_DOWN), "\ud835\udfde"),
+                entry(new KeyCodeCombination(KeyCode.DIGIT7, KeyCombination.ALT_DOWN), "\ud835\udfdf"),
+                entry(new KeyCodeCombination(KeyCode.DIGIT8, KeyCombination.ALT_DOWN), "\ud835\udfe0"),
+                entry(new KeyCodeCombination(KeyCode.DIGIT9, KeyCombination.ALT_DOWN), "\ud835\udfe1"),
                 entry(new KeyCodeCombination(KeyCode.A, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\ud835\udd38"),
                 entry(new KeyCodeCombination(KeyCode.B, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\ud835\udd39"),
                 entry(new KeyCodeCombination(KeyCode.C, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2102"),
@@ -469,7 +473,7 @@ public class KeyMaps {
                 entry(new KeyCodeCombination(KeyCode.EQUALS, KeyCombination.ALT_DOWN), "\u25bd"),                                                                 //meta vee
                 entry(new KeyCodeCombination(KeyCode.OPEN_BRACKET, KeyCombination.ALT_DOWN), "\u21d2"),                                                           //meta arrow
                 entry(new KeyCodeCombination(KeyCode.CLOSE_BRACKET, KeyCombination.ALT_DOWN), "\u21d4"),                                                          //meta double arrow
-                entry(new KeyCodeCombination(KeyCode.BACK_SLASH, KeyCombination.ALT_DOWN), "\u2ae8"),                                                             //meta bottom (too short)
+                entry(new KeyCodeCombination(KeyCode.BACK_SLASH, KeyCombination.ALT_DOWN), "\u234a"),                                                             //meta bottom
                 entry(new KeyCodeCombination(KeyCode.SEMICOLON, KeyCombination.ALT_DOWN), "\u22a2"),                                                              //proves
                 entry(new KeyCodeCombination(KeyCode.QUOTE, KeyCombination.ALT_DOWN), "\u22ac"),                                                                  //not proves
                 entry(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.ALT_DOWN), "\u22a8"),                                                                  //entails
@@ -551,7 +555,7 @@ public class KeyMaps {
     public Map<KeyCombination, String> getKeyPressedCharMap() {
         return keyPressedCharMap;
     }
-    public Map<KeyCombination, String> getKeyTypedCharMap() {
+    public Map<Character, String> getKeyTypedCharMap() {
         return keyTypedCharMap;
     }
 

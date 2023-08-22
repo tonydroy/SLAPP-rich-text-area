@@ -99,6 +99,12 @@ public final class ActionCmdFactory {
         return new ActionCmdInsertText(text);
     }
 
+    //inserted by TR
+    public ActionCmd insertUnicode(String codeString) {
+        return new ActionCmdInsertUnicode(codeString);
+    }
+    //
+
     public ActionCmd insertEmoji(Emoji emoji) {
         return new ActionCmdInsertEmoji(emoji, null);
     }

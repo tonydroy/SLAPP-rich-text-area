@@ -240,8 +240,8 @@ public class TextDecoration implements Decoration {
             foreground = Color.BLACK;
             background = Color.TRANSPARENT;
    //         fontFamily = "System";          original setting, changed by me
-            fontFamily = "Times New Roman";
-            fontSize = 16.0;                  //originally 14.0  see corresponding changes in view menus
+            fontFamily = "NOTO SANS";
+            fontSize = 15.0;                  //originally 14.0  see corresponding changes in view menus
             fontPosture = FontPosture.REGULAR;
             fontWeight = FontWeight.NORMAL;
             strikethrough = false;
