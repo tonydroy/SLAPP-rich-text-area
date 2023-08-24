@@ -58,6 +58,7 @@ import javafx.scene.text.Text;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -158,27 +159,36 @@ class RichListCell extends ListCell<Paragraph> {
             richTextAreaSkin.getViewModel().walkFragments((unit, decoration) -> {
                 if (decoration instanceof TextDecoration && !unit.isEmpty()) {
                     if (item.getDecoration().hasTableDecoration()) {
-                        // TODO REFACTORING: deal with units inside table cells
-                        String text = unit.getText();
-                        AtomicInteger s = new AtomicInteger();
-                        IntStream.iterate(text.indexOf(TextBuffer.ZERO_WIDTH_TABLE_SEPARATOR),
-                                        index -> index >= 0,
-                                        index -> text.indexOf(TextBuffer.ZERO_WIDTH_TABLE_SEPARATOR, index + 1))
-                                .boxed()
-                                .forEach(i -> {
-                                    String tableText = text.substring(s.getAndSet(i + 1), i + 1);
-                                    final Text textNode = buildText(tableText, (TextDecoration) decoration);
-                                    textNode.getProperties().put(TABLE_SEPARATOR, tp.get());
-                                    fragments.add(textNode);
-                                    positions.add(tp.addAndGet(tableText.length()));
-                                });
-                        if (s.get() < text.length()) {
-                            String tableText = text.substring(s.get()).replace("\n", TextBuffer.ZERO_WIDTH_TEXT);
-                            final Text textNode = buildText(tableText, (TextDecoration) decoration);
-                            textNode.getProperties().put(TABLE_SEPARATOR, tp.getAndAdd(tableText.length()));
-                            fragments.add(textNode);
-                            if (text.substring(s.get()).contains("\n")) {
-                                positions.add(tp.get());
+                        if (unit instanceof TextUnit) {
+                            String text = unit.getText();
+                            AtomicInteger s = new AtomicInteger();
+                            IntStream.iterate(text.indexOf(TextBuffer.ZERO_WIDTH_TABLE_SEPARATOR),
+                                            index -> index >= 0,
+                                            index -> text.indexOf(TextBuffer.ZERO_WIDTH_TABLE_SEPARATOR, index + 1))
+                                    .boxed()
+                                    .forEach(i -> {
+                                        String tableText = text.substring(s.getAndSet(i + 1), i + 1);
+                                        final Text textNode = buildText(tableText, (TextDecoration) decoration);
+                                        textNode.getProperties().put(TABLE_SEPARATOR, tp.get());
+                                        fragments.add(textNode);
+                                        positions.add(tp.addAndGet(tableText.length()));
+                                    });
+                            if (s.get() < text.length()) {
+                                String tableText = text.substring(s.get()).replace("\n", TextBuffer.ZERO_WIDTH_TEXT);
+                                final Text textNode = buildText(tableText, (TextDecoration) decoration);
+                                textNode.getProperties().put(TABLE_SEPARATOR, tp.getAndAdd(tableText.length()));
+                                fragments.add(textNode);
+                                if (text.substring(s.get()).contains("\n")) {
+                                    positions.add(tp.get());
+                                }
+                            }
+                        } else {
+                            final Node node = buildNode(unit, (TextDecoration) decoration);
+                            node.getProperties().put(TABLE_SEPARATOR, tp.getAndIncrement());
+                            fragments.add(node);
+                            length.addAndGet(unit.length());
+                            if (unit instanceof EmojiUnit) {
+                                richTextAreaSkin.nonTextNodes.incrementAndGet();
                             }
                         }
                     } else {
@@ -306,8 +316,8 @@ class RichListCell extends ListCell<Paragraph> {
         return imageView;
     }
 
-    void evictUnusedObjects() {
-        getParagraphTile().ifPresent(ParagraphTile::evictUnusedObjects);
+    void evictUnusedObjects(Set<Font> usedFonts, Set<Image> usedImages) {
+        getParagraphTile().ifPresent(tile -> tile.evictUnusedObjects(usedFonts, usedImages));
     }
 
     public void forwardDragEvent(MouseEvent e) {
@@ -327,6 +337,12 @@ class RichListCell extends ListCell<Paragraph> {
     public int getNextRowPosition(double x, boolean down) {
         return getParagraphTile()
                 .map(tile -> tile.getNextRowPosition(x, down))
+                .orElse(-1);
+    }
+
+    public int getNextTableCellPosition(boolean down) {
+        return getParagraphTile()
+                .map(tile -> tile.getNextTableCellPosition(down))
                 .orElse(-1);
     }
 

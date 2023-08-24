@@ -37,6 +37,7 @@ import com.gluonhq.richtextarea.model.Table;
 import com.gluonhq.richtextarea.model.TableDecoration;
 import com.gluonhq.richtextarea.model.TextBuffer;
 import com.gluonhq.richtextarea.model.TextDecoration;
+import com.gluonhq.richtextarea.model.UnitBuffer;
 import com.gluonhq.richtextarea.viewmodel.ActionCmd;
 import com.gluonhq.richtextarea.viewmodel.ActionCmdFactory;
 import com.gluonhq.richtextarea.viewmodel.RichTextAreaViewModel;
@@ -52,7 +53,6 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
@@ -88,9 +88,6 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -117,7 +114,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     interface ActionBuilder extends Function<KeyEvent, ActionCmd>{}
 
     // TODO need to find a better way to find next row caret position
-    private final RichTextAreaViewModel viewModel = new RichTextAreaViewModel(this::getNextRowPosition);
+    private final RichTextAreaViewModel viewModel = new RichTextAreaViewModel(this::getNextRowPosition, this::getNextTableCellPosition);
 
     private static final ActionCmdFactory ACTION_CMD_FACTORY = new ActionCmdFactory();
 
@@ -192,8 +189,8 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         entry( new KeyCodeCombination(LEFT,  SHIFT_ANY, ALT_ANY, CONTROL_ANY, SHORTCUT_ANY), e -> ACTION_CMD_FACTORY.caretMove(Direction.BACK, e)),
         entry( new KeyCodeCombination(DOWN,  SHIFT_ANY, ALT_ANY, SHORTCUT_ANY),              e -> ACTION_CMD_FACTORY.caretMove(Direction.DOWN, e)),
         entry( new KeyCodeCombination(UP,    SHIFT_ANY, ALT_ANY, SHORTCUT_ANY),              e -> ACTION_CMD_FACTORY.caretMove(Direction.UP, e)),
-        entry( new KeyCodeCombination(HOME,  SHIFT_ANY),                                     e -> ACTION_CMD_FACTORY.caretMove(Direction.FORWARD, e.isShiftDown(), false, true)),
-        entry( new KeyCodeCombination(END,   SHIFT_ANY),                                     e -> ACTION_CMD_FACTORY.caretMove(Direction.BACK, e.isShiftDown(), false, true)),
+        entry( new KeyCodeCombination(HOME,  SHIFT_ANY),                                     e -> ACTION_CMD_FACTORY.caretMove(Direction.BACK, e.isShiftDown(), false, true)),
+        entry( new KeyCodeCombination(END,   SHIFT_ANY),                                     e -> ACTION_CMD_FACTORY.caretMove(Direction.FORWARD, e.isShiftDown(), false, true)),
         entry( new KeyCodeCombination(A, SHORTCUT_DOWN),                                     e -> ACTION_CMD_FACTORY.selectAll()),
         entry( new KeyCodeCombination(C, SHORTCUT_DOWN),                                     e -> ACTION_CMD_FACTORY.copy()),
         entry( new KeyCodeCombination(X, SHORTCUT_DOWN),                                     e -> ACTION_CMD_FACTORY.cut()),
@@ -211,7 +208,9 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
             } else if (paragraph != null && paragraph.getStart() < paragraph.getEnd() &&
                     decoration != null && decoration.hasTableDecoration()) {
                 int caretPosition = viewModel.getCaretPosition();
-                Table table = new Table(viewModel.getTextBuffer().getText(paragraph.getStart(), paragraph.getEnd()),
+                UnitBuffer buffer = new UnitBuffer();
+                viewModel.walkFragments((u, d) -> buffer.append(u), paragraph.getStart(), paragraph.getEnd());
+                Table table = new Table(buffer,
                         paragraph.getStart(), decoration.getTableDecoration().getRows(), decoration.getTableDecoration().getColumns());
                 // move up/down rows
                 int nextCaretAt = table.getCaretAtNextRow(caretPosition, e.isShiftDown() ? Direction.UP : Direction.DOWN);
@@ -234,7 +233,9 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
             ParagraphDecoration decoration = viewModel.getDecorationAtParagraph();
             if (decoration != null && paragraph != null) {
                 if (decoration.hasTableDecoration()) {
-                    Table table = new Table(viewModel.getTextBuffer().getText(paragraph.getStart(), paragraph.getEnd()),
+                    UnitBuffer buffer = new UnitBuffer();
+                    viewModel.walkFragments((u, d) -> buffer.append(u), paragraph.getStart(), paragraph.getEnd());
+                    Table table = new Table(buffer,
                             paragraph.getStart(), decoration.getTableDecoration().getRows(), decoration.getTableDecoration().getColumns());
                     if (table.isCaretAtStartOfCell(caret)) {
                         // check backspace at beginning of each cell to prevent moving text from one cell to the other.
@@ -249,13 +250,39 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                     if (decoration.getGraphicType() != ParagraphDecoration.GraphicType.NONE) {
                         return ACTION_CMD_FACTORY.decorate(ParagraphDecoration.builder().fromDecoration(decoration).graphicType(ParagraphDecoration.GraphicType.NONE).build());
                     } else if (decoration.getIndentationLevel() > 0) {
+                        //decrease indentation level
                         return ACTION_CMD_FACTORY.decorate(ParagraphDecoration.builder().fromDecoration(decoration).indentationLevel(decoration.getIndentationLevel() - 1).build());
+                    } else {
+                        // if previous paragraph is a table:
+                        int index = viewModel.getParagraphList().indexOf(paragraph);
+                        if (index > 0) {
+                            if (viewModel.getParagraphList().get(index - 1).getDecoration().hasTableDecoration()) {
+                                // just move to last cell
+                                return ACTION_CMD_FACTORY.caretMove(Direction.BACK, false, false, false);
+                            }
+                        }
                     }
                 }
             }
             return ACTION_CMD_FACTORY.removeText(-1);
         }),
         entry( new KeyCodeCombination(BACK_SPACE, SHORTCUT_DOWN, SHIFT_ANY),                 e -> {
+            int caret = viewModel.getCaretPosition();
+            Paragraph paragraph = viewModel.getParagraphWithCaret().orElse(null);
+            ParagraphDecoration decoration = viewModel.getDecorationAtParagraph();
+            if (paragraph != null && decoration != null && decoration.hasTableDecoration()) {
+                // TODO: remove cell content, else if empty move to prev cell
+                return null;
+            } else if (paragraph != null && paragraph.getStart() == caret) {
+                // if previous paragraph is a table:
+                int index = viewModel.getParagraphList().indexOf(paragraph);
+                if (index > 0) {
+                    if (viewModel.getParagraphList().get(index - 1).getDecoration().hasTableDecoration()) {
+                        // just move to last cell
+                        return ACTION_CMD_FACTORY.caretMove(Direction.BACK, false, false, false);
+                    }
+                }
+            }
             if (Tools.MAC) {
                 // CMD + BACKSPACE or CMD + SHIFT + BACKSPACE removes line in Mac
                 return ACTION_CMD_FACTORY.removeText(0, RichTextAreaViewModel.Remove.LINE);
@@ -266,6 +293,22 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         }),
         entry( new KeyCodeCombination(BACK_SPACE, ALT_DOWN),                                 e -> {
             if (Tools.MAC) {
+                int caret = viewModel.getCaretPosition();
+                Paragraph paragraph = viewModel.getParagraphWithCaret().orElse(null);
+                ParagraphDecoration decoration = viewModel.getDecorationAtParagraph();
+                if (paragraph != null && decoration != null && decoration.hasTableDecoration()) {
+                    // TODO: remove prev word from cell if any, else if empty move to prev cell, else nothing
+                    return null;
+                } else if (paragraph != null && paragraph.getStart() == caret) {
+                    // if previous paragraph is a table:
+                    int index = viewModel.getParagraphList().indexOf(paragraph);
+                    if (index > 0) {
+                        if (viewModel.getParagraphList().get(index - 1).getDecoration().hasTableDecoration()) {
+                            // just move to last cell
+                            return ACTION_CMD_FACTORY.caretMove(Direction.BACK, false, false, false);
+                        }
+                    }
+                }
                 return ACTION_CMD_FACTORY.removeText(0, RichTextAreaViewModel.Remove.WORD);
             }
             return null;
@@ -312,7 +355,9 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
             } else if (decoration != null && decoration.hasTableDecoration() &&
                     paragraph != null && paragraph.getStart() < paragraph.getEnd()) {
                 int caretPosition = viewModel.getCaretPosition();
-                Table table = new Table(viewModel.getTextBuffer().getText(paragraph.getStart(), paragraph.getEnd()),
+                UnitBuffer buffer = new UnitBuffer();
+                viewModel.walkFragments((u, d) -> buffer.append(u), paragraph.getStart(), paragraph.getEnd());
+                Table table = new Table(buffer,
                         paragraph.getStart(), decoration.getTableDecoration().getRows(), decoration.getTableDecoration().getColumns());
                 // select content of prev/next cell if non-empty, or move to prev/next cell
                 List<Integer> selectionAtNextCell = table.selectNextCell(caretPosition, e.isShiftDown() ? Direction.BACK : Direction.FORWARD);
@@ -501,10 +546,24 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         }
 
         void evictUnusedObjects() {
+            Set<Font> usedFonts = new HashSet<>();
+            Set<Image> usedImages = new HashSet<>();
             getSheet().getChildren().stream()
                     .filter(RichListCell.class::isInstance)
                     .map(RichListCell.class::cast)
-                    .forEach(RichListCell::evictUnusedObjects);
+                    .forEach(cell -> cell.evictUnusedObjects(usedFonts, usedImages));
+
+            List<Font> cachedFonts = new ArrayList<>(getFontCache().values());
+            cachedFonts.removeAll(usedFonts);
+            if (!cachedFonts.isEmpty()) {
+                getFontCache().values().removeAll(cachedFonts);
+            }
+
+            List<Image> cachedImages = new ArrayList<>(getImageCache().values());
+            cachedImages.removeAll(usedImages);
+            if (!cachedImages.isEmpty()) {
+                getImageCache().values().removeAll(cachedImages);
+            }
         }
 
         int getNextRowPosition(double x, boolean down) {
@@ -513,6 +572,16 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                     .map(RichListCell.class::cast)
                     .filter(RichListCell::hasCaret)
                     .mapToInt(cell -> cell.getNextRowPosition(x, down))
+                    .findFirst()
+                    .orElse(-1);
+        }
+
+        int getNextTableCellPosition(boolean down) {
+            return getSheet().getChildren().stream()
+                    .filter(RichListCell.class::isInstance)
+                    .map(RichListCell.class::cast)
+                    .filter(RichListCell::hasCaret)
+                    .mapToInt(cell -> cell.getNextTableCellPosition(down))
                     .findFirst()
                     .orElse(-1);
         }
@@ -848,6 +917,11 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
             }
         }
         return nextRowPosition;
+    }
+
+    private int getNextTableCellPosition(Boolean down) {
+        return Math.min(viewModel.getTextLength(),
+                paragraphListView.getNextTableCellPosition(down != null && down));
     }
 
     private static boolean isPrintableChar(char c) {

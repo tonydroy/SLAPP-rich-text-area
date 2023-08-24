@@ -91,8 +91,8 @@ public class DecorationModel {
         if (o == null || getClass() != o.getClass()) return false;
         DecorationModel that = (DecorationModel) o;
         return start == that.start && length == that.length &&
-                decoration.equals(that.decoration) &&
-                paragraphDecoration.equals(that.paragraphDecoration);
+                Objects.equals(decoration, that.decoration) &&
+                Objects.equals(paragraphDecoration, that.paragraphDecoration);
     }
 
     @Override

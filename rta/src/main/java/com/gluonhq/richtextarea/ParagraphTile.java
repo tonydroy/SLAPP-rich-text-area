@@ -288,8 +288,8 @@ public class ParagraphTile extends HBox {
         });
     }
 
-    void evictUnusedObjects() {
-        layers.forEach(Layer::evictUnusedObjects);
+    void evictUnusedObjects(Set<Font> usedFonts, Set<Image> usedImages) {
+        layers.forEach(layer -> layer.evictUnusedObjects(usedFonts, usedImages));
     }
 
     void updateLayout() {
@@ -316,6 +316,37 @@ public class ParagraphTile extends HBox {
                 .map(l -> l.getNextRowPosition(x, down))
                 .orElse(0);
     }
+
+    int getNextTableCellPosition(boolean down) {
+        if (!paragraph.getDecoration().hasTableDecoration() ||
+                layers.stream().noneMatch(Layer::hasCaret)) {
+            return -1;
+        }
+        int r = paragraph.getDecoration().getTableDecoration().getRows();
+        int c = paragraph.getDecoration().getTableDecoration().getColumns();
+        int nextCell = -1;
+        for (int i = 0; i < r; i++) {
+            for (int j = 0; j < c; j++) {
+                int cellWithCaret = j + i * c;
+                if (layers.get(cellWithCaret).hasCaret()) {
+                    int p = viewModel.getCaretPosition();
+                    if ((down && p < layers.get(cellWithCaret).end - 1 && i == r - 1) ||
+                            (!down && p > layers.get(cellWithCaret).start && i == 0)) {
+                        // up & first row, or down & last row, move to start or to end before leaving the table
+                        return down ? Math.max(0, layers.get(cellWithCaret).end - 1) : layers.get(cellWithCaret).start;
+                    }
+                    nextCell = j + (i + (down ? 1 : -1)) * c;
+                    break;
+                }
+            }
+        }
+
+        return down ? // down: move to start of next row, or beginning of paragraph after table
+                (nextCell < layers.size() ? layers.get(nextCell).start : layers.get(r * c - 1).end) :
+                // up: move to end of prev row, or end of paragraph before table
+                (nextCell >= 0 ? Math.max(0, layers.get(nextCell).end - 1) : Math.max(0, layers.get(0).start - 1));
+    }
+
 
     private void updateCaretPosition(int caretPosition) {
         layers.forEach(l -> l.updateCaretPosition(caretPosition));
@@ -461,26 +492,20 @@ public class ParagraphTile extends HBox {
             e.consume();
         }
 
-        void evictUnusedObjects() {
-            Set<Font> usedFonts = textFlow.getChildren()
+        void evictUnusedObjects(Set<Font> usedFonts, Set<Image> usedImages) {
+            usedFonts.addAll(textFlow.getChildren()
                     .stream()
                     .filter(Text.class::isInstance)
                     .map(t -> ((Text) t).getFont())
                     .filter(Objects::nonNull)
-                    .collect(Collectors.toSet());
-            List<Font> cachedFonts = new ArrayList<>(richTextAreaSkin.getFontCache().values());
-            cachedFonts.removeAll(usedFonts);
-            richTextAreaSkin.getFontCache().values().removeAll(cachedFonts);
+                    .collect(Collectors.toSet()));
 
-            Set<Image> usedImages = textFlow.getChildren()
+            usedImages.addAll(textFlow.getChildren()
                     .stream()
                     .filter(ImageView.class::isInstance)
                     .map(t -> ((ImageView) t).getImage())
                     .filter(Objects::nonNull)
-                    .collect(Collectors.toSet());
-            List<Image> cachedImages = new ArrayList<>(richTextAreaSkin.getImageCache().values());
-            cachedImages.removeAll(usedImages);
-            richTextAreaSkin.getImageCache().values().removeAll(cachedImages);
+                    .collect(Collectors.toSet()));
         }
 
         double getCaretY() {
