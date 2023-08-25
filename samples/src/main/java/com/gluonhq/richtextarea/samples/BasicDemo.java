@@ -84,7 +84,7 @@ public class BasicDemo extends Application {
             new Document("", decorations, 0);
 
     @Override
-    public void start(Stage stage) {
+    public void basicDemo(Stage stage) {
         RichTextArea editor = new RichTextArea();
         editor.setDocument(emptyDocument);
         editor.setPromptText("Type something!");

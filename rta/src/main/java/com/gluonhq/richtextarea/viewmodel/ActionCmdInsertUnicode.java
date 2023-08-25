@@ -2,6 +2,8 @@ package com.gluonhq.richtextarea.viewmodel;
 
 import javafx.beans.binding.BooleanBinding;
 import javafx.scene.control.Alert;
+import javafx.stage.Modality;
+
 
 import java.util.Objects;
 public class ActionCmdInsertUnicode implements ActionCmd {
@@ -26,8 +28,12 @@ public class ActionCmdInsertUnicode implements ActionCmd {
                     alert.setTitle("Entry Problem");
                     alert.setHeaderText(null);
                     alert.setContentText("I do not recognize '" + numString + "' as a representation of a hexidecimal numer.");
+                    alert.initModality(Modality.APPLICATION_MODAL);
+//                    alert.initOwner(FullFeatureDemo.mainStage);
                     alert.showAndWait();
                 }
+
+
             } else if (codeString.charAt(0) == '#') {
                 //convert decimal string, set codeNum
                 String numString = codeString.substring(1);
