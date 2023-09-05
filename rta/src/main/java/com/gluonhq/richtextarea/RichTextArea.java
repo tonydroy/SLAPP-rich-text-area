@@ -52,6 +52,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.control.SkinBase;
 import javafx.scene.input.DataFormat;
+import javafx.stage.Stage;
 
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -77,10 +78,12 @@ public class RichTextArea extends Control {
     public static final String STYLE_CLASS = "rich-text-area";
     public static final DataFormat RTA_DATA_FORMAT = new DataFormat("text/rich-text-area");
     private static final PseudoClass PSEUDO_CLASS_READONLY = PseudoClass.getPseudoClass("readonly");
+    private static Stage mainStage;
 
     private final ActionFactory actionFactory = new ActionFactory(this);
 
-    public RichTextArea() {
+    public RichTextArea(Stage stage) {
+        this.mainStage = stage;
         getStyleClass().add(STYLE_CLASS);
     }
 
@@ -366,9 +369,7 @@ public class RichTextArea extends Control {
      *
      * @return the action factory
      */
-    public final ActionFactory getActionFactory() {
-        return actionFactory;
-    }
+    public final ActionFactory getActionFactory() {return actionFactory;}
 
     /**
      * {@inheritDoc}
@@ -383,6 +384,10 @@ public class RichTextArea extends Control {
      */
     @Override public String getUserAgentStylesheet() {
         return getClass().getResource("rich-text-area.css").toExternalForm();
+    }
+
+    public static void showSimpleAlert(String header, String message) {
+        Alerts.showSimpleAlert(mainStage, header, message);
     }
 
 }

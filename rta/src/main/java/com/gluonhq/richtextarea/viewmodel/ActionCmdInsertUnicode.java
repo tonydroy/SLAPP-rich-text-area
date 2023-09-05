@@ -1,5 +1,6 @@
 package com.gluonhq.richtextarea.viewmodel;
 
+import com.gluonhq.richtextarea.RichTextArea;
 import javafx.beans.binding.BooleanBinding;
 import javafx.scene.control.Alert;
 import javafx.stage.Modality;
@@ -24,35 +25,18 @@ public class ActionCmdInsertUnicode implements ActionCmd {
                 try {
                     codeNum = Integer.valueOf(numString, 16);
                 } catch (NumberFormatException e) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Entry Problem");
-                    alert.setHeaderText(null);
-                    alert.setContentText("I do not recognize '" + numString + "' as a representation of a hexidecimal numer.");
-                    alert.initModality(Modality.APPLICATION_MODAL);
-//                    alert.initOwner(FullFeatureDemo.mainStage);
-                    alert.showAndWait();
+                    RichTextArea.showSimpleAlert("Entry problem", "I do not recognize '" + numString + "' as a representation of a hexidecimal numer.");
                 }
-
-
             } else if (codeString.charAt(0) == '#') {
                 //convert decimal string, set codeNum
                 String numString = codeString.substring(1);
                 try {
                     codeNum = Integer.valueOf(numString);
                 } catch (NumberFormatException e) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Entry Problem");
-                    alert.setHeaderText(null);
-                    alert.setContentText("I do not recognize '" + numString + "' as a representation of a decimal number.");
-                    alert.showAndWait();
+                    RichTextArea.showSimpleAlert("Entry problem", "I do not recognize '" + numString + "' as a representation of a decimal numer.");
                 }
             } else {
-                //popup message "character string must begin with with '#' or 'x'
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Entry Problem");
-                alert.setHeaderText(null);
-                alert.setContentText("Begin decimal with '#' and hexidecimal with 'x'.");
-                alert.showAndWait();
+                RichTextArea.showSimpleAlert("Entry problem", "Begin decimal with '#' and hexidecimal with 'x'.");
             }
             if (codeNum > 1114111) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);

@@ -118,30 +118,22 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
 
     private static final ActionCmdFactory ACTION_CMD_FACTORY = new ActionCmdFactory();
 
-    private Map<KeyCombination, String> keyPressedCharMap;
+    private Map<KeyCodeCombination, String> keyPressedCharMap;
     private Map<Character, String> keyTypedCharMap;
-    private final Map<Character, String> BASE_MAP = Collections.emptyMap();
-    private final Map<KeyCombination, String> BASE_ALT_MAP = initializeBaseAltMap();
+    private final Map<Character, String> BASE_MAP = initializeBaseMap();
+    private final Map<KeyCodeCombination, String> BASE_ALT_MAP = initializeBaseAltMap();
     private final Map<Character, String> ITALIC_MAP = initializeItalicMap();
     private final Map<Character, String> SCRIPT_MAP = initializeScriptMap();
     private final Map<Character, String> GREEK_MAP = initializeGreekMap();
-    private final Map<KeyCombination, String> SANS_MAP = initializeSansMap();
-    private final Map<KeyCombination, String> BLACKBOARD_MAP = initializeBlackboardMap();
-    private final Map<KeyCombination, String> FRAKTUR_MAP = initializeFrakturMap();
-    private final Map<KeyCombination, String> SPECIAL_CHARACTER_MAP = initializeSpecialCharacterMap();
-    private final Map<KeyCombination, String> SPECIAL_WITH_SANS_MAP;
-    private final Map<KeyCombination, String> SPECIAL_WITH_BLACKBOARD_MAP;
-    private final Map<KeyCombination, String> SPECIAL_WITH_FRAKTUR_MAP;
+    private final Map<KeyCodeCombination, String> SANS_MAP = initializeSansMap();
+    private final Map<KeyCodeCombination, String> BLACKBOARD_MAP = initializeBlackboardMap();
+    private final Map<KeyCodeCombination, String> FRAKTUR_MAP = initializeFrakturMap();
+    private final Map<KeyCodeCombination, String> SPECIAL_CHARACTER_MAP = initializeSpecialCharacterMap();
+    private final Map<KeyCodeCombination, String> SPECIAL_WITH_SANS_MAP;
+    private final Map<KeyCodeCombination, String> SPECIAL_WITH_BLACKBOARD_MAP;
+    private final Map<KeyCodeCombination, String> SPECIAL_WITH_FRAKTUR_MAP;
 
     private ObjectProperty<KeyMapValue> keyMapState = new SimpleObjectProperty<>(KeyMapValue.BASE);
-
-
-
-
-
-
-
-
     private void setMaps(KeyMapValue request) {
         String fontFamily = "Noto Sans";
         switch(request) {
@@ -640,15 +632,15 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     protected RichTextAreaSkin(final RichTextArea control) {
         super(control);
 
-        Map<KeyCombination, String> tempMap = new HashMap();
+        Map<KeyCodeCombination, String> tempMap = new HashMap();
         tempMap.putAll(SPECIAL_CHARACTER_MAP);
         tempMap.putAll(SANS_MAP);
         SPECIAL_WITH_SANS_MAP = Collections.unmodifiableMap(tempMap);
-        Map<KeyCombination, String> tempMap1 = new HashMap();
+        Map<KeyCodeCombination, String> tempMap1 = new HashMap();
         tempMap1.putAll(SPECIAL_CHARACTER_MAP);
         tempMap1.putAll(BLACKBOARD_MAP);
         SPECIAL_WITH_BLACKBOARD_MAP = Collections.unmodifiableMap(tempMap1);
-        Map<KeyCombination, String> tempMap2 = new HashMap();
+        Map<KeyCodeCombination, String> tempMap2 = new HashMap();
         tempMap2.putAll(SPECIAL_CHARACTER_MAP);
         tempMap2.putAll(FRAKTUR_MAP);
         SPECIAL_WITH_FRAKTUR_MAP = Collections.unmodifiableMap(tempMap2);
@@ -1114,11 +1106,262 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         return getClassCssMetaData();
     }
 
-    private Map<KeyCombination, String> initializeBaseAltMap() {
+    private Map<Character, String> initializeBaseMap() {
         return Map.ofEntries(
-                entry (new KeyCodeCombination(KeyCode.D, KeyCombination.ALT_DOWN), "\u030a"),  //combining dot
-                entry (new KeyCodeCombination(KeyCode.T, KeyCombination.ALT_DOWN), "\u0303"),  //combining tilde
-                entry (new KeyCodeCombination(KeyCode.L, KeyCombination.ALT_DOWN), "\u2112")   //script L
+                entry ('a', "a"),
+                entry ('b', "b"),
+                entry ('c', "c"),
+                entry ('d', "d"),
+                entry ('e', "e"),
+                entry ('f', "f"),
+                entry ('g', "g"),
+                entry ('h', "h"),
+                entry ('i', "i"),
+                entry ('j', "j"),
+                entry ('k', "k"),
+                entry ('l', "l"),
+                entry ('m', "m"),
+                entry ('n', "n"),
+                entry ('o', "o"),
+                entry ('p', "p"),
+                entry ('q', "q"),
+                entry ('r', "r"),
+                entry ('s', "s"),
+                entry ('t', "t"),
+                entry ('u', "u"),
+                entry ('v', "v"),
+                entry ('w', "w"),
+                entry ('x', "x"),
+                entry ('y', "y"),
+                entry ('z', "z"),
+                entry ('A', "A"),
+                entry ('B', "B"),
+                entry ('C', "C"),
+                entry ('D', "D"),
+                entry ('E', "E"),
+                entry ('F', "F"),
+                entry ('G', "G"),
+                entry ('H', "H"),
+                entry ('I', "I"),
+                entry ('J', "J"),
+                entry ('K', "K"),
+                entry ('L', "L"),
+                entry ('M', "M"),
+                entry ('N', "N"),
+                entry ('O', "O"),
+                entry ('P', "P"),
+                entry ('Q', "Q"),
+                entry ('R', "R"),
+                entry ('S', "S"),
+                entry ('T', "T"),
+                entry ('U', "U"),
+                entry ('V', "V"),
+                entry ('W', "W"),
+                entry ('X', "X"),
+                entry ('Y', "Y"),
+                entry ('Z', "Z"),
+                entry ('`', "`"),
+                entry ('1', "1"),
+                entry ('2', "2"),
+                entry ('3', "3"),
+                entry ('4', "4"),
+                entry ('5', "5"),
+                entry ('6', "6"),
+                entry ('7', "7"),
+                entry ('8', "8"),
+                entry ('9', "9"),
+                entry ('0', "0"),
+                entry ('-', "-"),
+                entry ('=', "="),
+                entry ('[', "["),
+                entry (']', "]"),
+                entry ('\\', "\\"),
+                entry (';', ";"),
+                entry ('\'', "'"),
+                entry (',', ","),
+                entry ('.', "."),
+                entry ('/', "/"),
+                entry ('~', "~"),
+                entry ('!', "!"),
+                entry ('@', "@"),
+                entry ('#', "#"),
+                entry ('$', "$"),
+                entry ('%', "%"),
+                entry ('^', "^"),
+                entry ('&', "&"),
+                entry ('*', "*"),
+                entry ('(', "("),
+                entry (')', ")"),
+                entry ('_', "_"),
+                entry ('+', "+"),
+                entry ('{', "{"),
+                entry ('}', "}"),
+                entry ('|', "|"),
+                entry (':', ":"),
+                entry ('\"', "\""),
+                entry ('<', "<"),
+                entry ('>', ">"),
+                entry ('?', "?")
+        );
+
+    }
+
+    private Map<KeyCodeCombination, String> initializeBaseAltMap() {
+        return Map.ofEntries(
+                entry(new KeyCodeCombination(KeyCode.A, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.B, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.C, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.D, KeyCombination.ALT_DOWN), ""),         //combining dot
+                entry(new KeyCodeCombination(KeyCode.E, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.F, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.G, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.H, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.I, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.J, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.K, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.L, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.M, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.N, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.O, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.P, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.Q, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.R, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.S, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.T, KeyCombination.ALT_DOWN), ""),            //combining tilde
+                entry(new KeyCodeCombination(KeyCode.U, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.V, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.W, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.X, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.Y, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.Z, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT1, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT2, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT3, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT4, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT5, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT6, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT7, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT8, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT9, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.A, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.B, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.C, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.D, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.E, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.F, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.G, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.H, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.I, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.J, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.K, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.L, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2112"),
+                entry(new KeyCodeCombination(KeyCode.M, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.N, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.O, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.P, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.Q, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.R, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.S, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.T, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.U, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.V, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.W, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.X, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.Y, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.Z, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+
+                entry(new KeyCodeCombination(KeyCode.BACK_QUOTE, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.MINUS, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.EQUALS, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.OPEN_BRACKET, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.CLOSE_BRACKET, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.BACK_SLASH, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.SEMICOLON, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.QUOTE, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.PERIOD, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.SLASH, KeyCombination.ALT_DOWN), ""),
+
+                entry(new KeyCodeCombination(KeyCode.BACK_QUOTE, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT1, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT2, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT3, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT4, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT5, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT6, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT7, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT8, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT9, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.MINUS, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.EQUALS, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.OPEN_BRACKET, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.CLOSE_BRACKET, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.BACK_SLASH, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.SEMICOLON, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.QUOTE, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.PERIOD, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.SLASH, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+
+                entry(new KeyCodeCombination(KeyCode.BACK_QUOTE, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT1, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT2, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT3, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT4, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT5, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT6, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT7, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT8, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT9, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.MINUS, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.EQUALS, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.Q, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.W, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.E, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.R, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.T, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.Y, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.U, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.I, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.O, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.P, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.OPEN_BRACKET, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.CLOSE_BRACKET, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.BACK_SLASH, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.D, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.F, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.G, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.H, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.J, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.K, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.L, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.SEMICOLON, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.QUOTE, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+
+                entry(new KeyCodeCombination(KeyCode.Z, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u0305"),             //combining overline
+                entry(new KeyCodeCombination(KeyCode.X, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u033f"),             //combining double overline
+                entry(new KeyCodeCombination(KeyCode.C, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u20d7"),             //combining arrow above
+                entry(new KeyCodeCombination(KeyCode.V, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u0302"),             //combining hat
+                entry(new KeyCodeCombination(KeyCode.B, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u0338"),             //combining slash
+                entry(new KeyCodeCombination(KeyCode.N, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u030a"),             //combining dot
+                entry(new KeyCodeCombination(KeyCode.M, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u0303"),             //combining tilde
+
+
+//                entry(new KeyCodeCombination(KeyCode.Z, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+//                entry(new KeyCodeCombination(KeyCode.X, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+//                entry(new KeyCodeCombination(KeyCode.C, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+//                entry(new KeyCodeCombination(KeyCode.V, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+//                entry(new KeyCodeCombination(KeyCode.B, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+//                entry(new KeyCodeCombination(KeyCode.N, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+//                entry(new KeyCodeCombination(KeyCode.M, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.PERIOD, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.SLASH, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "")
         );
     }
     private Map<Character, String> initializeItalicMap() {
@@ -1174,7 +1417,49 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry ('W', "\ud835\udc4a"),
                 entry ('X', "\ud835\udc4b"),
                 entry ('Y', "\ud835\udc4c"),
-                entry ('Z', "\ud835\udc4d")
+                entry ('Z', "\ud835\udc4d"),
+                entry ('`', "`"),
+                entry ('1', "1"),
+                entry ('2', "2"),
+                entry ('3', "3"),
+                entry ('4', "4"),
+                entry ('5', "5"),
+                entry ('6', "6"),
+                entry ('7', "7"),
+                entry ('8', "8"),
+                entry ('9', "9"),
+                entry ('0', "0"),
+                entry ('-', "-"),
+                entry ('=', "="),
+                entry ('[', "["),
+                entry (']', "]"),
+                entry ('\\', "\\"),
+                entry (';', ";"),
+                entry ('\'', "'"),
+                entry (',', ","),
+                entry ('.', "."),
+                entry ('/', "/"),
+                entry ('~', "~"),
+                entry ('!', "!"),
+                entry ('@', "@"),
+                entry ('#', "#"),
+                entry ('$', "$"),
+                entry ('%', "%"),
+                entry ('^', "^"),
+                entry ('&', "&"),
+                entry ('*', "*"),
+                entry ('(', "("),
+                entry (')', ")"),
+                entry ('_', "_"),
+                entry ('+', "+"),
+                entry ('{',"{"),
+                entry ('}', "}"),
+                entry ('|', "|"),
+                entry (':', ":"),
+                entry ('\"', "\""),
+                entry ('<', "<"),
+                entry ('>', ">"),
+                entry ('?', "?")
         );
     }
     private Map<Character, String> initializeScriptMap() {
@@ -1230,7 +1515,49 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry ('W', "\ud835\udcb2"),
                 entry ('X', "\ud835\udcb3"),
                 entry ('Y', "\ud835\udcb4"),
-                entry ('Z', "\ud835\udcb5")
+                entry ('Z', "\ud835\udcb5"),
+                entry ('`', "`"),
+                entry ('1', "1"),
+                entry ('2', "2"),
+                entry ('3', "3"),
+                entry ('4', "4"),
+                entry ('5', "5"),
+                entry ('6', "6"),
+                entry ('7', "7"),
+                entry ('8', "8"),
+                entry ('9', "9"),
+                entry ('0', "0"),
+                entry ('-', "-"),
+                entry ('=', "="),
+                entry ('[', "["),
+                entry (']', "]"),
+                entry ('\\', "\\"),
+                entry (';', ";"),
+                entry ('\'', "'"),
+                entry (',', ","),
+                entry ('.', "."),
+                entry ('/', "/"),
+                entry ('~', "~"),
+                entry ('!', "!"),
+                entry ('@', "@"),
+                entry ('#', "#"),
+                entry ('$', "$"),
+                entry ('%', "%"),
+                entry ('^', "^"),
+                entry ('&', "&"),
+                entry ('*', "*"),
+                entry ('(', "("),
+                entry (')', ")"),
+                entry ('_', "_"),
+                entry ('+', "+"),
+                entry ('{',"{"),
+                entry ('}', "}"),
+                entry ('|', "|"),
+                entry (':', ":"),
+                entry ('\"', "\""),
+                entry ('<', "<"),
+                entry ('>', ">"),
+                entry ('?', "?")
         );
     }
     private Map<Character, String> initializeGreekMap() {
@@ -1286,10 +1613,51 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry ('y', "\u03c5"),
                 entry ('Y', "\u03a5"),
                 entry ('z', "\u03b6"),
-                entry ('Z', "\u0396")
+                entry ('Z', "\u0396"),
+                entry ('`', "`"),
+                entry ('1', "1"),
+                entry ('2', "2"),
+                entry ('3', "3"),
+                entry ('4', "4"),
+                entry ('5', "5"),
+                entry ('6', "6"),
+                entry ('7', "7"),
+                entry ('8', "8"),
+                entry ('9', "9"),
+                entry ('0', "0"),
+                entry ('-', "-"),
+                entry ('=', "="),
+                entry ('[', "["),
+                entry (']', "]"),
+                entry ('\\', "\\"),
+                entry (';', ";"),
+                entry ('\'', "'"),
+                entry (',', ","),
+                entry ('.', "."),
+                entry ('/', "/"),
+                entry ('~', "~"),
+                entry ('!', "!"),
+                entry ('@', "@"),
+                entry ('#', "#"),
+                entry ('$', "$"),
+                entry ('%', "%"),
+                entry ('^', "^"),
+                entry ('&', "&"),
+                entry ('*', "*"),
+                entry ('(', "("),
+                entry (')', ")"),
+                entry ('_', "_"),
+                entry ('+', "+"),
+                entry ('}', "}"),
+                entry ('|', "|"),
+                entry (':', ":"),
+                entry ('\"', "\""),
+                entry ('<', "<"),
+                entry ('>', ">"),
+                entry ('?', "?")
         );
     }
-    private Map<KeyCombination, String> initializeSansMap() {
+    private Map<KeyCodeCombination, String> initializeSansMap() {
         return Map.ofEntries(
                 entry(new KeyCodeCombination(KeyCode.A, KeyCombination.ALT_DOWN), "\ud835\uddba"),
                 entry(new KeyCodeCombination(KeyCode.B, KeyCombination.ALT_DOWN), "\ud835\uddbb"),
@@ -1356,7 +1724,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         );
 
     }
-    private Map<KeyCombination, String> initializeFrakturMap() {
+    private Map<KeyCodeCombination, String> initializeFrakturMap() {
         return Map.ofEntries(
                 entry(new KeyCodeCombination(KeyCode.A, KeyCombination.ALT_DOWN), "\ud835\udd1e"),
                 entry(new KeyCodeCombination(KeyCode.B, KeyCombination.ALT_DOWN), "\ud835\udd1f"),
@@ -1412,7 +1780,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.Z, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2128")
         );
     }
-    private Map<KeyCombination, String> initializeBlackboardMap() {
+    private Map<KeyCodeCombination, String> initializeBlackboardMap() {
         return Map.ofEntries(
                 entry(new KeyCodeCombination(KeyCode.A, KeyCombination.ALT_DOWN), "\ud835\udd52"),
                 entry(new KeyCodeCombination(KeyCode.B, KeyCombination.ALT_DOWN), "\ud835\udd53"),
@@ -1478,7 +1846,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.Z, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2124")
         );
     }
-    private Map<KeyCombination, String> initializeSpecialCharacterMap() {
+    private Map<KeyCodeCombination, String> initializeSpecialCharacterMap() {
         return Map.ofEntries(
                 entry(new KeyCodeCombination(KeyCode.BACK_QUOTE, KeyCombination.ALT_DOWN), "\u00ac"),                                                             //hammer
                 entry(new KeyCodeCombination(KeyCode.MINUS, KeyCombination.ALT_DOWN), "\u25b3"),                                                                  //meta caret
@@ -1492,7 +1860,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.PERIOD, KeyCombination.ALT_DOWN), "\u22ad"),                                                                 //not entails
                 entry(new KeyCodeCombination(KeyCode.SLASH, KeyCombination.ALT_DOWN), "\u25c3\u25b9"),                                                            //replacement rule
 
-                entry(new KeyCodeCombination(KeyCode.BACK_QUOTE, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u223c"),                                  //tilde
+                entry(new KeyCodeCombination(KeyCode.BACK_QUOTE, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u20eb"),                                  //tilde
                 entry(new KeyCodeCombination(KeyCode.DIGIT1, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2227"),                                      //caret
                 entry(new KeyCodeCombination(KeyCode.DIGIT2, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2228"),                                      //wedge
                 entry(new KeyCodeCombination(KeyCode.DIGIT3, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2192"),                                      //arrow
@@ -1507,7 +1875,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.EQUALS, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2260"),                                      //not equals
                 entry(new KeyCodeCombination(KeyCode.OPEN_BRACKET, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u301a"),                                //open double bracket
                 entry(new KeyCodeCombination(KeyCode.CLOSE_BRACKET, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u301b"),                               //close double bracket
-                entry(new KeyCodeCombination(KeyCode.BACK_SLASH, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u20eb"),                                  //double slash
+                entry(new KeyCodeCombination(KeyCode.BACK_SLASH, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2224"),                                  //double slash
                 entry(new KeyCodeCombination(KeyCode.SEMICOLON, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u00d7"),                                   //times
                 entry(new KeyCodeCombination(KeyCode.QUOTE, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2032"),                                       //prime
                 entry(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2191"),                                       //up arrow
@@ -1556,11 +1924,11 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.C, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u20d7"),             //combining arrow above
                 entry(new KeyCodeCombination(KeyCode.V, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u0302"),             //combining hat
                 entry(new KeyCodeCombination(KeyCode.B, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u0338"),             //combining slash
-                entry(new KeyCodeCombination(KeyCode.N, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2238"),             //dotminus
-                entry(new KeyCodeCombination(KeyCode.M, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2224"),             //not factor
-                entry(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u231c"),         //left corner
-                entry(new KeyCodeCombination(KeyCode.PERIOD, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u231d")        //right corner
-                //           entry(new KeyCodeCombination(KeyCode.SLASH, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "")                 //none
+                entry(new KeyCodeCombination(KeyCode.N, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u030a"),             //combining dot
+                entry(new KeyCodeCombination(KeyCode.M, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u0303"),             //combining tilde
+                entry(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2238"),         //not divides
+                entry(new KeyCodeCombination(KeyCode.PERIOD, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u231c"),        //left corner
+                entry(new KeyCodeCombination(KeyCode.SLASH, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u231d")          //right corner
         );
     }
 
@@ -1580,6 +1948,14 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         public String toString() {
             return name;
         }
+    }
+
+    public Map<Character, String> getKeyTypedCharMap() {
+        return keyTypedCharMap;
+    }
+
+    public Map<KeyCodeCombination, String> getKeyPressedCharMap() {
+        return keyPressedCharMap;
     }
 
     public final KeyMapValue getKeyMapState() {
