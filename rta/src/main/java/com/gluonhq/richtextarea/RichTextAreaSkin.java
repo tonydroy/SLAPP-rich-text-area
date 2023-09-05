@@ -134,7 +134,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     private final Map<KeyCodeCombination, String> SPECIAL_WITH_FRAKTUR_MAP;
 
     private ObjectProperty<KeyMapValue> keyMapState = new SimpleObjectProperty<>(KeyMapValue.BASE);
-    private void setMaps(KeyMapValue request) {
+    public void setMaps(KeyMapValue request) {
         String fontFamily = "Noto Sans";
         switch(request) {
             case BASE: {
@@ -693,7 +693,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
 
         //these need other initialization to work
         setMaps(KeyMapValue.BASE);
-        keyMapState.addListener((observable, oldVal, newVal) -> setMaps(newVal));
+//        keyMapState.addListener((observable, oldVal, newVal) -> setMaps(newVal));
     }
 
     /// PROPERTIES ///////////////////////////////////////////////////////////////
