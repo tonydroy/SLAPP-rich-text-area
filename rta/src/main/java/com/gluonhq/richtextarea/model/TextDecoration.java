@@ -49,6 +49,10 @@ public class TextDecoration implements Decoration {
     private FontWeight fontWeight;
     private Boolean strikethrough;
     private Boolean underline;
+    private Boolean superscript;
+    private Boolean transSuperscript;
+    private Boolean subscript;
+    private Boolean transSubscript;
     private String url;
 
     private TextDecoration() {}
@@ -142,6 +146,42 @@ public class TextDecoration implements Decoration {
     }
 
     /**
+     * Gets if the text has superscript formatting
+     *
+     * @defaultValue false
+     *
+     * @return whether superscript formatting is applied
+     */
+    public Boolean isSuperscript() {return superscript != null && superscript; }
+
+    /**
+     * Gets if the text has Trans-Superscript formatting (superscript translated right)
+     *
+     * @defaultValue false
+     *
+     * @return whether trans-superscript formatting is applied
+     */
+    public Boolean isTransSuperscript() {return transSuperscript != null && transSuperscript; }
+
+    /**
+     * Gets if the text has subscript formatting
+     *
+     * @defaultValue false
+     *
+     * @return whether subscript formatting is applied
+     */
+    public Boolean isSubscript() {return subscript != null && subscript; }
+
+    /**
+     * Gets if the text has trans-subscript formatting
+     *
+     * @defaultValue false
+     *
+     * @return whether trans-subscript formatting is applied
+     */
+    public Boolean isTransSubscript() {return transSubscript != null && transSubscript; }
+
+    /**
      * Gets a string with a URL that can be used to decorate a fragment of text as a hyperlink
      *
      * @defaultValue null
@@ -183,6 +223,10 @@ public class TextDecoration implements Decoration {
         td.fontPosture = Objects.requireNonNullElse(fontPosture, decoration.fontPosture);
         td.strikethrough = Objects.requireNonNullElse(strikethrough, decoration.strikethrough);
         td.underline = Objects.requireNonNullElse(underline, decoration.underline);
+        td.superscript = Objects.requireNonNullElse(superscript, decoration.superscript);
+        td.transSuperscript = Objects.requireNonNullElse(transSuperscript, decoration.transSuperscript);
+        td.subscript = Objects.requireNonNullElse(subscript, decoration.subscript);
+        td.transSubscript = Objects.requireNonNullElse(transSubscript, decoration.transSubscript);
         td.url = url == null ? decoration.url : url;
         return td;
     }
@@ -200,12 +244,16 @@ public class TextDecoration implements Decoration {
                 fontWeight == that.fontWeight &&
                 Objects.equals(strikethrough, that.strikethrough) &&
                 Objects.equals(underline, that.underline) &&
+                Objects.equals(superscript, that.superscript) &&
+                Objects.equals(transSuperscript, that.transSuperscript) &&
+                Objects.equals(subscript, that.subscript) &&
+                Objects.equals(transSubscript, that.transSubscript) &&
                 Objects.equals(url, that.url);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(foreground, background, fontFamily, fontSize, fontPosture, fontWeight, strikethrough, underline, url);
+        return Objects.hash(foreground, background, fontFamily, fontSize, fontPosture, fontWeight, strikethrough, underline, superscript, transSuperscript, subscript, transSubscript, url);
     }
 
     public static class Builder {
@@ -218,6 +266,10 @@ public class TextDecoration implements Decoration {
         private FontWeight fontWeight;
         private Boolean strikethrough;
         private Boolean underline;
+        private Boolean superscript;
+        private Boolean transSuperscript;
+        private Boolean subscript;
+        private Boolean transSubscript;
         private String url;
 
         private Builder() {}
@@ -232,6 +284,10 @@ public class TextDecoration implements Decoration {
             decoration.fontPosture = this.fontPosture;
             decoration.strikethrough = this.strikethrough;
             decoration.underline = this.underline;
+            decoration.superscript = this.superscript;
+            decoration.transSuperscript = this.transSuperscript;
+            decoration.subscript = this.subscript;
+            decoration.transSubscript = this.transSubscript;
             decoration.url = this.url;
             return decoration;
         }
@@ -246,6 +302,10 @@ public class TextDecoration implements Decoration {
             fontWeight = FontWeight.NORMAL;
             strikethrough = false;
             underline = false;
+            superscript = false;
+            transSuperscript = false;
+            subscript = false;
+            transSubscript = false;
             url = null;
             return this;
         }
@@ -259,6 +319,10 @@ public class TextDecoration implements Decoration {
             fontWeight = decoration.fontWeight;
             strikethrough = decoration.strikethrough;
             underline = decoration.underline;
+            superscript = decoration.superscript;
+            transSuperscript = decoration.transSuperscript;
+            subscript = decoration.subscript;
+            transSubscript = decoration.transSubscript;
             url = decoration.url;
             return this;
         }
@@ -303,6 +367,26 @@ public class TextDecoration implements Decoration {
             return this;
         }
 
+        public Builder superscript(Boolean superscript) {
+            this.superscript = superscript;
+            return this;
+        }
+
+        public Builder transSuperscript(Boolean transSuperscript) {
+            this.transSuperscript = transSuperscript;
+            return this;
+        }
+
+        public Builder subscript(Boolean subscript) {
+            this.subscript = subscript;
+            return this;
+        }
+
+        public Builder transSubscript(Boolean transSubscript) {
+            this.transSubscript = transSubscript;
+            return this;
+        }
+
         public Builder url(String url) {
             this.url = url;
             return this;
@@ -319,8 +403,12 @@ public class TextDecoration implements Decoration {
                 ", " + (fontPosture != null ? getFirstLetter(fontPosture.name()) : "-") +
                 ", " + (fontWeight != null ? getFirstLetter(fontWeight.name()) : "-") +
                 "]" +
-                ", S:" + strikethrough +
-                ", U:" + underline +
+                ", Stk:" + strikethrough +
+                ", Und:" + underline +
+                ", Sup:" + superscript +
+                ", TSup:" + transSuperscript +
+                ", Sub:" + subscript +
+                ", Tsub:" + transSubscript +
                 ", URL:" + url +
                 "}";
     }

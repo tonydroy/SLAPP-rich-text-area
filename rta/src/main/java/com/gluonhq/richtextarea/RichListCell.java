@@ -253,19 +253,28 @@ class RichListCell extends ListCell<Paragraph> {
         text.setStrikethrough(decoration.isStrikethrough());
         text.setUnderline(decoration.isUnderline());
 
+        if (decoration.isSubscript() || decoration.isTransSubscript()) text.setTranslateY(decoration.getFontSize() * .17);
+        else if (decoration.isSuperscript() || decoration.isTransSuperscript()) text.setTranslateY(decoration.getFontSize() * -.4);
+        else text.setTranslateY(0.0);
+
+        if (decoration.isTransSubscript() || decoration.isTransSuperscript()) text.setTranslateX(decoration.getFontSize() * -.3);
+        else text.setTranslateX(0.0);
+
+        double actualFontSize = (decoration.isSuperscript() || decoration.isSubscript() || decoration.isTransSuperscript() || decoration.isTransSubscript() ) ? decoration.getFontSize() * .72 : decoration.getFontSize();
+
         // Caching fonts, assuming their reuse, especially for default one
         int hash = Objects.hash(
                 decoration.getFontFamily(),
                 decoration.getFontWeight(),
                 decoration.getFontPosture(),
-                decoration.getFontSize());
+                actualFontSize);
 
         Font font = richTextAreaSkin.getFontCache().computeIfAbsent(hash,
                 h -> Font.font(
                         decoration.getFontFamily(),
                         decoration.getFontWeight(),
                         decoration.getFontPosture(),
-                        decoration.getFontSize()));
+                        actualFontSize));
 
         text.setFont(font);
         String url = decoration.getURL();

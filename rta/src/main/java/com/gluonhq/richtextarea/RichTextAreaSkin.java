@@ -93,12 +93,7 @@ import java.util.function.Function;
 import static com.gluonhq.richtextarea.viewmodel.RichTextAreaViewModel.Direction;
 import static java.util.Map.entry;
 import static javafx.scene.input.KeyCode.*;
-import static javafx.scene.input.KeyCombination.ALT_ANY;
-import static javafx.scene.input.KeyCombination.ALT_DOWN;
-import static javafx.scene.input.KeyCombination.CONTROL_ANY;
-import static javafx.scene.input.KeyCombination.SHIFT_ANY;
-import static javafx.scene.input.KeyCombination.SHORTCUT_ANY;
-import static javafx.scene.input.KeyCombination.SHORTCUT_DOWN;
+import static javafx.scene.input.KeyCombination.*;
 import static javafx.scene.text.FontPosture.ITALIC;
 import static javafx.scene.text.FontPosture.REGULAR;
 import static javafx.scene.text.FontWeight.BOLD;
@@ -319,6 +314,27 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
             Boolean underlineState = decoration.isUnderline() == true ? false : true;
             return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).underline(underlineState).build());
         }),
+
+        entry(new KeyCodeCombination(EQUALS, SHORTCUT_DOWN),                                 e -> {
+            TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
+            Boolean subscriptState = decoration.isSubscript() == true ? false : true;
+            return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).subscript(subscriptState).superscript(false).build());
+        }),
+            entry(new KeyCodeCombination(MINUS, SHORTCUT_DOWN),                                 e -> {
+                TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
+                Boolean transSubscriptState = decoration.isTransSubscript() == true ? false : true;
+                return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).transSubscript(transSubscriptState).transSuperscript(false).subscript(false).superscript(false).build());
+        }),
+            entry(new KeyCodeCombination(EQUALS, SHORTCUT_DOWN, SHIFT_DOWN),                                 e -> {
+                TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
+                Boolean superscriptState = decoration.isSuperscript() == true ? false : true;
+                return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).superscript(superscriptState).subscript(false).build());
+            }),
+            entry(new KeyCodeCombination(MINUS, SHORTCUT_DOWN, SHIFT_DOWN),                                 e -> {
+                TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
+                Boolean transSuperscriptState = decoration.isTransSuperscript() == true ? false : true;
+                return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).transSuperscript(transSuperscriptState).transSubscript(false).subscript(false).superscript(false).build());
+            }),
 
         // to change keyboards
         entry( new KeyCodeCombination(DIGIT5, SHORTCUT_DOWN),                                 e -> {
