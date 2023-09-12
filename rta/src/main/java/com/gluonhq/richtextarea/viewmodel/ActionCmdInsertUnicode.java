@@ -26,6 +26,7 @@ public class ActionCmdInsertUnicode implements ActionCmd {
                     codeNum = Integer.valueOf(numString, 16);
                 } catch (NumberFormatException e) {
                     RichTextArea.showSimpleAlert("Entry problem", "I do not recognize '" + numString + "' as a representation of a hexidecimal numer.");
+                    return;
                 }
             } else if (codeString.charAt(0) == '#') {
                 //convert decimal string, set codeNum
@@ -34,17 +35,15 @@ public class ActionCmdInsertUnicode implements ActionCmd {
                     codeNum = Integer.valueOf(numString);
                 } catch (NumberFormatException e) {
                     RichTextArea.showSimpleAlert("Entry problem", "I do not recognize '" + numString + "' as a representation of a decimal numer.");
+                    return;
                 }
             } else {
                 RichTextArea.showSimpleAlert("Entry problem", "Begin decimal with '#' and hexidecimal with 'x'.");
+                return;
             }
             if (codeNum > 1114111) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Entry Problem");
-                alert.setHeaderText(null);
-                alert.setContentText("'" + codeString + "' does not fall within the unicode codeNum points.");
-                alert.showAndWait();
-                return;
+                RichTextArea.showSimpleAlert("Entry problem", "'" + codeString + "' does not fall within the unicode codeNum points.");
+               return;
             }
 
             char[] chars = Character.toChars(codeNum);
