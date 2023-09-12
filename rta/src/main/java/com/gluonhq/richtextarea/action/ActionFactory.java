@@ -112,6 +112,15 @@ public class ActionFactory {
         return save;
     }
 
+    private Action saveNow;
+
+    public Action saveNow() {
+        if (saveNow == null) {
+            saveNow = new ImmediateBasicAction(control, action -> ACTION_CMD_FACTORY.save());
+        }
+        return saveNow;
+    }
+
     private Action selectAll;
     public Action selectAll() {
         if (selectAll == null) {

@@ -46,8 +46,8 @@ import java.util.function.Function;
 
 class BasicAction implements Action {
 
-    private RichTextAreaViewModel viewModel;
-    private final RichTextArea control;
+    protected RichTextAreaViewModel viewModel;
+    protected final RichTextArea control;
     private final Function<Action, ActionCmd> actionCmdFunction;
 
     private final BooleanProperty disabledImplProperty = new SimpleBooleanProperty(this, "disabledImpl", false);
@@ -81,7 +81,7 @@ class BasicAction implements Action {
         }
     }
 
-    private ActionCmd getActionCmd() {
+    protected ActionCmd getActionCmd() {
         return actionCmdFunction.apply(this);
     }
 
