@@ -29,6 +29,7 @@ package com.gluonhq.richtextarea.model;
 
 import com.gluonhq.richtextarea.Tools;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -46,7 +47,9 @@ import java.util.stream.Collectors;
  * decorations or caret position) should refer to their position within the full raw text.
  *
  */
-public class Document {
+public class Document implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private final String text;
     private final List<DecorationModel> decorationList;

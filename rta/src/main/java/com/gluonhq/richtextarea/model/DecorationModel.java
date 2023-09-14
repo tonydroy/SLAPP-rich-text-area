@@ -27,13 +27,14 @@
  */
 package com.gluonhq.richtextarea.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * A DecorationModel contains the text and paragraph decorations for a fragment of text,
  * defined by a start position and a length.
  */
-public class DecorationModel {
+public class DecorationModel implements Serializable {
     private final int start;
     private final int length;
     private final Decoration decoration;    // TextDecoration or ImageDecoration

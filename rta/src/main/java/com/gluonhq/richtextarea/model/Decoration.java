@@ -27,12 +27,14 @@
  */
 package com.gluonhq.richtextarea.model;
 
+import java.io.Serializable;
+
 /**
  * Interface used to define the decoration applied to a fragment of RichTextArea
  *
  * Known implementations: {@link TextDecoration} and {@link ImageDecoration} for
  * text decoration, and {@link ParagraphDecoration} for paragraph decoration
  */
-public interface Decoration {
+public interface Decoration extends Serializable {
 
 }
