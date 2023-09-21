@@ -1,9 +1,11 @@
 package com.gluonhq.richtextarea.viewmodel;
 
+import com.gluonhq.richtextarea.Alerts;
 import com.gluonhq.richtextarea.RichTextArea;
 import javafx.beans.binding.BooleanBinding;
 import javafx.scene.control.Alert;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 
 import java.util.Objects;

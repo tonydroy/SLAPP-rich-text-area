@@ -297,7 +297,7 @@ public class TextDecoration implements Decoration {
             background = Color.TRANSPARENT;
    //         fontFamily = "System";          original setting, changed by me
             fontFamily = "NOTO SANS";
-            fontSize = 15.0;                  //originally 14.0  see corresponding changes in view menus
+            fontSize = 14.0;                  //originally 14.0  see corresponding changes in view menus
             fontPosture = FontPosture.REGULAR;
             fontWeight = FontWeight.NORMAL;
             strikethrough = false;

@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 
 public class Alerts {
 
-    public static void showSimpleAlert(Stage stage, String header, String message) {
+    public static void showSimpleAlert(String header, String message, Stage stage) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(header);
         alert.setHeaderText(null);

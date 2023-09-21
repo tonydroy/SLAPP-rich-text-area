@@ -387,7 +387,7 @@ public class RichTextArea extends Control {
     }
 
     public static void showSimpleAlert(String header, String message) {
-        Alerts.showSimpleAlert(mainStage, header, message);
+        Alerts.showSimpleAlert(header, message, mainStage );
     }
 
 }
