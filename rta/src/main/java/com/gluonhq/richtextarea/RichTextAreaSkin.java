@@ -86,6 +86,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -101,6 +103,9 @@ import static javafx.scene.text.FontWeight.NORMAL;
 
 
 public class RichTextAreaSkin extends SkinBase<RichTextArea> {
+    private RichTextArea control;
+
+
 
     interface ActionBuilder extends Function<KeyEvent, ActionCmd>{}
 
@@ -655,6 +660,8 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
 
     protected RichTextAreaSkin(final RichTextArea control) {
         super(control);
+
+        this.control = control;
 
         Map<KeyCodeCombination, String> tempMap = new HashMap();
         tempMap.putAll(SPECIAL_CHARACTER_MAP);
@@ -2004,5 +2011,15 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     public final ObjectProperty<KeyMapValue> keyMapStateProperty() {
         return keyMapState;
     }
+
+    //added by me as part of effort to get height
+   public double getEndCursorPositionY(int length) {
+        viewModel.setCaretPosition(length);
+        control.requestFocus();
+        return caretOriginProperty.getValue().getY();
+   }
+
+
+
 
 }

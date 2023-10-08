@@ -216,7 +216,7 @@ public class ParagraphTile extends HBox {
         graphicBox.getChildren().add(graphicNode);
 
         double nodePrefWidth = 0d, nodePrefHeight = 0d;
-         if (graphicNode instanceof Label) {
+        if (graphicNode instanceof Label) {
             Label numberedListLabel = (Label) graphicNode;
             String text = numberedListLabel.getText();
             if (text != null) {
@@ -251,7 +251,7 @@ public class ParagraphTile extends HBox {
             nodePrefHeight = graphicNode.prefHeight(nodePrefWidth);
         }
 
-        graphicNode.setTranslateY(Math.max(0d, (layer.getCaretY() - nodePrefHeight)/ 2d));
+        graphicNode.setTranslateY(Math.max(0d, (layer.getCaretY() - nodePrefHeight) / 2d));
         double boxPrefWidth = spanPrefWidth + nodePrefWidth;
         graphicBox.setMinWidth(boxPrefWidth);
         graphicBox.setMaxWidth(boxPrefWidth);
@@ -359,7 +359,7 @@ public class ParagraphTile extends HBox {
     private class Layer extends Pane {
 
         private final Timeline caretTimeline = new Timeline(
-                new KeyFrame(Duration.ZERO        , e -> setCaretVisibility(true)),
+                new KeyFrame(Duration.ZERO, e -> setCaretVisibility(true)),
                 new KeyFrame(Duration.seconds(0.5), e -> setCaretVisibility(false)),
                 new KeyFrame(Duration.seconds(1.0))
         );
@@ -390,6 +390,7 @@ public class ParagraphTile extends HBox {
             getChildren().addAll(textBackgroundColorPaths);
             getChildren().addAll(selectionShape, caretShape, textFlow);
             getStyleClass().add("layer");
+
         }
 
         @Override
@@ -629,7 +630,12 @@ public class ParagraphTile extends HBox {
                 Bounds sceneBounds = caretShape.localToScene(caretShape.getBoundsInLocal());
                 final Bounds boundsInRTA = richTextAreaSkin.getSkinnable().sceneToLocal(sceneBounds);
                 richTextAreaSkin.caretOriginProperty.set(new Point2D(boundsInRTA.getMinX(), boundsInRTA.getMinY()));
+                System.out.println("Paragraph dec: " + boundsInRTA.getMinY());
             });
         }
+
     }
 }
+
+
+
