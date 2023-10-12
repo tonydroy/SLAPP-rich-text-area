@@ -105,7 +105,7 @@ import static javafx.scene.text.FontWeight.NORMAL;
 public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     private RichTextArea control;
 
-
+    public CountDownLatch cursorLatch = new CountDownLatch(0);
 
     interface ActionBuilder extends Function<KeyEvent, ActionCmd>{}
 
@@ -2013,11 +2013,29 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     }
 
     //added by me as part of effort to get height
-   public double getEndCursorPositionY(int length) {
+
+
+   public void updateCursorLatch() {
+        cursorLatch = new CountDownLatch(1);
+   }
+
+   public void setCaretPosition(int length) {
         viewModel.setCaretPosition(length);
-        control.requestFocus();
+   }
+
+    public int getCaretPosition() {
+        return viewModel.getCaretPosition();
+    }
+
+   public double getCaretHeight() {
         return caretOriginProperty.getValue().getY();
    }
+
+
+
+
+
+
 
 
 
