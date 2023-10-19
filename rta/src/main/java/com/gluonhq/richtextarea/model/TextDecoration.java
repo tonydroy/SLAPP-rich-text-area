@@ -31,6 +31,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Objects;
 
 import static com.gluonhq.richtextarea.Tools.getFirstLetter;
@@ -41,8 +44,10 @@ import static com.gluonhq.richtextarea.Tools.getFirstLetter;
  */
 public class TextDecoration implements Decoration {
 
-    private Color foreground;
-    private Color background;
+    private transient Color foreground;
+    private double[] foregroundColorValues;
+    private transient Color background;
+    private double[] backgroundColorValues;
     private String fontFamily;
     private double fontSize;
     private FontPosture fontPosture;
@@ -56,6 +61,19 @@ public class TextDecoration implements Decoration {
     private String url;
 
     private TextDecoration() {}
+
+    //added by TR to preserve serializability of document
+    private void writeObject (ObjectOutputStream stream) throws IOException, ClassNotFoundException {
+        foregroundColorValues = new double[]{foreground.getRed(), foreground.getGreen(), foreground.getBlue(), foreground.getOpacity()};
+        backgroundColorValues = new double[]{background.getRed(), background.getGreen(), background.getBlue(), background.getOpacity()};
+        stream.defaultWriteObject();
+    }
+    private void readObject (ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        stream.defaultReadObject();
+        foreground = new Color(foregroundColorValues[0], foregroundColorValues[1], foregroundColorValues[2], foregroundColorValues[3]);
+        background = new Color(backgroundColorValues[0], backgroundColorValues[2], backgroundColorValues[3], backgroundColorValues[3]);
+    }
+    //
 
     /**
      * Gets the foreground color of the text.

@@ -2031,6 +2031,10 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         return caretOriginProperty.getValue().getY();
    }
 
+   public void resetSavedProperty(boolean value) {
+        viewModel.setSavedProperty(value);
+   }
+
 
 
 

@@ -145,6 +145,7 @@ public class RichTextArea extends Control {
     public final boolean isModified() {
        return modifiedProperty.get();
     }
+
     final ReadOnlyBooleanWrapper modifiedProperty = new ReadOnlyBooleanWrapper(this, "modified");
 
     // editableProperty
