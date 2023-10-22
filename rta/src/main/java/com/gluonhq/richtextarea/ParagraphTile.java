@@ -630,7 +630,6 @@ public class ParagraphTile extends HBox {
                 Bounds sceneBounds = caretShape.localToScene(caretShape.getBoundsInLocal());
                 final Bounds boundsInRTA = richTextAreaSkin.getSkinnable().sceneToLocal(sceneBounds);
                 richTextAreaSkin.caretOriginProperty.set(new Point2D(boundsInRTA.getMinX(), boundsInRTA.getMinY()));
-                richTextAreaSkin.cursorLatch.countDown();
             });
         }
 

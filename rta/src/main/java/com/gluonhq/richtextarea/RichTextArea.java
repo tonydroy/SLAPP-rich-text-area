@@ -49,6 +49,7 @@ import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Control;
 import javafx.scene.control.SkinBase;
 import javafx.scene.input.DataFormat;
@@ -390,6 +391,8 @@ public class RichTextArea extends Control {
     public static void showSimpleAlert(String header, String message) {
         Alerts.showSimpleAlert(header, message, mainStage );
     }
+
+
 
 }
 

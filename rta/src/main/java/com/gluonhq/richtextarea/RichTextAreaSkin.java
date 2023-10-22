@@ -63,6 +63,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -75,7 +76,9 @@ import javafx.scene.control.skin.ListViewSkin;
 import javafx.scene.control.skin.VirtualFlow;
 import javafx.scene.image.Image;
 import javafx.scene.input.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Path;
@@ -84,6 +87,9 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
@@ -104,8 +110,6 @@ import static javafx.scene.text.FontWeight.NORMAL;
 
 public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     private RichTextArea control;
-
-    public CountDownLatch cursorLatch = new CountDownLatch(0);
 
     interface ActionBuilder extends Function<KeyEvent, ActionCmd>{}
 
@@ -640,8 +644,8 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 viewModel.getParagraphWithCaret().ifPresent(this::scrollTo);
             });
         }
-    }
 
+    }
 
     // --- prompt text fill
     private final StyleableProperty<Paint> promptTextFill = FACTORY.createStyleablePaintProperty(getSkinnable(), "promptTextFill", "-fx-prompt-text-fill", c -> {
@@ -2014,34 +2018,28 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
 
     //added by me as part of effort to get height
 
-
-   public void updateCursorLatch() {
-        cursorLatch = new CountDownLatch(1);
-   }
-
-   public void setCaretPosition(int length) {
+    private void setCaretPosition(int length) {
         viewModel.setCaretPosition(length);
    }
+    public double getContentAreaHeight(double rtaWidth) {
+        BorderPane root = new BorderPane();
+        control.setContentAreaWidth(rtaWidth);
+        root.setCenter(control);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setWidth(rtaWidth + 20);
+        control.requestFocus();
+        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.show();
 
-    public int getCaretPosition() {
-        return viewModel.getCaretPosition();
+        int length = control.getTextLength();
+        setCaretPosition(length);
+        Bounds bounds = caret().get().localToScene(caret().get().getBoundsInLocal());
+        stage.close();
+
+        return bounds.getMaxY();
     }
-
-   public double getCaretHeight() {
-        return caretOriginProperty.getValue().getY();
-   }
-
-   public void resetSavedProperty(boolean value) {
-        viewModel.setSavedProperty(value);
-   }
-
-
-
-
-
-
-
-
 
 
 

@@ -765,7 +765,4 @@ public class RichTextAreaViewModel {
         setDocument(currentDocument);
     }
 
-    public void setSavedProperty(boolean value) {
-        savedProperty.set(value);
-    }
 }
