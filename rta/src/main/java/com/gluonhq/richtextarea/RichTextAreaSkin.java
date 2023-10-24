@@ -108,6 +108,7 @@ import static javafx.scene.text.FontWeight.BOLD;
 import static javafx.scene.text.FontWeight.NORMAL;
 
 
+
 public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     private RichTextArea control;
 
@@ -2021,24 +2022,33 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     private void setCaretPosition(int length) {
         viewModel.setCaretPosition(length);
    }
-    public double getContentAreaHeight(double rtaWidth) {
-        BorderPane root = new BorderPane();
+    public double getContentAreaHeight(double rtaWidth, double pageHeight) {
+        double height;
+        Group root = new Group();
         control.setContentAreaWidth(rtaWidth);
-        root.setCenter(control);
+        control.setPrefHeight(pageHeight + 20);
+        root.getChildren().add(control);
         Scene scene = new Scene(root);
+
+
         Stage stage = new Stage();
         stage.setScene(scene);
-        stage.setWidth(rtaWidth + 20);
+        stage.setWidth(rtaWidth + 40);
         control.requestFocus();
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.show();
 
         int length = control.getTextLength();
         setCaretPosition(length);
-        Bounds bounds = caret().get().localToScene(caret().get().getBoundsInLocal());
-        stage.close();
+        if (caret().isPresent()) {
+            Bounds bounds = caret().get().localToScene(caret().get().getBoundsInLocal());
+            height = bounds.getMaxY();
+        } else {
+            height = pageHeight * 2.0;
+        }
 
-        return bounds.getMaxY();
+        stage.close();
+        return height;
     }
 
 
