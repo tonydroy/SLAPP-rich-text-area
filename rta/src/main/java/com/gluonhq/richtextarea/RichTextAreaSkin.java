@@ -2026,17 +2026,19 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         double height;
         Group root = new Group();
         control.setContentAreaWidth(rtaWidth);
-        control.setPrefHeight(pageHeight + 20);
+        control.setPrefHeight(pageHeight);
         root.getChildren().add(control);
         Scene scene = new Scene(root);
-
 
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setWidth(rtaWidth + 40);
-        control.requestFocus();
+
         stage.initStyle(StageStyle.TRANSPARENT);
+        stage.toBack();
         stage.show();
+
+        control.requestFocus();
 
         int length = control.getTextLength();
         setCaretPosition(length);
@@ -2044,7 +2046,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
             Bounds bounds = caret().get().localToScene(caret().get().getBoundsInLocal());
             height = bounds.getMaxY();
         } else {
-            height = pageHeight * 2.0;
+            height = pageHeight * 10.0;
         }
 
         stage.close();
