@@ -314,7 +314,7 @@ public class TextDecoration implements Decoration {
             foreground = Color.BLACK;
             background = Color.TRANSPARENT;
    //         fontFamily = "System";          original setting, changed by me
-            fontFamily = "Noto Serif Combo";
+            fontFamily = "NOTO SANS";
             fontSize = 11.0;                  //originally 14.0  see corresponding changes in view menus
             fontPosture = FontPosture.REGULAR;
             fontWeight = FontWeight.NORMAL;

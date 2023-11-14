@@ -139,32 +139,43 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
 
     private ObjectProperty<KeyMapValue> keyMapState = new SimpleObjectProperty<>(KeyMapValue.BASE);
     public void setMaps(KeyMapValue request) {
+        String fontFamily = "Noto Sans";
         switch(request) {
             case BASE: {
                 keyPressedCharMap = SPECIAL_WITH_ITALIC_MAP;
                 keyTypedCharMap = BASE_MAP;
+                fontFamily = "Noto Sans";
                 break;
             }
             case ITALIC_AND_SANS: {
                 keyPressedCharMap = SPECIAL_WITH_SANS_MAP;
                 keyTypedCharMap = ITALIC_MAP;
+                fontFamily = "Noto Sans Math";
                 break;
             }
             case SCRIPT_AND_SANS: {
                 keyPressedCharMap = SPECIAL_WITH_SANS_MAP;
                 keyTypedCharMap = SCRIPT_MAP;
+                fontFamily = "Noto Sans Math";
                 break;
             }
             case ITALIC_AND_BLACKBOARD: {
                 keyPressedCharMap = SPECIAL_WITH_BLACKBOARD_MAP;
                 keyTypedCharMap = ITALIC_MAP;
+                fontFamily = "Noto Sans Math";
                 break;
             }
             case GREEK_AND_FRAKTUR: {
                 keyPressedCharMap = SPECIAL_WITH_FRAKTUR_MAP;
                 keyTypedCharMap = GREEK_MAP;
+                fontFamily = "Noto Sans Math";
                 break;
             }
+        }
+        TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
+        ActionCmd actionCmd = ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).fontFamily(fontFamily).build());
+        if (actionCmd != null) {
+            execute(actionCmd);
         }
     }
 
@@ -315,45 +326,45 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
             return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).underline(underlineState).build());
         }),
 
-        entry(new KeyCodeCombination(F8),                                 e -> {
+        entry(new KeyCodeCombination(EQUALS, SHORTCUT_DOWN),                                 e -> {
             TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
-            Boolean subscriptState = (decoration.isSubscript() || decoration.isTransSubscript()) == true ? false : true;
-            return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).subscript(subscriptState).transSubscript(false).transSuperscript(false).superscript(false).build());
+            Boolean subscriptState = decoration.isSubscript() == true ? false : true;
+            return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).subscript(subscriptState).superscript(false).build());
         }),
-            entry(new KeyCodeCombination(F8, SHIFT_DOWN),                                 e -> {
+            entry(new KeyCodeCombination(MINUS, SHORTCUT_DOWN),                                 e -> {
                 TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
-                Boolean transSubscriptState = (decoration.isTransSubscript() || decoration.isSubscript()) == true ? false : true;
+                Boolean transSubscriptState = decoration.isTransSubscript() == true ? false : true;
                 return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).transSubscript(transSubscriptState).transSuperscript(false).subscript(false).superscript(false).build());
         }),
-            entry(new KeyCodeCombination(F7),                                 e -> {
+            entry(new KeyCodeCombination(EQUALS, SHORTCUT_DOWN, SHIFT_DOWN),                                 e -> {
                 TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
-                Boolean superscriptState = (decoration.isSuperscript() || decoration.isTransSuperscript()) == true ? false : true;
-                return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).superscript(superscriptState).transSubscript(false).transSuperscript(false).subscript(false).build());
+                Boolean superscriptState = decoration.isSuperscript() == true ? false : true;
+                return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).superscript(superscriptState).subscript(false).build());
             }),
-            entry(new KeyCodeCombination(F7, SHIFT_DOWN),                                 e -> {
+            entry(new KeyCodeCombination(MINUS, SHORTCUT_DOWN, SHIFT_DOWN),                                 e -> {
                 TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
-                Boolean transSuperscriptState = (decoration.isTransSuperscript() || decoration.isSuperscript()) == true ? false : true;
+                Boolean transSuperscriptState = decoration.isTransSuperscript() == true ? false : true;
                 return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).transSuperscript(transSuperscriptState).transSubscript(false).subscript(false).superscript(false).build());
             }),
 
         // to change keyboards
-        entry( new KeyCodeCombination(F1),                                 e -> {
+        entry( new KeyCodeCombination(DIGIT5, SHORTCUT_DOWN),                                 e -> {
             setKeyMapState(KeyMapValue.BASE);
             return null;
         }),
-        entry( new KeyCodeCombination(F2),                                 e -> {
+        entry( new KeyCodeCombination(DIGIT6, SHORTCUT_DOWN),                                 e -> {
             setKeyMapState(KeyMapValue.ITALIC_AND_SANS);
             return null;
         }),
-        entry( new KeyCodeCombination(F3),                                 e -> {
+        entry( new KeyCodeCombination(DIGIT7, SHORTCUT_DOWN),                                 e -> {
             setKeyMapState(KeyMapValue.SCRIPT_AND_SANS);
             return null;
         }),
-        entry( new KeyCodeCombination(F4),                                 e -> {
+        entry( new KeyCodeCombination(DIGIT8, SHORTCUT_DOWN),                                 e -> {
             setKeyMapState(KeyMapValue.ITALIC_AND_BLACKBOARD);
             return null;
         }),
-        entry( new KeyCodeCombination(F5),                                 e -> {
+        entry( new KeyCodeCombination(DIGIT9, SHORTCUT_DOWN),                                 e -> {
             setKeyMapState(KeyMapValue.GREEK_AND_FRAKTUR);
             return null;
         }),
