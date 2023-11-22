@@ -67,7 +67,7 @@
 
 .rich-text-area .paragraph-tile > .content-area > .layer > .text-flow {
     /*-fx-background-color: #ff000010;*/
-    /*-fx-padding: 2;*/
+    /*-fx-padding: 0;*/
 }
 
 .rich-text-area .paragraph-tile > .content-area > HBox > .table {
