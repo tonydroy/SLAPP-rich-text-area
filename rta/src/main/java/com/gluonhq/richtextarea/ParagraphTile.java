@@ -444,6 +444,11 @@ public class ParagraphTile extends HBox {
 
         void mousePressedListener(MouseEvent e) {
             Point2D localEvent = screenToLocal(e.getScreenX(), e.getScreenY());
+
+            //Added by me to prevent crash in derivations on mouse clicks out of justification RTA
+            //
+            if (localEvent == null) localEvent = new Point2D(0,0);
+            //
             if (e.getButton() == MouseButton.PRIMARY && !(e.isMiddleButtonDown() || e.isSecondaryButtonDown())) {
                 HitInfo hitInfo = textFlow.hitTest(new Point2D(localEvent.getX() - textFlowLayoutX, localEvent.getY() - textFlowLayoutY));
                 Selection prevSelection = viewModel.getSelection();
