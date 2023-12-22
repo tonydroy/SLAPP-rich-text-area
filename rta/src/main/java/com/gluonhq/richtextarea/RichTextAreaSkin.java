@@ -1221,7 +1221,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry (',', ","),
                 entry ('.', "."),
                 entry ('/', "/"),
-                entry ('~', "~"),
+                entry ('~', "\u223c"),
                 entry ('!', "!"),
                 entry ('@', "@"),
                 entry ('#', "#"),
@@ -1387,7 +1387,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry (',', ","),
                 entry ('.', "."),
                 entry ('/', "/"),
-                entry ('~', "~"),
+                entry ('~', "\u223c"),
                 entry ('!', "!"),
                 entry ('@', "@"),
                 entry ('#', "#"),
@@ -1485,7 +1485,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry (',', ","),
                 entry ('.', "."),
                 entry ('/', "/"),
-                entry ('~', "~"),
+                entry ('~', "\u223c"),
                 entry ('!', "!"),
                 entry ('@', "@"),
                 entry ('#', "#"),
@@ -1583,7 +1583,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry (',', ","),
                 entry ('.', "."),
                 entry ('/', "/"),
-                entry ('~', "~"),
+                entry ('~', "\u223c"),
                 entry ('!', "!"),
                 entry ('@', "@"),
                 entry ('#', "#"),
@@ -1807,6 +1807,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.ALT_DOWN), "\u22a8"),                                                                  //entails
                 entry(new KeyCodeCombination(KeyCode.PERIOD, KeyCombination.ALT_DOWN), "\u22ad"),                                                                 //not entails
                 entry(new KeyCodeCombination(KeyCode.SLASH, KeyCombination.ALT_DOWN), "\u25c3\u25b9"),                                                            //replacement rule
+
 
                 entry(new KeyCodeCombination(KeyCode.BACK_QUOTE, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u223c"),                                  //tilde
                 entry(new KeyCodeCombination(KeyCode.DIGIT1, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2227"),                                      //caret
