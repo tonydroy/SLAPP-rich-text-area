@@ -29,6 +29,7 @@ package com.gluonhq.richtextarea;
 
 import com.gluonhq.emoji.EmojiSkinTone;
 import com.gluonhq.richtextarea.action.ActionFactory;
+import com.gluonhq.richtextarea.model.Decoration;
 import com.gluonhq.richtextarea.model.Document;
 import com.gluonhq.richtextarea.model.ParagraphDecoration;
 import javafx.beans.property.BooleanProperty;
@@ -185,7 +186,7 @@ public class RichTextArea extends Control {
     public final Selection getSelection() {
        return selectionProperty.get();
     }
-    private final ReadOnlyObjectWrapper<Selection> selectionProperty = new ReadOnlyObjectWrapper<>(this, "selection", Selection.UNDEFINED);
+    final ReadOnlyObjectWrapper<Selection> selectionProperty = new ReadOnlyObjectWrapper<>(this, "selection", Selection.UNDEFINED);
 
     // textLengthProperty
     /**
@@ -326,6 +327,29 @@ public class RichTextArea extends Control {
     public final int getCaretPosition() { return caretPosition.get(); }
     public final ReadOnlyIntegerProperty caretPositionProperty() { return caretPosition.getReadOnlyProperty(); }
 
+
+    /**
+     * The current decoration at the caret.
+     */
+    final ReadOnlyObjectWrapper<Decoration> decorationAtCaret = new ReadOnlyObjectWrapper<>(this, "decorationAtCaret");
+    public final ReadOnlyObjectProperty<Decoration> decorationAtCaretProperty() {
+        return decorationAtCaret.getReadOnlyProperty();
+    }
+    public final Decoration getDecorationAtCaret() {
+        return decorationAtCaret.get();
+    }
+
+    /**
+     * The paragraph decoration at the current paragraph.
+     */
+    final ReadOnlyObjectWrapper<ParagraphDecoration> decorationAtParagraph = new ReadOnlyObjectWrapper<>(this, "decorationAtParagraph");
+    public final ReadOnlyObjectProperty<ParagraphDecoration> decorationAtParagraphProperty() {
+        return decorationAtParagraph.getReadOnlyProperty();
+    }
+    public final ParagraphDecoration getDecorationAtParagraph() {
+        return decorationAtParagraph.get();
+    }
+
     /**
      * Defines if tables can be inserted into the document or not. By default, it is allowed
      */
@@ -348,8 +372,8 @@ public class RichTextArea extends Control {
      *
      * @defaultValue An empty String
      */
-    private StringProperty promptText = new SimpleStringProperty(this, "promptText", "") {
-        @Override protected void invalidated() {
+    private final StringProperty promptText = new SimpleStringProperty(this, "promptText", ""){
+    @Override protected void invalidated() {
             // Strip out newlines
             String txt = get();
             if (txt != null && txt.contains("\n")) {

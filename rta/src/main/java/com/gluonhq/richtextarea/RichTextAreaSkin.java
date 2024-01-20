@@ -112,7 +112,8 @@ import static javafx.scene.text.FontWeight.NORMAL;
 public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     private RichTextArea control;
 
-    interface ActionBuilder extends Function<KeyEvent, ActionCmd>{}
+    interface ActionBuilder extends Function<KeyEvent, ActionCmd> {
+    }
 
     // TODO need to find a better way to find next row caret position
     private final RichTextAreaViewModel viewModel = new RichTextAreaViewModel(this::getNextRowPosition, this::getNextTableCellPosition);
@@ -138,8 +139,9 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     private BooleanProperty overlineOn = new SimpleBooleanProperty(false);
 
     private ObjectProperty<KeyMapValue> keyMapState = new SimpleObjectProperty<>(KeyMapValue.BASE);
+
     public void setMaps(KeyMapValue request) {
-        switch(request) {
+        switch (request) {
             case BASE: {
                 keyPressedCharMap = SPECIAL_WITH_ITALIC_MAP;
                 keyTypedCharMap = BASE_MAP;
@@ -170,119 +172,93 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
 
 
     private final Map<KeyCombination, ActionBuilder> INPUT_MAP = Map.ofEntries(
-        entry( new KeyCodeCombination(RIGHT, SHIFT_ANY, ALT_ANY, CONTROL_ANY, SHORTCUT_ANY), e -> ACTION_CMD_FACTORY.caretMove(Direction.FORWARD, e)),
-        entry( new KeyCodeCombination(LEFT,  SHIFT_ANY, ALT_ANY, CONTROL_ANY, SHORTCUT_ANY), e -> ACTION_CMD_FACTORY.caretMove(Direction.BACK, e)),
-        entry( new KeyCodeCombination(DOWN,  SHIFT_ANY, ALT_ANY, SHORTCUT_ANY),              e -> ACTION_CMD_FACTORY.caretMove(Direction.DOWN, e)),
-        entry( new KeyCodeCombination(UP,    SHIFT_ANY, ALT_ANY, SHORTCUT_ANY),              e -> ACTION_CMD_FACTORY.caretMove(Direction.UP, e)),
-        entry( new KeyCodeCombination(HOME,  SHIFT_ANY),                                     e -> ACTION_CMD_FACTORY.caretMove(Direction.BACK, e.isShiftDown(), false, true)),
-        entry( new KeyCodeCombination(END,   SHIFT_ANY),                                     e -> ACTION_CMD_FACTORY.caretMove(Direction.FORWARD, e.isShiftDown(), false, true)),
-        entry( new KeyCodeCombination(A, SHORTCUT_DOWN),                                     e -> ACTION_CMD_FACTORY.selectAll()),
-        entry( new KeyCodeCombination(C, SHORTCUT_DOWN),                                     e -> ACTION_CMD_FACTORY.copy()),
-        entry( new KeyCodeCombination(X, SHORTCUT_DOWN),                                     e -> ACTION_CMD_FACTORY.cut()),
-        entry( new KeyCodeCombination(V, SHORTCUT_DOWN),                                     e -> ACTION_CMD_FACTORY.paste()),
-        entry( new KeyCodeCombination(Z, SHORTCUT_DOWN, SHIFT_ANY),                          e -> e.isShiftDown() ? ACTION_CMD_FACTORY.redo() : ACTION_CMD_FACTORY.undo()),
-        entry( new KeyCodeCombination(ENTER, SHIFT_ANY),                                     e -> {
-            ParagraphDecoration decoration = viewModel.getDecorationAtParagraph();
-            Paragraph paragraph = viewModel.getParagraphWithCaret().orElse(null);
-            if (decoration != null && decoration.getGraphicType() != ParagraphDecoration.GraphicType.NONE) {
-                int level = decoration.getIndentationLevel();
-                if (level > 0 && paragraph != null && viewModel.isEmptyParagraph(paragraph)) {
-                    // on empty paragraphs, Enter is the same as shift+tab
-                    return ACTION_CMD_FACTORY.decorate(ParagraphDecoration.builder().fromDecoration(decoration).indentationLevel(level - 1).build());
-                }
-            } else if (paragraph != null && paragraph.getStart() < paragraph.getEnd() &&
-                    decoration != null && decoration.hasTableDecoration()) {
-                int caretPosition = viewModel.getCaretPosition();
-                UnitBuffer buffer = new UnitBuffer();
-                viewModel.walkFragments((u, d) -> buffer.append(u), paragraph.getStart(), paragraph.getEnd());
-                Table table = new Table(buffer,
-                        paragraph.getStart(), decoration.getTableDecoration().getRows(), decoration.getTableDecoration().getColumns());
-                // move up/down rows
-                int nextCaretAt = table.getCaretAtNextRow(caretPosition, e.isShiftDown() ? Direction.UP : Direction.DOWN);
-                viewModel.setCaretPosition(nextCaretAt);
-                if (nextCaretAt == 0 || nextCaretAt == viewModel.getTextLength()) {
-                    // insert new line before/after the table and reset decoration
-                    return ACTION_CMD_FACTORY.insertAndDecorate("\n", ParagraphDecoration.builder().presets().build());
-                }
-                return null;
-            }
-            if (getSkinnable().getOnAction() != null && !e.isShiftDown()) {
-                getSkinnable().getOnAction().handle(new ActionEvent());
-                return null;
-            }
-            return ACTION_CMD_FACTORY.insertText("\n");
-        }),
-        entry( new KeyCodeCombination(BACK_SPACE, SHIFT_ANY),                                e -> {
-            int caret = viewModel.getCaretPosition();
-            Paragraph paragraph = viewModel.getParagraphWithCaret().orElse(null);
-            ParagraphDecoration decoration = viewModel.getDecorationAtParagraph();
-            if (decoration != null && paragraph != null) {
-                if (decoration.hasTableDecoration()) {
+            entry(new KeyCodeCombination(RIGHT, SHIFT_ANY, ALT_ANY, CONTROL_ANY, SHORTCUT_ANY), e -> ACTION_CMD_FACTORY.caretMove(Direction.FORWARD, e)),
+            entry(new KeyCodeCombination(LEFT, SHIFT_ANY, ALT_ANY, CONTROL_ANY, SHORTCUT_ANY), e -> ACTION_CMD_FACTORY.caretMove(Direction.BACK, e)),
+            entry(new KeyCodeCombination(DOWN, SHIFT_ANY, ALT_ANY, SHORTCUT_ANY), e -> ACTION_CMD_FACTORY.caretMove(Direction.DOWN, e)),
+            entry(new KeyCodeCombination(UP, SHIFT_ANY, ALT_ANY, SHORTCUT_ANY), e -> ACTION_CMD_FACTORY.caretMove(Direction.UP, e)),
+            entry(new KeyCodeCombination(HOME, SHIFT_ANY), e -> ACTION_CMD_FACTORY.caretMove(Direction.BACK, e.isShiftDown(), false, true)),
+            entry(new KeyCodeCombination(END, SHIFT_ANY), e -> ACTION_CMD_FACTORY.caretMove(Direction.FORWARD, e.isShiftDown(), false, true)),
+            entry(new KeyCodeCombination(A, SHORTCUT_DOWN), e -> ACTION_CMD_FACTORY.selectAll()),
+            entry(new KeyCodeCombination(C, SHORTCUT_DOWN), e -> ACTION_CMD_FACTORY.copy()),
+            entry(new KeyCodeCombination(X, SHORTCUT_DOWN), e -> ACTION_CMD_FACTORY.cut()),
+            entry(new KeyCodeCombination(V, SHORTCUT_DOWN), e -> ACTION_CMD_FACTORY.paste()),
+            entry(new KeyCodeCombination(Z, SHORTCUT_DOWN, SHIFT_ANY), e -> e.isShiftDown() ? ACTION_CMD_FACTORY.redo() : ACTION_CMD_FACTORY.undo()),
+            entry(new KeyCodeCombination(ENTER, SHIFT_ANY), e -> {
+                ParagraphDecoration decoration = viewModel.getDecorationAtParagraph();
+                Paragraph paragraph = viewModel.getParagraphWithCaret().orElse(null);
+                if (decoration != null && decoration.getGraphicType() != ParagraphDecoration.GraphicType.NONE) {
+                    int level = decoration.getIndentationLevel();
+                    if (level > 0 && paragraph != null && viewModel.isEmptyParagraph(paragraph)) {
+                        // on empty paragraphs, Enter is the same as shift+tab
+                        return ACTION_CMD_FACTORY.decorate(ParagraphDecoration.builder().fromDecoration(decoration).indentationLevel(level - 1).build());
+                    }
+                } else if (paragraph != null && paragraph.getStart() < paragraph.getEnd() &&
+                        decoration != null && decoration.hasTableDecoration()) {
+                    int caretPosition = viewModel.getCaretPosition();
                     UnitBuffer buffer = new UnitBuffer();
                     viewModel.walkFragments((u, d) -> buffer.append(u), paragraph.getStart(), paragraph.getEnd());
                     Table table = new Table(buffer,
                             paragraph.getStart(), decoration.getTableDecoration().getRows(), decoration.getTableDecoration().getColumns());
-                    if (table.isCaretAtStartOfCell(caret)) {
-                        // check backspace at beginning of each cell to prevent moving text from one cell to the other.
-                        // and just move caret if cell was empty:
-                        if (table.isCaretAtEmptyCell(caret)) {
-                            return ACTION_CMD_FACTORY.caretMove(Direction.BACK, false, false, false);
-                        }
-                        return null;
+                    // move up/down rows
+                    int nextCaretAt = table.getCaretAtNextRow(caretPosition, e.isShiftDown() ? Direction.UP : Direction.DOWN);
+                    viewModel.setCaretPosition(nextCaretAt);
+                    if (nextCaretAt == 0 || nextCaretAt == viewModel.getTextLength()) {
+                        // insert new line before/after the table and reset decoration
+                        return ACTION_CMD_FACTORY.insertAndDecorate("\n", ParagraphDecoration.builder().presets().build());
                     }
-                } else if (paragraph.getStart() == caret) {
-                    // check backspace at beginning of paragraph:
-                    if (decoration.getGraphicType() != ParagraphDecoration.GraphicType.NONE) {
-                        return ACTION_CMD_FACTORY.decorate(ParagraphDecoration.builder().fromDecoration(decoration).graphicType(ParagraphDecoration.GraphicType.NONE).build());
-                    } else if (decoration.getIndentationLevel() > 0) {
-                        //decrease indentation level
-                        return ACTION_CMD_FACTORY.decorate(ParagraphDecoration.builder().fromDecoration(decoration).indentationLevel(decoration.getIndentationLevel() - 1).build());
-                    } else {
-                        // if previous paragraph is a table:
-                        int index = viewModel.getParagraphList().indexOf(paragraph);
-                        if (index > 0) {
-                            if (viewModel.getParagraphList().get(index - 1).getDecoration().hasTableDecoration()) {
-                                // just move to last cell
+                    return null;
+                }
+                if (getSkinnable().getOnAction() != null && !e.isShiftDown()) {
+                    getSkinnable().getOnAction().handle(new ActionEvent());
+                    return null;
+                }
+                return ACTION_CMD_FACTORY.insertText("\n");
+            }),
+            entry(new KeyCodeCombination(BACK_SPACE, SHIFT_ANY), e -> {
+                int caret = viewModel.getCaretPosition();
+                Paragraph paragraph = viewModel.getParagraphWithCaret().orElse(null);
+                ParagraphDecoration decoration = viewModel.getDecorationAtParagraph();
+                if (decoration != null && paragraph != null) {
+                    if (decoration.hasTableDecoration()) {
+                        UnitBuffer buffer = new UnitBuffer();
+                        viewModel.walkFragments((u, d) -> buffer.append(u), paragraph.getStart(), paragraph.getEnd());
+                        Table table = new Table(buffer,
+                                paragraph.getStart(), decoration.getTableDecoration().getRows(), decoration.getTableDecoration().getColumns());
+                        if (table.isCaretAtStartOfCell(caret)) {
+                            // check backspace at beginning of each cell to prevent moving text from one cell to the other.
+                            // and just move caret if cell was empty:
+                            if (table.isCaretAtEmptyCell(caret)) {
                                 return ACTION_CMD_FACTORY.caretMove(Direction.BACK, false, false, false);
+                            }
+                            return null;
+                        }
+                    } else if (paragraph.getStart() == caret) {
+                        // check backspace at beginning of paragraph:
+                        if (decoration.getGraphicType() != ParagraphDecoration.GraphicType.NONE) {
+                            return ACTION_CMD_FACTORY.decorate(ParagraphDecoration.builder().fromDecoration(decoration).graphicType(ParagraphDecoration.GraphicType.NONE).build());
+                        } else if (decoration.getIndentationLevel() > 0) {
+                            //decrease indentation level
+                            return ACTION_CMD_FACTORY.decorate(ParagraphDecoration.builder().fromDecoration(decoration).indentationLevel(decoration.getIndentationLevel() - 1).build());
+                        } else {
+                            // if previous paragraph is a table:
+                            int index = viewModel.getParagraphList().indexOf(paragraph);
+                            if (index > 0) {
+                                if (viewModel.getParagraphList().get(index - 1).getDecoration().hasTableDecoration()) {
+                                    // just move to last cell
+                                    return ACTION_CMD_FACTORY.caretMove(Direction.BACK, false, false, false);
+                                }
                             }
                         }
                     }
                 }
-            }
-            return ACTION_CMD_FACTORY.removeText(-1);
-        }),
-        entry( new KeyCodeCombination(BACK_SPACE, SHORTCUT_DOWN, SHIFT_ANY),                 e -> {
-            int caret = viewModel.getCaretPosition();
-            Paragraph paragraph = viewModel.getParagraphWithCaret().orElse(null);
-            ParagraphDecoration decoration = viewModel.getDecorationAtParagraph();
-            if (paragraph != null && decoration != null && decoration.hasTableDecoration()) {
-                // TODO: remove cell content, else if empty move to prev cell
-                return null;
-            } else if (paragraph != null && paragraph.getStart() == caret) {
-                // if previous paragraph is a table:
-                int index = viewModel.getParagraphList().indexOf(paragraph);
-                if (index > 0) {
-                    if (viewModel.getParagraphList().get(index - 1).getDecoration().hasTableDecoration()) {
-                        // just move to last cell
-                        return ACTION_CMD_FACTORY.caretMove(Direction.BACK, false, false, false);
-                    }
-                }
-            }
-            if (Tools.MAC) {
-                // CMD + BACKSPACE or CMD + SHIFT + BACKSPACE removes line in Mac
-                return ACTION_CMD_FACTORY.removeText(0, RichTextAreaViewModel.Remove.LINE);
-            }
-            // CTRL + BACKSPACE removes word in Windows and Linux
-            // SHIFT + CTRL + BACKSPACE removes line in Windows and Linux
-            return ACTION_CMD_FACTORY.removeText(0, e.isShiftDown() ? RichTextAreaViewModel.Remove.LINE : RichTextAreaViewModel.Remove.WORD);
-        }),
-        entry( new KeyCodeCombination(BACK_SPACE, ALT_DOWN),                                 e -> {
-            if (Tools.MAC) {
+                return ACTION_CMD_FACTORY.removeText(-1);
+            }),
+            entry(new KeyCodeCombination(BACK_SPACE, SHORTCUT_DOWN, SHIFT_ANY), e -> {
                 int caret = viewModel.getCaretPosition();
                 Paragraph paragraph = viewModel.getParagraphWithCaret().orElse(null);
                 ParagraphDecoration decoration = viewModel.getDecorationAtParagraph();
                 if (paragraph != null && decoration != null && decoration.hasTableDecoration()) {
-                    // TODO: remove prev word from cell if any, else if empty move to prev cell, else nothing
+                    // TODO: remove cell content, else if empty move to prev cell
                     return null;
                 } else if (paragraph != null && paragraph.getStart() == caret) {
                     // if previous paragraph is a table:
@@ -294,102 +270,128 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                         }
                     }
                 }
-                return ACTION_CMD_FACTORY.removeText(0, RichTextAreaViewModel.Remove.WORD);
-            }
-            return null;
-        }),
-        entry( new KeyCodeCombination(DELETE),                                               e -> ACTION_CMD_FACTORY.removeText(0)),
-        entry( new KeyCodeCombination(B, SHORTCUT_DOWN),                                     e -> {
-            TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
-            FontWeight fontWeight = decoration.getFontWeight() == BOLD ? NORMAL : BOLD;
-            return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).fontWeight(fontWeight).build());
-        }),
-        entry(new KeyCodeCombination(I, SHORTCUT_DOWN),                                      e -> {
-            TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
-            FontPosture fontPosture = decoration.getFontPosture() == ITALIC ? REGULAR : ITALIC;
-            return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).fontPosture(fontPosture).build());
-        }),
-        entry(new KeyCodeCombination(U, SHORTCUT_DOWN),                                      e -> {
-            TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
-            Boolean underlineState = decoration.isUnderline() == true ? false : true;
-            return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).underline(underlineState).build());
-        }),
+                if (Tools.MAC) {
+                    // CMD + BACKSPACE or CMD + SHIFT + BACKSPACE removes line in Mac
+                    return ACTION_CMD_FACTORY.removeText(0, RichTextAreaViewModel.Remove.LINE);
+                }
+                // CTRL + BACKSPACE removes word in Windows and Linux
+                // SHIFT + CTRL + BACKSPACE removes line in Windows and Linux
+                return ACTION_CMD_FACTORY.removeText(0, e.isShiftDown() ? RichTextAreaViewModel.Remove.LINE : RichTextAreaViewModel.Remove.WORD);
+            }),
+            entry(new KeyCodeCombination(BACK_SPACE, ALT_DOWN), e -> {
+                if (Tools.MAC) {
+                    int caret = viewModel.getCaretPosition();
+                    Paragraph paragraph = viewModel.getParagraphWithCaret().orElse(null);
+                    ParagraphDecoration decoration = viewModel.getDecorationAtParagraph();
+                    if (paragraph != null && decoration != null && decoration.hasTableDecoration()) {
+                        // TODO: remove prev word from cell if any, else if empty move to prev cell, else nothing
+                        return null;
+                    } else if (paragraph != null && paragraph.getStart() == caret) {
+                        // if previous paragraph is a table:
+                        int index = viewModel.getParagraphList().indexOf(paragraph);
+                        if (index > 0) {
+                            if (viewModel.getParagraphList().get(index - 1).getDecoration().hasTableDecoration()) {
+                                // just move to last cell
+                                return ACTION_CMD_FACTORY.caretMove(Direction.BACK, false, false, false);
+                            }
+                        }
+                    }
+                    return ACTION_CMD_FACTORY.removeText(0, RichTextAreaViewModel.Remove.WORD);
+                }
+                return null;
+            }),
+            entry(new KeyCodeCombination(DELETE), e -> ACTION_CMD_FACTORY.removeText(0)),
+            entry(new KeyCodeCombination(B, SHORTCUT_DOWN), e -> {
+                TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
+                FontWeight fontWeight = decoration.getFontWeight() == BOLD ? NORMAL : BOLD;
+                return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).fontWeight(fontWeight).build());
+            }),
+            entry(new KeyCodeCombination(I, SHORTCUT_DOWN), e -> {
+                TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
+                FontPosture fontPosture = decoration.getFontPosture() == ITALIC ? REGULAR : ITALIC;
+                return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).fontPosture(fontPosture).build());
+            }),
+            entry(new KeyCodeCombination(U, SHORTCUT_DOWN), e -> {
+                TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
+                Boolean underlineState = decoration.isUnderline() == true ? false : true;
+                return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).underline(underlineState).build());
+            }),
 
-        entry(new KeyCodeCombination(F8),                                 e -> {
-            TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
-            Boolean subscriptState = (decoration.isSubscript() || decoration.isTransSubscript()) == true ? false : true;
-            return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).subscript(subscriptState).transSubscript(false).superscript(false).transSuperscript(false).build());
-        }),
-            entry(new KeyCodeCombination(F8, SHIFT_DOWN),                                 e -> {
+            entry(new KeyCodeCombination(F8), e -> {
+                TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
+                Boolean subscriptState = (decoration.isSubscript() || decoration.isTransSubscript()) == true ? false : true;
+                return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).subscript(subscriptState).transSubscript(false).superscript(false).transSuperscript(false).build());
+            }),
+            entry(new KeyCodeCombination(F8, SHIFT_DOWN), e -> {
                 TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
                 Boolean transSubscriptState = (decoration.isTransSubscript() || decoration.isSubscript()) == true ? false : true;
                 return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).transSubscript(transSubscriptState).transSuperscript(false).subscript(false).superscript(false).build());
-        }),
-            entry(new KeyCodeCombination(F7),                                 e -> {
+            }),
+            entry(new KeyCodeCombination(F7), e -> {
                 TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
                 Boolean superscriptState = (decoration.isSuperscript() || decoration.isTransSuperscript()) == true ? false : true;
                 return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).superscript(superscriptState).transSuperscript(false).subscript(false).transSubscript(false).build());
             }),
-            entry(new KeyCodeCombination(F7, SHIFT_DOWN),                                 e -> {
+            entry(new KeyCodeCombination(F7, SHIFT_DOWN), e -> {
                 TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
                 Boolean transSuperscriptState = (decoration.isTransSuperscript() || decoration.isSuperscript()) == true ? false : true;
                 return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).transSuperscript(transSuperscriptState).transSubscript(false).subscript(false).superscript(false).build());
             }),
 
-        // to change keyboards
-        entry( new KeyCodeCombination(F1),                                 e -> {
-            setKeyMapState(KeyMapValue.BASE);
-            return null;
-        }),
-        entry( new KeyCodeCombination(F2),                                 e -> {
-            setKeyMapState(KeyMapValue.ITALIC_AND_SANS);
-            return null;
-        }),
-        entry( new KeyCodeCombination(F3),                                 e -> {
-            setKeyMapState(KeyMapValue.SCRIPT_AND_SANS);
-            return null;
-        }),
-        entry( new KeyCodeCombination(F4),                                 e -> {
-            setKeyMapState(KeyMapValue.ITALIC_AND_BLACKBOARD);
-            return null;
-        }),
-        entry( new KeyCodeCombination(F5),                                 e -> {
-            setKeyMapState(KeyMapValue.GREEK_AND_FRAKTUR);
-            return null;
-        }),
-        entry( new KeyCodeCombination(DIGIT0, SHORTCUT_DOWN),                                 e -> {
-            toggleOverlineOn();
-            return null;
-                }),
-        //
-        entry(new KeyCodeCombination(TAB, SHIFT_ANY),                                        e -> {
-            ParagraphDecoration decoration = viewModel.getDecorationAtParagraph();
-            Paragraph paragraph = viewModel.getParagraphWithCaret().orElse(null);
-            if (decoration != null && decoration.getGraphicType() != ParagraphDecoration.GraphicType.NONE) {
-                int level = Math.max(decoration.getIndentationLevel() + (e.isShiftDown() ? -1 : 1), 0);
-                return ACTION_CMD_FACTORY.decorate(ParagraphDecoration.builder().fromDecoration(decoration).indentationLevel(level).build());
-            } else if (decoration != null && decoration.hasTableDecoration() &&
-                    paragraph != null && paragraph.getStart() < paragraph.getEnd()) {
-                int caretPosition = viewModel.getCaretPosition();
-                UnitBuffer buffer = new UnitBuffer();
-                viewModel.walkFragments((u, d) -> buffer.append(u), paragraph.getStart(), paragraph.getEnd());
-                Table table = new Table(buffer,
-                        paragraph.getStart(), decoration.getTableDecoration().getRows(), decoration.getTableDecoration().getColumns());
-                // select content of prev/next cell if non-empty, or move to prev/next cell
-                List<Integer> selectionAtNextCell = table.selectNextCell(caretPosition, e.isShiftDown() ? Direction.BACK : Direction.FORWARD);
-                int start = selectionAtNextCell.get(0);
-                viewModel.clearSelection();
-                viewModel.setCaretPosition(start);
-                if (selectionAtNextCell.size() == 2) {
-                    int end = selectionAtNextCell.get(1);
-                    if (start < end) {
-                        // select content
-                        return ACTION_CMD_FACTORY.selectCell(new Selection(start, end));
+            // to change keyboards
+            entry(new KeyCodeCombination(F1), e -> {
+                setKeyMapState(KeyMapValue.BASE);
+                return null;
+            }),
+            entry(new KeyCodeCombination(F2), e -> {
+                setKeyMapState(KeyMapValue.ITALIC_AND_SANS);
+                return null;
+            }),
+            entry(new KeyCodeCombination(F3), e -> {
+                setKeyMapState(KeyMapValue.SCRIPT_AND_SANS);
+                return null;
+            }),
+            entry(new KeyCodeCombination(F4), e -> {
+                setKeyMapState(KeyMapValue.ITALIC_AND_BLACKBOARD);
+                return null;
+            }),
+            entry(new KeyCodeCombination(F5), e -> {
+                setKeyMapState(KeyMapValue.GREEK_AND_FRAKTUR);
+                return null;
+            }),
+            entry(new KeyCodeCombination(DIGIT0, SHORTCUT_DOWN), e -> {
+                toggleOverlineOn();
+                return null;
+            }),
+            //
+            entry(new KeyCodeCombination(TAB, SHIFT_ANY), e -> {
+                ParagraphDecoration decoration = viewModel.getDecorationAtParagraph();
+                Paragraph paragraph = viewModel.getParagraphWithCaret().orElse(null);
+                if (decoration != null && decoration.getGraphicType() != ParagraphDecoration.GraphicType.NONE) {
+                    int level = Math.max(decoration.getIndentationLevel() + (e.isShiftDown() ? -1 : 1), 0);
+                    return ACTION_CMD_FACTORY.decorate(ParagraphDecoration.builder().fromDecoration(decoration).indentationLevel(level).build());
+                } else if (decoration != null && decoration.hasTableDecoration() &&
+                        paragraph != null && paragraph.getStart() < paragraph.getEnd()) {
+                    int caretPosition = viewModel.getCaretPosition();
+                    UnitBuffer buffer = new UnitBuffer();
+                    viewModel.walkFragments((u, d) -> buffer.append(u), paragraph.getStart(), paragraph.getEnd());
+                    Table table = new Table(buffer,
+                            paragraph.getStart(), decoration.getTableDecoration().getRows(), decoration.getTableDecoration().getColumns());
+                    // select content of prev/next cell if non-empty, or move to prev/next cell
+                    List<Integer> selectionAtNextCell = table.selectNextCell(caretPosition, e.isShiftDown() ? Direction.BACK : Direction.FORWARD);
+                    int start = selectionAtNextCell.get(0);
+                    viewModel.clearSelection();
+                    viewModel.setCaretPosition(start);
+                    if (selectionAtNextCell.size() == 2) {
+                        int end = selectionAtNextCell.get(1);
+                        if (start < end) {
+                            // select content
+                            return ACTION_CMD_FACTORY.selectCell(new Selection(start, end));
+                        }
                     }
                 }
-            }
-            return null;
-        })
+                return null;
+            })
     );
 
     private static final Point2D DEFAULT_POINT_2D = new Point2D(-1, -1);
@@ -464,7 +466,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         RichVirtualFlow(RichTextArea control) {
             ReadOnlyObjectProperty<Bounds> clippedBounds = lookup(".clipped-container").layoutBoundsProperty();
             textFlowPrefWidthProperty.bind(Bindings.createDoubleBinding(() -> control.getContentAreaWidth() > 0 ?
-                    control.getContentAreaWidth() :
+                            control.getContentAreaWidth() :
                             clippedBounds.get().getWidth() > 0 ? clippedBounds.get().getWidth() - 10 : -1,
                     control.contentAreaWidthProperty(), clippedBounds));
         }
@@ -643,12 +645,15 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         final RichTextAreaSkin skin = (RichTextAreaSkin) c.getSkin();
         return skin.promptTextFill;
     }, Color.GRAY);
+
     protected final void setPromptTextFill(Paint value) {
         promptTextFill.setValue(value);
     }
+
     protected final Paint getPromptTextFill() {
         return promptTextFill.getValue();
     }
+
     protected final ObjectProperty<Paint> promptTextFillProperty() {
         return (ObjectProperty<Paint>) promptTextFill;
     }
@@ -675,8 +680,6 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         tempMap3.putAll(SPECIAL_CHARACTER_MAP);
         tempMap3.putAll(ITALIC_ALT_MAP);
         SPECIAL_WITH_ITALIC_MAP = Collections.unmodifiableMap(tempMap3);
-
-
 
 
         resources = ResourceBundle.getBundle("com.gluonhq.richtextarea.rich-text-area");
@@ -728,7 +731,9 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         String fontFamily = "Noto Serif Combo";
         TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
         ActionCmd actionCmd = ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).fontFamily(fontFamily).build());
-        if (actionCmd != null) { execute(actionCmd); }
+        if (actionCmd != null) {
+            execute(actionCmd);
+        }
 
     }
 
@@ -755,6 +760,11 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         getSkinnable().tableAllowedProperty().removeListener(tableAllowedListener);
         getSkinnable().textLengthProperty.unbind();
         getSkinnable().modifiedProperty.unbind();
+        getSkinnable().selectionProperty.unbind();
+        getSkinnable().decorationAtCaret.unbind();
+        getSkinnable().decorationAtParagraph.unbind();
+
+
         getSkinnable().setOnKeyPressed(null);
         getSkinnable().setOnKeyTyped(null);
         getSkinnable().widthProperty().removeListener(controlPrefWidthListener);
@@ -818,7 +828,12 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         promptNode.fontProperty().bind(promptFontBinding);
         getSkinnable().textLengthProperty.bind(viewModel.textLengthProperty());
         getSkinnable().modifiedProperty.bind(viewModel.savedProperty().not());
-        getSkinnable().setOnContextMenuRequested(contextMenuEventEventHandler);
+
+        getSkinnable().selectionProperty.bind(viewModel.selectionProperty());
+        getSkinnable().decorationAtCaret.bind(viewModel.decorationAtCaretProperty());
+        getSkinnable().decorationAtParagraph.bind(viewModel.decorationAtParagraphProperty());
+
+        //       getSkinnable().setOnContextMenuRequested(contextMenuEventEventHandler);
         getSkinnable().editableProperty().addListener(this::editableChangeListener);
         getSkinnable().tableAllowedProperty().addListener(tableAllowedListener);
         viewModel.setTableAllowed(getSkinnable().isTableAllowed());
@@ -961,10 +976,10 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     }
 
     private static boolean isCharOnly(KeyEvent e) {
-        char c = e.getCharacter().isEmpty()? 0: e.getCharacter().charAt(0);
+        char c = e.getCharacter().isEmpty() ? 0 : e.getCharacter().charAt(0);
         return isPrintableChar(c) &&
-               !e.isControlDown() &&
-               !e.isMetaDown();
+                !e.isControlDown() &&
+                !e.isMetaDown();
     }
 
     private void execute(ActionCmd action) {
@@ -1013,7 +1028,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
             if ("\t".equals(e.getCharacter())) {
                 ParagraphDecoration decoration = viewModel.getDecorationAtParagraph();
                 if (decoration != null &&
-                    (decoration.getGraphicType() != ParagraphDecoration.GraphicType.NONE || decoration.hasTableDecoration())) {
+                        (decoration.getGraphicType() != ParagraphDecoration.GraphicType.NONE || decoration.hasTableDecoration())) {
                     // processed via keyPressedListener
                     e.consume();
                     return;
@@ -1142,106 +1157,107 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         return FACTORY.getCssMetaData();
     }
 
-    @Override public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
+    @Override
+    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
         return getClassCssMetaData();
     }
 
     private Map<Character, String> initializeBaseMap() {
         return Map.ofEntries(
-                entry ('a', "a"),
-                entry ('b', "b"),
-                entry ('c', "c"),
-                entry ('d', "d"),
-                entry ('e', "e"),
-                entry ('f', "f"),
-                entry ('g', "g"),
-                entry ('h', "h"),
-                entry ('i', "i"),
-                entry ('j', "j"),
-                entry ('k', "k"),
-                entry ('l', "l"),
-                entry ('m', "m"),
-                entry ('n', "n"),
-                entry ('o', "o"),
-                entry ('p', "p"),
-                entry ('q', "q"),
-                entry ('r', "r"),
-                entry ('s', "s"),
-                entry ('t', "t"),
-                entry ('u', "u"),
-                entry ('v', "v"),
-                entry ('w', "w"),
-                entry ('x', "x"),
-                entry ('y', "y"),
-                entry ('z', "z"),
-                entry ('A', "A"),
-                entry ('B', "B"),
-                entry ('C', "C"),
-                entry ('D', "D"),
-                entry ('E', "E"),
-                entry ('F', "F"),
-                entry ('G', "G"),
-                entry ('H', "H"),
-                entry ('I', "I"),
-                entry ('J', "J"),
-                entry ('K', "K"),
-                entry ('L', "L"),
-                entry ('M', "M"),
-                entry ('N', "N"),
-                entry ('O', "O"),
-                entry ('P', "P"),
-                entry ('Q', "Q"),
-                entry ('R', "R"),
-                entry ('S', "S"),
-                entry ('T', "T"),
-                entry ('U', "U"),
-                entry ('V', "V"),
-                entry ('W', "W"),
-                entry ('X', "X"),
-                entry ('Y', "Y"),
-                entry ('Z', "Z"),
-                entry ('`', "`"),
-                entry ('1', "1"),
-                entry ('2', "2"),
-                entry ('3', "3"),
-                entry ('4', "4"),
-                entry ('5', "5"),
-                entry ('6', "6"),
-                entry ('7', "7"),
-                entry ('8', "8"),
-                entry ('9', "9"),
-                entry ('0', "0"),
-                entry ('-', "-"),
-                entry ('=', "="),
-                entry ('[', "["),
-                entry (']', "]"),
-                entry ('\\', "\\"),
-                entry (';', ";"),
-                entry ('\'', "'"),
-                entry (',', ","),
-                entry ('.', "."),
-                entry ('/', "/"),
-                entry ('~', "\u223c"),
-                entry ('!', "!"),
-                entry ('@', "@"),
-                entry ('#', "#"),
-                entry ('$', "$"),
-                entry ('%', "%"),
-                entry ('^', "^"),
-                entry ('&', "&"),
-                entry ('*', "*"),
-                entry ('(', "("),
-                entry (')', ")"),
-                entry ('_', "_"),
-                entry ('+', "+"),
-                entry ('{', "{"),
-                entry ('}', "}"),
-                entry ('|', "|"),
-                entry (':', ":"),
-                entry ('\"', "\""),
-                entry ('<', "<"),
-                entry ('>', ">"),
-                entry ('?', "?")
+                entry('a', "a"),
+                entry('b', "b"),
+                entry('c', "c"),
+                entry('d', "d"),
+                entry('e', "e"),
+                entry('f', "f"),
+                entry('g', "g"),
+                entry('h', "h"),
+                entry('i', "i"),
+                entry('j', "j"),
+                entry('k', "k"),
+                entry('l', "l"),
+                entry('m', "m"),
+                entry('n', "n"),
+                entry('o', "o"),
+                entry('p', "p"),
+                entry('q', "q"),
+                entry('r', "r"),
+                entry('s', "s"),
+                entry('t', "t"),
+                entry('u', "u"),
+                entry('v', "v"),
+                entry('w', "w"),
+                entry('x', "x"),
+                entry('y', "y"),
+                entry('z', "z"),
+                entry('A', "A"),
+                entry('B', "B"),
+                entry('C', "C"),
+                entry('D', "D"),
+                entry('E', "E"),
+                entry('F', "F"),
+                entry('G', "G"),
+                entry('H', "H"),
+                entry('I', "I"),
+                entry('J', "J"),
+                entry('K', "K"),
+                entry('L', "L"),
+                entry('M', "M"),
+                entry('N', "N"),
+                entry('O', "O"),
+                entry('P', "P"),
+                entry('Q', "Q"),
+                entry('R', "R"),
+                entry('S', "S"),
+                entry('T', "T"),
+                entry('U', "U"),
+                entry('V', "V"),
+                entry('W', "W"),
+                entry('X', "X"),
+                entry('Y', "Y"),
+                entry('Z', "Z"),
+                entry('`', "`"),
+                entry('1', "1"),
+                entry('2', "2"),
+                entry('3', "3"),
+                entry('4', "4"),
+                entry('5', "5"),
+                entry('6', "6"),
+                entry('7', "7"),
+                entry('8', "8"),
+                entry('9', "9"),
+                entry('0', "0"),
+                entry('-', "-"),
+                entry('=', "="),
+                entry('[', "["),
+                entry(']', "]"),
+                entry('\\', "\\"),
+                entry(';', ";"),
+                entry('\'', "'"),
+                entry(',', ","),
+                entry('.', "."),
+                entry('/', "/"),
+                entry('~', "\u223c"),
+                entry('!', "!"),
+                entry('@', "@"),
+                entry('#', "#"),
+                entry('$', "$"),
+                entry('%', "%"),
+                entry('^', "^"),
+                entry('&', "&"),
+                entry('*', "*"),
+                entry('(', "("),
+                entry(')', ")"),
+                entry('_', "_"),
+                entry('+', "+"),
+                entry('{', "{"),
+                entry('}', "}"),
+                entry('|', "|"),
+                entry(':', ":"),
+                entry('\"', "\""),
+                entry('<', "<"),
+                entry('>', ">"),
+                entry('?', "?")
         );
 
     }
@@ -1312,299 +1328,303 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.Z, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\ud835\udc4d")
         );
     }
+
     private Map<Character, String> initializeItalicMap() {
         return Map.ofEntries(
-                entry ('a', "\ud835\udc4e"),
-                entry ('b', "\ud835\udc4f"),
-                entry ('c', "\ud835\udc50"),
-                entry ('d', "\ud835\udc51"),
-                entry ('e', "\ud835\udc52"),
-                entry ('f', "\ud835\udc53"),
-                entry ('g', "\ud835\udc54"),
-                entry ('h', "\u210e"),
-                entry ('i', "\ud835\udc56"),
-                entry ('j', "\ud835\udc57"),
-                entry ('k', "\ud835\udc58"),
-                entry ('l', "\ud835\udc59"),
-                entry ('m', "\ud835\udc5a"),
-                entry ('n', "\ud835\udc5b"),
-                entry ('o', "\ud835\udc5c"),
-                entry ('p', "\ud835\udc5d"),
-                entry ('q', "\ud835\udc5e"),
-                entry ('r', "\ud835\udc5f"),
-                entry ('s', "\ud835\udc60"),
-                entry ('t', "\ud835\udc61"),
-                entry ('u', "\ud835\udc62"),
-                entry ('v', "\ud835\udc63"),
-                entry ('w', "\ud835\udc64"),
-                entry ('x', "\ud835\udc65"),
-                entry ('y', "\ud835\udc66"),
-                entry ('z', "\ud835\udc67"),
-                entry ('A', "\ud835\udc34"),
-                entry ('B', "\ud835\udc35"),
-                entry ('C', "\ud835\udc36"),
-                entry ('D', "\ud835\udc37"),
-                entry ('E', "\ud835\udc38"),
-                entry ('F', "\ud835\udc39"),
-                entry ('G', "\ud835\udc3a"),
-                entry ('H', "\ud835\udc3b"),
-                entry ('I', "\ud835\udc3c"),
-                entry ('J', "\ud835\udc3d"),
-                entry ('K', "\ud835\udc3e"),
-                entry ('L', "\ud835\udc3f"),
-                entry ('M', "\ud835\udc40"),
-                entry ('N', "\ud835\udc41"),
-                entry ('O', "\ud835\udc42"),
-                entry ('P', "\ud835\udc43"),
-                entry ('Q', "\ud835\udc44"),
-                entry ('R', "\ud835\udc45"),
-                entry ('S', "\ud835\udc46"),
-                entry ('T', "\ud835\udc47"),
-                entry ('U', "\ud835\udc48"),
-                entry ('V', "\ud835\udc49"),
-                entry ('W', "\ud835\udc4a"),
-                entry ('X', "\ud835\udc4b"),
-                entry ('Y', "\ud835\udc4c"),
-                entry ('Z', "\ud835\udc4d"),
-                entry ('`', "`"),
-                entry ('1', "1"),
-                entry ('2', "2"),
-                entry ('3', "3"),
-                entry ('4', "4"),
-                entry ('5', "5"),
-                entry ('6', "6"),
-                entry ('7', "7"),
-                entry ('8', "8"),
-                entry ('9', "9"),
-                entry ('0', "0"),
-                entry ('-', "-"),
-                entry ('=', "="),
-                entry ('[', "["),
-                entry (']', "]"),
-                entry ('\\', "\\"),
-                entry (';', ";"),
-                entry ('\'', "'"),
-                entry (',', ","),
-                entry ('.', "."),
-                entry ('/', "/"),
-                entry ('~', "\u223c"),
-                entry ('!', "!"),
-                entry ('@', "@"),
-                entry ('#', "#"),
-                entry ('$', "$"),
-                entry ('%', "%"),
-                entry ('^', "^"),
-                entry ('&', "&"),
-                entry ('*', "*"),
-                entry ('(', "("),
-                entry (')', ")"),
-                entry ('_', "_"),
-                entry ('+', "+"),
-                entry ('{',"{"),
-                entry ('}', "}"),
-                entry ('|', "|"),
-                entry (':', ":"),
-                entry ('\"', "\""),
-                entry ('<', "<"),
-                entry ('>', ">"),
-                entry ('?', "?")
+                entry('a', "\ud835\udc4e"),
+                entry('b', "\ud835\udc4f"),
+                entry('c', "\ud835\udc50"),
+                entry('d', "\ud835\udc51"),
+                entry('e', "\ud835\udc52"),
+                entry('f', "\ud835\udc53"),
+                entry('g', "\ud835\udc54"),
+                entry('h', "\u210e"),
+                entry('i', "\ud835\udc56"),
+                entry('j', "\ud835\udc57"),
+                entry('k', "\ud835\udc58"),
+                entry('l', "\ud835\udc59"),
+                entry('m', "\ud835\udc5a"),
+                entry('n', "\ud835\udc5b"),
+                entry('o', "\ud835\udc5c"),
+                entry('p', "\ud835\udc5d"),
+                entry('q', "\ud835\udc5e"),
+                entry('r', "\ud835\udc5f"),
+                entry('s', "\ud835\udc60"),
+                entry('t', "\ud835\udc61"),
+                entry('u', "\ud835\udc62"),
+                entry('v', "\ud835\udc63"),
+                entry('w', "\ud835\udc64"),
+                entry('x', "\ud835\udc65"),
+                entry('y', "\ud835\udc66"),
+                entry('z', "\ud835\udc67"),
+                entry('A', "\ud835\udc34"),
+                entry('B', "\ud835\udc35"),
+                entry('C', "\ud835\udc36"),
+                entry('D', "\ud835\udc37"),
+                entry('E', "\ud835\udc38"),
+                entry('F', "\ud835\udc39"),
+                entry('G', "\ud835\udc3a"),
+                entry('H', "\ud835\udc3b"),
+                entry('I', "\ud835\udc3c"),
+                entry('J', "\ud835\udc3d"),
+                entry('K', "\ud835\udc3e"),
+                entry('L', "\ud835\udc3f"),
+                entry('M', "\ud835\udc40"),
+                entry('N', "\ud835\udc41"),
+                entry('O', "\ud835\udc42"),
+                entry('P', "\ud835\udc43"),
+                entry('Q', "\ud835\udc44"),
+                entry('R', "\ud835\udc45"),
+                entry('S', "\ud835\udc46"),
+                entry('T', "\ud835\udc47"),
+                entry('U', "\ud835\udc48"),
+                entry('V', "\ud835\udc49"),
+                entry('W', "\ud835\udc4a"),
+                entry('X', "\ud835\udc4b"),
+                entry('Y', "\ud835\udc4c"),
+                entry('Z', "\ud835\udc4d"),
+                entry('`', "`"),
+                entry('1', "1"),
+                entry('2', "2"),
+                entry('3', "3"),
+                entry('4', "4"),
+                entry('5', "5"),
+                entry('6', "6"),
+                entry('7', "7"),
+                entry('8', "8"),
+                entry('9', "9"),
+                entry('0', "0"),
+                entry('-', "-"),
+                entry('=', "="),
+                entry('[', "["),
+                entry(']', "]"),
+                entry('\\', "\\"),
+                entry(';', ";"),
+                entry('\'', "'"),
+                entry(',', ","),
+                entry('.', "."),
+                entry('/', "/"),
+                entry('~', "\u223c"),
+                entry('!', "!"),
+                entry('@', "@"),
+                entry('#', "#"),
+                entry('$', "$"),
+                entry('%', "%"),
+                entry('^', "^"),
+                entry('&', "&"),
+                entry('*', "*"),
+                entry('(', "("),
+                entry(')', ")"),
+                entry('_', "_"),
+                entry('+', "+"),
+                entry('{', "{"),
+                entry('}', "}"),
+                entry('|', "|"),
+                entry(':', ":"),
+                entry('\"', "\""),
+                entry('<', "<"),
+                entry('>', ">"),
+                entry('?', "?")
         );
     }
+
     private Map<Character, String> initializeScriptMap() {
         return Map.ofEntries(
-                entry ('a', "\ud835\udcb6"),
-                entry ('b', "\ud835\udcb7"),
-                entry ('c', "\ud835\udcb8"),
-                entry ('d', "\ud835\udcb9"),
-                entry ('e', "\u212f"),
-                entry ('f', "\ud835\udcbb"),
-                entry ('g', "\u210a"),
-                entry ('h', "\ud835\udcbd"),
-                entry ('i', "\ud835\udcbe"),
-                entry ('j', "\ud835\udcbf"),
-                entry ('k', "\ud835\udcc0"),
-                entry ('l', "\ud835\udcc1"),
-                entry ('m', "\ud835\udcc2"),
-                entry ('n', "\ud835\udcc3"),
-                entry ('o', "\u2134"),
-                entry ('p', "\ud835\udcc5"),
-                entry ('q', "\ud835\udcc6"),
-                entry ('r', "\ud835\udcc7"),
-                entry ('s', "\ud835\udcc8"),
-                entry ('t', "\ud835\udcc9"),
-                entry ('u', "\ud835\udcca"),
-                entry ('v', "\ud835\udccb"),
-                entry ('w', "\ud835\udccc"),
-                entry ('x', "\ud835\udccd"),
-                entry ('y', "\ud835\udcce"),
-                entry ('z', "\ud835\udccf"),
-                entry ('A', "\ud835\udc9c"),
-                entry ('B', "\u212c"),
-                entry ('C', "\ud835\udc9e"),
-                entry ('D', "\ud835\udc9f"),
-                entry ('E', "\u2130"),
-                entry ('F', "\u2131"),
-                entry ('G', "\ud835\udca2"),
-                entry ('H', "\u210b"),
-                entry ('I', "\u2110"),
-                entry ('J', "\ud835\udca5"),
-                entry ('K', "\ud835\udca6"),
-                entry ('L', "\u2112"),
-                entry ('M', "\u2133"),
-                entry ('N', "\ud835\udca9"),
-                entry ('O', "\ud835\udcaa"),
-                entry ('P', "\ud835\udcab"),
-                entry ('Q', "\ud835\udcac"),
-                entry ('R', "\u211b"),
-                entry ('S', "\ud835\udcae"),
-                entry ('T', "\ud835\udcaf"),
-                entry ('U', "\ud835\udcb0"),
-                entry ('V', "\ud835\udcb1"),
-                entry ('W', "\ud835\udcb2"),
-                entry ('X', "\ud835\udcb3"),
-                entry ('Y', "\ud835\udcb4"),
-                entry ('Z', "\ud835\udcb5"),
-                entry ('`', "`"),
-                entry ('1', "1"),
-                entry ('2', "2"),
-                entry ('3', "3"),
-                entry ('4', "4"),
-                entry ('5', "5"),
-                entry ('6', "6"),
-                entry ('7', "7"),
-                entry ('8', "8"),
-                entry ('9', "9"),
-                entry ('0', "0"),
-                entry ('-', "-"),
-                entry ('=', "="),
-                entry ('[', "["),
-                entry (']', "]"),
-                entry ('\\', "\\"),
-                entry (';', ";"),
-                entry ('\'', "'"),
-                entry (',', ","),
-                entry ('.', "."),
-                entry ('/', "/"),
-                entry ('~', "\u223c"),
-                entry ('!', "!"),
-                entry ('@', "@"),
-                entry ('#', "#"),
-                entry ('$', "$"),
-                entry ('%', "%"),
-                entry ('^', "^"),
-                entry ('&', "&"),
-                entry ('*', "*"),
-                entry ('(', "("),
-                entry (')', ")"),
-                entry ('_', "_"),
-                entry ('+', "+"),
-                entry ('{',"{"),
-                entry ('}', "}"),
-                entry ('|', "|"),
-                entry (':', ":"),
-                entry ('\"', "\""),
-                entry ('<', "<"),
-                entry ('>', ">"),
-                entry ('?', "?")
+                entry('a', "\ud835\udcb6"),
+                entry('b', "\ud835\udcb7"),
+                entry('c', "\ud835\udcb8"),
+                entry('d', "\ud835\udcb9"),
+                entry('e', "\u212f"),
+                entry('f', "\ud835\udcbb"),
+                entry('g', "\u210a"),
+                entry('h', "\ud835\udcbd"),
+                entry('i', "\ud835\udcbe"),
+                entry('j', "\ud835\udcbf"),
+                entry('k', "\ud835\udcc0"),
+                entry('l', "\ud835\udcc1"),
+                entry('m', "\ud835\udcc2"),
+                entry('n', "\ud835\udcc3"),
+                entry('o', "\u2134"),
+                entry('p', "\ud835\udcc5"),
+                entry('q', "\ud835\udcc6"),
+                entry('r', "\ud835\udcc7"),
+                entry('s', "\ud835\udcc8"),
+                entry('t', "\ud835\udcc9"),
+                entry('u', "\ud835\udcca"),
+                entry('v', "\ud835\udccb"),
+                entry('w', "\ud835\udccc"),
+                entry('x', "\ud835\udccd"),
+                entry('y', "\ud835\udcce"),
+                entry('z', "\ud835\udccf"),
+                entry('A', "\ud835\udc9c"),
+                entry('B', "\u212c"),
+                entry('C', "\ud835\udc9e"),
+                entry('D', "\ud835\udc9f"),
+                entry('E', "\u2130"),
+                entry('F', "\u2131"),
+                entry('G', "\ud835\udca2"),
+                entry('H', "\u210b"),
+                entry('I', "\u2110"),
+                entry('J', "\ud835\udca5"),
+                entry('K', "\ud835\udca6"),
+                entry('L', "\u2112"),
+                entry('M', "\u2133"),
+                entry('N', "\ud835\udca9"),
+                entry('O', "\ud835\udcaa"),
+                entry('P', "\ud835\udcab"),
+                entry('Q', "\ud835\udcac"),
+                entry('R', "\u211b"),
+                entry('S', "\ud835\udcae"),
+                entry('T', "\ud835\udcaf"),
+                entry('U', "\ud835\udcb0"),
+                entry('V', "\ud835\udcb1"),
+                entry('W', "\ud835\udcb2"),
+                entry('X', "\ud835\udcb3"),
+                entry('Y', "\ud835\udcb4"),
+                entry('Z', "\ud835\udcb5"),
+                entry('`', "`"),
+                entry('1', "1"),
+                entry('2', "2"),
+                entry('3', "3"),
+                entry('4', "4"),
+                entry('5', "5"),
+                entry('6', "6"),
+                entry('7', "7"),
+                entry('8', "8"),
+                entry('9', "9"),
+                entry('0', "0"),
+                entry('-', "-"),
+                entry('=', "="),
+                entry('[', "["),
+                entry(']', "]"),
+                entry('\\', "\\"),
+                entry(';', ";"),
+                entry('\'', "'"),
+                entry(',', ","),
+                entry('.', "."),
+                entry('/', "/"),
+                entry('~', "\u223c"),
+                entry('!', "!"),
+                entry('@', "@"),
+                entry('#', "#"),
+                entry('$', "$"),
+                entry('%', "%"),
+                entry('^', "^"),
+                entry('&', "&"),
+                entry('*', "*"),
+                entry('(', "("),
+                entry(')', ")"),
+                entry('_', "_"),
+                entry('+', "+"),
+                entry('{', "{"),
+                entry('}', "}"),
+                entry('|', "|"),
+                entry(':', ":"),
+                entry('\"', "\""),
+                entry('<', "<"),
+                entry('>', ">"),
+                entry('?', "?")
         );
     }
+
     private Map<Character, String> initializeGreekMap() {
         return Map.ofEntries(
-                entry ('a', "\u03b1"),
-                entry ('A', "\u0391"),
-                entry ('b', "\u03b2"),
-                entry ('B', "\u0392"),
-                entry ('c', "\u03c8"),
-                entry ('C', "\u03a8"),
-                entry ('d', "\u03b4"),
-                entry ('D', "\u0394"),
-                entry ('e', "\u03b5"),
-                entry ('E', "\u0395"),
-                entry ('f', "\u03c6"),
-                entry ('F', "\u03a6"),
-                entry ('g', "\u03b3"),
-                entry ('G', "\u0393"),
-                entry ('h', "\u03b7"),
-                entry ('H', "\u0397"),
-                entry ('i', "\u03b9"),
-                entry ('I', "\u0399"),
-                entry ('j', "\u03be"),
-                entry ('J', "\u039e"),
-                entry ('k', "\u03ba"),
-                entry ('K', "\u039a"),
-                entry ('l', "\u03bb"),
-                entry ('L', "\u039B"),
-                entry ('m', "\u03bc"),
-                entry ('M', "\u039c"),
-                entry ('n', "\u03bd"),
-                entry ('N', "\u039d"),
-                entry ('o', "\u03bf"),
-                entry ('O', "\u039f"),
-                entry ('p', "\u03c0"),
-                entry ('P', "\u03a0"),
-                entry('q',""),
-                entry('Q',""),
-                entry ('r', "\u03c1"),
-                entry ('R', "\u03a1"),
-                entry ('s', "\u03c3"),
-                entry ('S', "\u03a3"),
-                entry ('t', "\u03c4"),
-                entry ('T', "\u03a4"),
-                entry ('u', "\u03b8"),
-                entry ('U', "\u0398"),
-                entry ('v', "\u03c9"),
-                entry ('V', "\u03a9"),
-                entry ('w',""),
-                entry ('W',""),
-                entry ('x', "\u03c7"),
-                entry ('X', "\u03a7"),
-                entry ('y', "\u03c5"),
-                entry ('Y', "\u03a5"),
-                entry ('z', "\u03b6"),
-                entry ('Z', "\u0396"),
-                entry ('`', "`"),
-                entry ('1', "1"),
-                entry ('2', "2"),
-                entry ('3', "3"),
-                entry ('4', "4"),
-                entry ('5', "5"),
-                entry ('6', "6"),
-                entry ('7', "7"),
-                entry ('8', "8"),
-                entry ('9', "9"),
-                entry ('0', "0"),
-                entry ('-', "-"),
-                entry ('=', "="),
-                entry ('[', "["),
-                entry (']', "]"),
-                entry ('\\', "\\"),
-                entry (';', ";"),
-                entry ('\'', "'"),
-                entry (',', ","),
-                entry ('.', "."),
-                entry ('/', "/"),
-                entry ('~', "\u223c"),
-                entry ('!', "!"),
-                entry ('@', "@"),
-                entry ('#', "#"),
-                entry ('$', "$"),
-                entry ('%', "%"),
-                entry ('^', "^"),
-                entry ('&', "&"),
-                entry ('*', "*"),
-                entry ('(', "("),
-                entry (')', ")"),
-                entry ('_', "_"),
-                entry ('+', "+"),
-                entry ('}', "}"),
-                entry ('|', "|"),
-                entry (':', ":"),
-                entry ('\"', "\""),
-                entry ('<', "<"),
-                entry ('>', ">"),
-                entry ('?', "?")
+                entry('a', "\u03b1"),
+                entry('A', "\u0391"),
+                entry('b', "\u03b2"),
+                entry('B', "\u0392"),
+                entry('c', "\u03c8"),
+                entry('C', "\u03a8"),
+                entry('d', "\u03b4"),
+                entry('D', "\u0394"),
+                entry('e', "\u03b5"),
+                entry('E', "\u0395"),
+                entry('f', "\u03c6"),
+                entry('F', "\u03a6"),
+                entry('g', "\u03b3"),
+                entry('G', "\u0393"),
+                entry('h', "\u03b7"),
+                entry('H', "\u0397"),
+                entry('i', "\u03b9"),
+                entry('I', "\u0399"),
+                entry('j', "\u03be"),
+                entry('J', "\u039e"),
+                entry('k', "\u03ba"),
+                entry('K', "\u039a"),
+                entry('l', "\u03bb"),
+                entry('L', "\u039B"),
+                entry('m', "\u03bc"),
+                entry('M', "\u039c"),
+                entry('n', "\u03bd"),
+                entry('N', "\u039d"),
+                entry('o', "\u03bf"),
+                entry('O', "\u039f"),
+                entry('p', "\u03c0"),
+                entry('P', "\u03a0"),
+                entry('q', ""),
+                entry('Q', ""),
+                entry('r', "\u03c1"),
+                entry('R', "\u03a1"),
+                entry('s', "\u03c3"),
+                entry('S', "\u03a3"),
+                entry('t', "\u03c4"),
+                entry('T', "\u03a4"),
+                entry('u', "\u03b8"),
+                entry('U', "\u0398"),
+                entry('v', "\u03c9"),
+                entry('V', "\u03a9"),
+                entry('w', ""),
+                entry('W', ""),
+                entry('x', "\u03c7"),
+                entry('X', "\u03a7"),
+                entry('y', "\u03c5"),
+                entry('Y', "\u03a5"),
+                entry('z', "\u03b6"),
+                entry('Z', "\u0396"),
+                entry('`', "`"),
+                entry('1', "1"),
+                entry('2', "2"),
+                entry('3', "3"),
+                entry('4', "4"),
+                entry('5', "5"),
+                entry('6', "6"),
+                entry('7', "7"),
+                entry('8', "8"),
+                entry('9', "9"),
+                entry('0', "0"),
+                entry('-', "-"),
+                entry('=', "="),
+                entry('[', "["),
+                entry(']', "]"),
+                entry('\\', "\\"),
+                entry(';', ";"),
+                entry('\'', "'"),
+                entry(',', ","),
+                entry('.', "."),
+                entry('/', "/"),
+                entry('~', "\u223c"),
+                entry('!', "!"),
+                entry('@', "@"),
+                entry('#', "#"),
+                entry('$', "$"),
+                entry('%', "%"),
+                entry('^', "^"),
+                entry('&', "&"),
+                entry('*', "*"),
+                entry('(', "("),
+                entry(')', ")"),
+                entry('_', "_"),
+                entry('+', "+"),
+                entry('}', "}"),
+                entry('|', "|"),
+                entry(':', ":"),
+                entry('\"', "\""),
+                entry('<', "<"),
+                entry('>', ">"),
+                entry('?', "?")
         );
     }
+
     private Map<KeyCodeCombination, String> initializeSansMap() {
         return Map.ofEntries(
                 entry(new KeyCodeCombination(KeyCode.A, KeyCombination.ALT_DOWN), "\ud835\uddba"),
@@ -1672,6 +1692,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         );
 
     }
+
     private Map<KeyCodeCombination, String> initializeFrakturMap() {
         return Map.ofEntries(
                 entry(new KeyCodeCombination(KeyCode.A, KeyCombination.ALT_DOWN), "\ud835\udd1e"),
@@ -1728,6 +1749,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.Z, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2128")
         );
     }
+
     private Map<KeyCodeCombination, String> initializeBlackboardMap() {
         return Map.ofEntries(
                 entry(new KeyCodeCombination(KeyCode.A, KeyCombination.ALT_DOWN), "\ud835\udd52"),
@@ -1794,6 +1816,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.Z, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2124")
         );
     }
+
     private Map<KeyCodeCombination, String> initializeSpecialCharacterMap() {
         return Map.ofEntries(
                 entry(new KeyCodeCombination(KeyCode.BACK_QUOTE, KeyCombination.ALT_DOWN), "\u00ac"),                                                             //hammer
@@ -1893,6 +1916,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         KeyMapValue(String name) {
             this.name = name;
         }
+
         @Override
         public String toString() {
             return name;
@@ -1900,17 +1924,25 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     }
 
 
-
     public Map<Character, String> getKeyTypedCharMap() {
         return keyTypedCharMap;
     }
+
     public Map<KeyCodeCombination, String> getKeyPressedCharMap() {
         return keyPressedCharMap;
     }
 
-    public final Boolean getOverlineOn() {return overlineOn.get();}
-    public final void setOverlineOn(Boolean state) {overlineOn.set(state);}
-    public final BooleanProperty overlineOnProperty() {return overlineOn;}
+    public final Boolean getOverlineOn() {
+        return overlineOn.get();
+    }
+
+    public final void setOverlineOn(Boolean state) {
+        overlineOn.set(state);
+    }
+
+    public final BooleanProperty overlineOnProperty() {
+        return overlineOn;
+    }
 
     private final void toggleOverlineOn() {
         if (getOverlineOn()) setOverlineOn(false);
@@ -1921,7 +1953,11 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     public final KeyMapValue getKeyMapState() {
         return keyMapState.get();
     }
-    public final void setKeyMapState(KeyMapValue mapValue) {keyMapState.set(mapValue); }
+
+    public final void setKeyMapState(KeyMapValue mapValue) {
+        keyMapState.set(mapValue);
+    }
+
     public final ObjectProperty<KeyMapValue> keyMapStateProperty() {
         return keyMapState;
     }
@@ -1930,7 +1966,8 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
 
     private void setCaretPosition(int length) {
         viewModel.setCaretPosition(length);
-   }
+    }
+
     public double getContentAreaHeight(double rtaWidth, double pageHeight) {
         double height;
         Group root = new Group();
@@ -1960,6 +1997,24 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
 
         stage.close();
         return height;
+    }
+
+    private Bounds bounds;
+    public Bounds getCaretPosition() {
+
+
+        caret().ifPresentOrElse(caret ->
+
+        {
+        //   bounds = caret.sceneToLocal(caret.getBoundsInLocal());
+            bounds = caret.localToScene(caret.getBoundsInLocal());
+
+
+        }, () ->
+        {
+            System.out.println("caret not present");
+        });
+        return bounds;
     }
 
 
