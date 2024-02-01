@@ -67,11 +67,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -146,7 +142,11 @@ public class ParagraphTile extends HBox {
             layer.setContent(fragments, background, decoration);
             layers.add(layer);
             contentPane.getChildren().add(layer);
-            updateGraphicBox(layer, control.getParagraphGraphicFactory());
+
+            // try-catch added by me as temporary placeholder
+            try {
+                updateGraphicBox(layer, control.getParagraphGraphicFactory());
+            } catch (NullPointerException e) {}
             graphicBox.setPadding(new Insets(decoration.getTopInset(), 2, decoration.getBottomInset(), 0));
             contentPane.layout();
         }
@@ -348,8 +348,11 @@ public class ParagraphTile extends HBox {
     }
 
 
+    //try catch added by me as temporary holder
     private void updateCaretPosition(int caretPosition) {
-        layers.forEach(l -> l.updateCaretPosition(caretPosition));
+        try {
+            layers.forEach(l -> l.updateCaretPosition(caretPosition));
+        } catch(ConcurrentModificationException e) {}
     }
 
     private void updateSelection(Selection selection) {
