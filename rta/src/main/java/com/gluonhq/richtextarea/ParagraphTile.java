@@ -143,10 +143,8 @@ public class ParagraphTile extends HBox {
             layers.add(layer);
             contentPane.getChildren().add(layer);
 
-            // try-catch added by me as temporary placeholder
-            try {
-                updateGraphicBox(layer, control.getParagraphGraphicFactory());
-            } catch (NullPointerException e) {}
+            updateGraphicBox(layer, control.getParagraphGraphicFactory());
+
             graphicBox.setPadding(new Insets(decoration.getTopInset(), 2, decoration.getBottomInset(), 0));
             contentPane.layout();
         }
@@ -350,9 +348,7 @@ public class ParagraphTile extends HBox {
 
     //try catch added by me as temporary holder
     private void updateCaretPosition(int caretPosition) {
-        try {
-            layers.forEach(l -> l.updateCaretPosition(caretPosition));
-        } catch(ConcurrentModificationException e) {}
+        layers.forEach(l -> l.updateCaretPosition(caretPosition));
     }
 
     private void updateSelection(Selection selection) {
