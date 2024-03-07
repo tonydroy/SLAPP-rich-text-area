@@ -619,6 +619,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         }
 
         void scrollIfNeeded() {
+
             final Bounds vfBounds = virtualFlow.localToScene(virtualFlow.getBoundsInLocal());
             double viewportMinY = vfBounds.getMinY();
             double viewportMaxY = vfBounds.getMaxY();
