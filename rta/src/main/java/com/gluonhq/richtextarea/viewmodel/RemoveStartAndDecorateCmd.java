@@ -1,5 +1,7 @@
+package com.gluonhq.richtextarea.viewmodel;
+
 /*
- * Copyright (c) 2023, Gluon
+ * Copyright (c) 2024, Gluon
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,68 +27,63 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.gluonhq.richtextarea.viewmodel;
 
-import com.gluonhq.emoji.Emoji;
+
 import com.gluonhq.richtextarea.Selection;
-import com.gluonhq.richtextarea.model.Block;
-import com.gluonhq.richtextarea.model.BlockUnit;
-import com.gluonhq.richtextarea.model.EmojiUnit;
-import com.gluonhq.richtextarea.model.UnitBuffer;
+import com.gluonhq.richtextarea.model.Decoration;
+import com.gluonhq.richtextarea.model.TextDecoration;
 
 import java.util.Objects;
 
-class SelectAndReplaceCmd extends AbstractEditCmd {
+class RemoveStartAndDecorateCmd extends AbstractEditCmd {
 
-    private final UnitBuffer content;
     private final Selection selection;
+    private final Decoration decoration;
+    private Decoration prevDecoration;
 
-
-    public SelectAndReplaceCmd(Selection selection, String content) {
-        this.selection = selection;
-        this.content = UnitBuffer.convertTextToUnits(content);
-    }
-
-    public SelectAndReplaceCmd(Selection selection, Emoji content) {
-        this.selection = selection;
-        this.content = new UnitBuffer(new EmojiUnit(content));
-    }
-
-    public SelectAndReplaceCmd(Selection selection, Block content) {
-        this.selection = selection;
-        this.content = new UnitBuffer(new BlockUnit(content));
+    public RemoveStartAndDecorateCmd(Selection selection, Decoration decoration) {
+        this.selection = Objects.requireNonNull(selection);
+        this.decoration = Objects.requireNonNull(decoration);
     }
 
     @Override
     public void doRedo(RichTextAreaViewModel viewModel) {
         Objects.requireNonNull(viewModel);
+        prevDecoration = viewModel.getDecorationAtCaret();
+        int prevCaret = viewModel.getCaretPosition();
 
-
-        // 1. select
-        if (selection != null) {
-            viewModel.setSelection(selection);
-        }
-
-        // 2. delete selection
+        // 1. select start of selection, delete it, move back caret, select remaining content again
+        viewModel.setSelection(new Selection(selection.getStart(), selection.getStart() + 1));
         viewModel.remove(-1, 1);
+        viewModel.setCaretPosition(prevCaret - 1);
+        viewModel.setSelection(new Selection(selection.getStart(), selection.getEnd() - 1));
 
-        // 3. insert content
-        if (content != null) {
-            viewModel.insert(content.getText());
+        // 2. apply decoration
+        viewModel.decorate(decoration);
+
+        // unselect and apply previous decoration after selection
+        viewModel.setSelection(Selection.UNDEFINED);
+        if (prevDecoration != null && prevDecoration instanceof TextDecoration) {
+            viewModel.setDecorationAtCaret(prevDecoration);
         }
     }
 
     @Override
     public void doUndo(RichTextAreaViewModel viewModel) {
-        // 1. insert content
-        Objects.requireNonNull(viewModel).undo();
+        // 1. reset decoration
+        if (prevDecoration != null && prevDecoration instanceof TextDecoration) {
+            viewModel.setDecorationAtCaret(prevDecoration);
+        }
 
-        // 2. delete selection
+        // 2. apply decoration
+        viewModel.undo();
+
+        // 3. remove single selection
         viewModel.undo();
     }
 
     @Override
     public String toString() {
-        return "SelectAndReplaceCmd[" + super.toString() + ", " + content + ", " + selection + "]";
+        return "RemoveStartAndDecorateCmd[" + super.toString() + ", " + selection+ ", " + decoration + "]";
     }
 }
