@@ -27,7 +27,7 @@
  */
 package com.gluonhq.richtextarea.model;
 
-import javafx.scene.paint.Color;
+
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import org.junit.jupiter.api.Assertions;
@@ -232,11 +232,11 @@ public class PieceTableEmojiTests {
     public void sameBlockDecorateForegroundColor() {
         String text = "Original Bigger Text";
         PieceTable pt = new PieceTable(new Document(text));
-        pt.decorate(1, 2, TextDecoration.builder().foreground(Color.AQUA).build());
+        pt.decorate(1, 2, TextDecoration.builder().foreground("aqua").build());
         Assertions.assertEquals(text, pt.getText());
         Assertions.assertTrue(pt.pieces.stream()
                 .filter(piece -> piece.getInternalText().equals("r"))
-                .anyMatch(piece -> ((TextDecoration) piece.getDecoration()).getForeground() == Color.AQUA)
+                .anyMatch(piece -> ((TextDecoration) piece.getDecoration()).getForeground().equals("aqua"))
         );
     }
 

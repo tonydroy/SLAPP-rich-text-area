@@ -140,7 +140,7 @@ public class FullFeaturedDemo extends Application {
     private final List<DecorationModel> decorations;
 
     {
-        TextDecoration bold14 = TextDecoration.builder().presets().fontWeight(BOLD).fontSize(14).build();
+        TextDecoration bold14 = TextDecoration.builder().presets().fontWeight(BOLD).fontSize(14).foreground("darkblue").build();
         TextDecoration preset = TextDecoration.builder().presets().build();
         ParagraphDecoration center63 = ParagraphDecoration.builder().presets().alignment(TextAlignment.CENTER).topInset(6).bottomInset(3).build();
         ParagraphDecoration justify22 = ParagraphDecoration.builder().presets().alignment(TextAlignment.JUSTIFY).topInset(2).bottomInset(2).build();
@@ -170,7 +170,7 @@ public class FullFeaturedDemo extends Application {
             decorations, 2314);
 
     private final Label textLengthLabel = new Label();
-    private final RichTextArea editor = new RichTextArea();
+    private final RichTextArea editor = new RichTextArea(EditorMain.mainStage);
 
     @Override
     public void start(Stage stage) {
@@ -243,12 +243,12 @@ public class FullFeaturedDemo extends Application {
 
         final ColorPicker textForeground = new ColorPicker();
         textForeground.getStyleClass().add("foreground");
-        new TextDecorateAction<>(editor, textForeground.valueProperty(), TextDecoration::getForeground, (builder, a) -> builder.foreground(a).build());
+        new TextDecorateAction<>(editor, textForeground.valueProperty(), (TextDecoration textDecoration1) -> Color.web(textDecoration1.getForeground()), (builder, a) -> builder.foreground(toHexString(a)).build());
         textForeground.setValue(Color.BLACK);
 
         final ColorPicker textBackground = new ColorPicker();
         textBackground.getStyleClass().add("background");
-        new TextDecorateAction<>(editor, textBackground.valueProperty(), TextDecoration::getBackground, (builder, a) -> builder.background(a).build());
+        new TextDecorateAction<>(editor, textBackground.valueProperty(), (TextDecoration textDecoration) -> Color.web(textDecoration.getBackground()), (builder, a) -> builder.background(toHexString(a)).build());
         textBackground.setValue(Color.TRANSPARENT);
 
         CheckBox editableProp = new CheckBox("Editable");
@@ -598,10 +598,19 @@ public class FullFeaturedDemo extends Application {
         return builder.build();
     }
 
+    private String toHexString(Color value) {
+        return String.format("#%02X%02X%02X%02X", (int) Math.round(value.getRed() * 255),
+                (int) Math.round(value.getGreen() * 255),
+                (int) Math.round(value.getBlue() * 255),
+                (int) Math.round(value.getOpacity() * 255));
+    }
+
 
     public static void main(String[] args) {
         launch(args);
     }
+
+
 
     private enum Presets {
 

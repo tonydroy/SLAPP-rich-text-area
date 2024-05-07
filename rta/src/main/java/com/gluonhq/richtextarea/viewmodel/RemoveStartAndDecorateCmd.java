@@ -1,5 +1,3 @@
-package com.gluonhq.richtextarea.viewmodel;
-
 /*
  * Copyright (c) 2024, Gluon
  *
@@ -27,7 +25,7 @@ package com.gluonhq.richtextarea.viewmodel;
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
+package com.gluonhq.richtextarea.viewmodel;
 
 import com.gluonhq.richtextarea.Selection;
 import com.gluonhq.richtextarea.model.Decoration;

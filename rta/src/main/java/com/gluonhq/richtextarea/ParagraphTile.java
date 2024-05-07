@@ -67,7 +67,11 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -142,9 +146,7 @@ public class ParagraphTile extends HBox {
             layer.setContent(fragments, background, decoration);
             layers.add(layer);
             contentPane.getChildren().add(layer);
-
             updateGraphicBox(layer, control.getParagraphGraphicFactory());
-
             graphicBox.setPadding(new Insets(decoration.getTopInset(), 2, decoration.getBottomInset(), 0));
             contentPane.layout();
         }
@@ -249,7 +251,7 @@ public class ParagraphTile extends HBox {
             nodePrefHeight = graphicNode.prefHeight(nodePrefWidth);
         }
 
-        graphicNode.setTranslateY(Math.max(0d, (layer.getCaretY() - nodePrefHeight) / 2d));
+        graphicNode.setTranslateY(Math.max(0d, (layer.getCaretY() - nodePrefHeight)/ 2d));
         double boxPrefWidth = spanPrefWidth + nodePrefWidth;
         graphicBox.setMinWidth(boxPrefWidth);
         graphicBox.setMaxWidth(boxPrefWidth);
@@ -317,7 +319,7 @@ public class ParagraphTile extends HBox {
 
     int getNextTableCellPosition(boolean down) {
         if (!paragraph.getDecoration().hasTableDecoration() ||
-                layers.stream().noneMatch(Layer::hasCaret)) {
+            layers.stream().noneMatch(Layer::hasCaret)) {
             return -1;
         }
         int r = paragraph.getDecoration().getTableDecoration().getRows();
@@ -345,8 +347,6 @@ public class ParagraphTile extends HBox {
                 (nextCell >= 0 ? Math.max(0, layers.get(nextCell).end - 1) : Math.max(0, layers.get(0).start - 1));
     }
 
-
-    //try catch added by me as temporary holder
     private void updateCaretPosition(int caretPosition) {
         layers.forEach(l -> l.updateCaretPosition(caretPosition));
     }
@@ -358,7 +358,7 @@ public class ParagraphTile extends HBox {
     private class Layer extends Pane {
 
         private final Timeline caretTimeline = new Timeline(
-                new KeyFrame(Duration.ZERO, e -> setCaretVisibility(true)),
+                new KeyFrame(Duration.ZERO        , e -> setCaretVisibility(true)),
                 new KeyFrame(Duration.seconds(0.5), e -> setCaretVisibility(false)),
                 new KeyFrame(Duration.seconds(1.0))
         );
@@ -389,7 +389,6 @@ public class ParagraphTile extends HBox {
             getChildren().addAll(textBackgroundColorPaths);
             getChildren().addAll(selectionShape, caretShape, textFlow);
             getStyleClass().add("layer");
-
         }
 
         @Override
@@ -636,9 +635,5 @@ public class ParagraphTile extends HBox {
                 richTextAreaSkin.caretOriginProperty.set(new Point2D(boundsInRTA.getMinX(), boundsInRTA.getMinY()));
             });
         }
-
     }
 }
-
-
-

@@ -50,7 +50,6 @@ import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Control;
 import javafx.scene.control.SkinBase;
 import javafx.scene.input.DataFormat;
@@ -147,7 +146,6 @@ public class RichTextArea extends Control {
     public final boolean isModified() {
        return modifiedProperty.get();
     }
-
     final ReadOnlyBooleanWrapper modifiedProperty = new ReadOnlyBooleanWrapper(this, "modified");
 
     // editableProperty
@@ -333,10 +331,10 @@ public class RichTextArea extends Control {
      */
     final ReadOnlyObjectWrapper<Decoration> decorationAtCaret = new ReadOnlyObjectWrapper<>(this, "decorationAtCaret");
     public final ReadOnlyObjectProperty<Decoration> decorationAtCaretProperty() {
-        return decorationAtCaret.getReadOnlyProperty();
+       return decorationAtCaret.getReadOnlyProperty();
     }
     public final Decoration getDecorationAtCaret() {
-        return decorationAtCaret.get();
+       return decorationAtCaret.get();
     }
 
     /**
@@ -344,12 +342,11 @@ public class RichTextArea extends Control {
      */
     final ReadOnlyObjectWrapper<ParagraphDecoration> decorationAtParagraph = new ReadOnlyObjectWrapper<>(this, "decorationAtParagraph");
     public final ReadOnlyObjectProperty<ParagraphDecoration> decorationAtParagraphProperty() {
-        return decorationAtParagraph.getReadOnlyProperty();
+       return decorationAtParagraph.getReadOnlyProperty();
     }
     public final ParagraphDecoration getDecorationAtParagraph() {
-        return decorationAtParagraph.get();
+       return decorationAtParagraph.get();
     }
-
     /**
      * Defines if tables can be inserted into the document or not. By default, it is allowed
      */
@@ -372,8 +369,8 @@ public class RichTextArea extends Control {
      *
      * @defaultValue An empty String
      */
-    private final StringProperty promptText = new SimpleStringProperty(this, "promptText", ""){
-    @Override protected void invalidated() {
+    private final StringProperty promptText = new SimpleStringProperty(this, "promptText", "") {
+        @Override protected void invalidated() {
             // Strip out newlines
             String txt = get();
             if (txt != null && txt.contains("\n")) {
@@ -395,7 +392,9 @@ public class RichTextArea extends Control {
      *
      * @return the action factory
      */
-    public final ActionFactory getActionFactory() {return actionFactory;}
+    public final ActionFactory getActionFactory() {
+        return actionFactory;
+    }
 
     /**
      * {@inheritDoc}

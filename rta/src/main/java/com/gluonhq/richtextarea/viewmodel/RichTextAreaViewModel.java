@@ -361,7 +361,6 @@ public class RichTextAreaViewModel {
         int caretPosition = getCaretPosition();
         if (caretPosition >= getTextLength()) {
             getTextBuffer().append(text);
-
             // text (with 0+ LF) appended to last paragraph or as new paragraphs
         } else {
             getTextBuffer().insert(text, caretPosition);
@@ -764,5 +763,4 @@ public class RichTextAreaViewModel {
         savedProperty.set(true);
         setDocument(currentDocument);
     }
-
 }

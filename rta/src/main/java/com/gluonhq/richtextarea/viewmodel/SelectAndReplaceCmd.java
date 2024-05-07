@@ -41,7 +41,6 @@ class SelectAndReplaceCmd extends AbstractEditCmd {
     private final UnitBuffer content;
     private final Selection selection;
 
-
     public SelectAndReplaceCmd(Selection selection, String content) {
         this.selection = selection;
         this.content = UnitBuffer.convertTextToUnits(content);
@@ -60,7 +59,6 @@ class SelectAndReplaceCmd extends AbstractEditCmd {
     @Override
     public void doRedo(RichTextAreaViewModel viewModel) {
         Objects.requireNonNull(viewModel);
-
 
         // 1. select
         if (selection != null) {

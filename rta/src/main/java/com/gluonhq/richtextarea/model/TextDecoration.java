@@ -31,9 +31,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Objects;
 
 import static com.gluonhq.richtextarea.Tools.getFirstLetter;
@@ -44,10 +41,8 @@ import static com.gluonhq.richtextarea.Tools.getFirstLetter;
  */
 public class TextDecoration implements Decoration {
 
-    private transient Color foreground;
-    private double[] foregroundColorValues;
-    private transient Color background;
-    private double[] backgroundColorValues;
+    private String foreground;
+    private String background;
     private String fontFamily;
     private double fontSize;
     private FontPosture fontPosture;
@@ -62,45 +57,35 @@ public class TextDecoration implements Decoration {
 
     private TextDecoration() {}
 
-    //added by TR to preserve serializability of document
-    private void writeObject (ObjectOutputStream stream) throws IOException, ClassNotFoundException {
-        foregroundColorValues = new double[]{foreground.getRed(), foreground.getGreen(), foreground.getBlue(), foreground.getOpacity()};
-        backgroundColorValues = new double[]{background.getRed(), background.getGreen(), background.getBlue(), background.getOpacity()};
-        stream.defaultWriteObject();
-    }
-    private void readObject (ObjectInputStream stream) throws IOException, ClassNotFoundException {
-        stream.defaultReadObject();
-        foreground = new Color(foregroundColorValues[0], foregroundColorValues[1], foregroundColorValues[2], foregroundColorValues[3]);
-        background = new Color(backgroundColorValues[0], backgroundColorValues[2], backgroundColorValues[3], backgroundColorValues[3]);
-    }
-    //
-
     /**
      * Gets the foreground color of the text.
+     * Any string value that can be parsed with {@link Color#web(String)}
      *
-     * @defaultValue {@link Color#BLACK}
+     * @defaultValue #000000, black
      *
      * @return the foreground color of the text
      */
-    public Color getForeground() {
+    public String getForeground() {
         return foreground;
     }
 
     /**
      * Gets the background color of the text.
      *
-     * @defaultValue {@link Color#TRANSPARENT}
+     * Any string value that can be parsed with {@link Color#web(String)}
+     *
+     * @defaultValue #00000000, transparent
      *
      * @return the background color of the text
      */
-    public Color getBackground() {
+    public String getBackground() {
         return background;
     }
 
     /**
      * Gets the font size of the text.
      *
-     * @defaultValue 12
+     * @defaultValue 14
      *
      * @return the font size of the text
      */
@@ -276,8 +261,8 @@ public class TextDecoration implements Decoration {
 
     public static class Builder {
 
-        private Color foreground;
-        private Color background;
+        private String foreground;
+        private String background;
         private String fontFamily;
         private double fontSize;
         private FontPosture fontPosture;
@@ -311,8 +296,8 @@ public class TextDecoration implements Decoration {
         }
 
         public Builder presets() {
-            foreground = Color.BLACK;
-            background = Color.TRANSPARENT;
+            foreground = "black";
+            background = "transparent";
    //         fontFamily = "System";          original setting, changed by me
             fontFamily = "Noto Serif Combo";
             fontSize = 11.0;                  //originally 14.0  see corresponding changes in view menus
@@ -345,12 +330,12 @@ public class TextDecoration implements Decoration {
             return this;
         }
 
-        public Builder foreground(Color color) {
+        public Builder foreground(String color) {
             this.foreground = Objects.requireNonNull(color);
             return this;
         }
 
-        public Builder background(Color color) {
+        public Builder background(String color) {
             this.background = Objects.requireNonNull(color);
             return this;
         }

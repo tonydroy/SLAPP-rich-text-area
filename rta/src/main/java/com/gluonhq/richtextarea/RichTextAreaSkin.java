@@ -47,7 +47,13 @@ import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
-import javafx.beans.property.*;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -75,10 +81,16 @@ import javafx.scene.control.SkinBase;
 import javafx.scene.control.skin.ListViewSkin;
 import javafx.scene.control.skin.VirtualFlow;
 import javafx.scene.image.Image;
-import javafx.scene.input.*;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.TransferMode;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Path;
@@ -92,14 +104,13 @@ import javafx.stage.StageStyle;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static com.gluonhq.richtextarea.viewmodel.RichTextAreaViewModel.Direction;
 import static java.util.Map.entry;
+import javafx.scene.input.KeyCode;
 import static javafx.scene.input.KeyCode.*;
 import static javafx.scene.input.KeyCombination.*;
 import static javafx.scene.text.FontPosture.ITALIC;
@@ -107,13 +118,10 @@ import static javafx.scene.text.FontPosture.REGULAR;
 import static javafx.scene.text.FontWeight.BOLD;
 import static javafx.scene.text.FontWeight.NORMAL;
 
-
-
 public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     private RichTextArea control;
 
-    interface ActionBuilder extends Function<KeyEvent, ActionCmd> {
-    }
+    interface ActionBuilder extends Function<KeyEvent, ActionCmd>{}
 
     // TODO need to find a better way to find next row caret position
     private final RichTextAreaViewModel viewModel = new RichTextAreaViewModel(this::getNextRowPosition, this::getNextTableCellPosition);
@@ -137,9 +145,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     private final Map<KeyCodeCombination, String> SPECIAL_WITH_FRAKTUR_MAP;
 
     private BooleanProperty overlineOn = new SimpleBooleanProperty(false);
-
     private ObjectProperty<KeyMapValue> keyMapState = new SimpleObjectProperty<>(KeyMapValue.BASE);
-
     public void setMaps(KeyMapValue request) {
         switch (request) {
             case BASE: {
@@ -169,7 +175,6 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
             }
         }
     }
-
 
     private final Map<KeyCombination, ActionBuilder> INPUT_MAP = Map.ofEntries(
             entry(new KeyCodeCombination(RIGHT, SHIFT_ANY, ALT_ANY, CONTROL_ANY, SHORTCUT_ANY), e -> ACTION_CMD_FACTORY.caretMove(Direction.FORWARD, e)),
@@ -418,7 +423,6 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     int mouseDragStart = -1;
     int dragAndDropStart = -1;
     int anchorIndex = -1;
-    //Paragraph lastParagraph = null;
 
     private final Text promptNode;
 
@@ -466,7 +470,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         RichVirtualFlow(RichTextArea control) {
             ReadOnlyObjectProperty<Bounds> clippedBounds = lookup(".clipped-container").layoutBoundsProperty();
             textFlowPrefWidthProperty.bind(Bindings.createDoubleBinding(() -> control.getContentAreaWidth() > 0 ?
-                            control.getContentAreaWidth() :
+                    control.getContentAreaWidth() :
                             clippedBounds.get().getWidth() > 0 ? clippedBounds.get().getWidth() - 10 : -1,
                     control.contentAreaWidthProperty(), clippedBounds));
         }
@@ -619,7 +623,6 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         }
 
         void scrollIfNeeded() {
-
             final Bounds vfBounds = virtualFlow.localToScene(virtualFlow.getBoundsInLocal());
             double viewportMinY = vfBounds.getMinY();
             double viewportMaxY = vfBounds.getMaxY();
@@ -638,23 +641,20 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 viewModel.getParagraphWithCaret().ifPresent(this::scrollTo);
             });
         }
-
     }
 
-    // --- prompt text fill
+
+     // --- prompt text fill
     private final StyleableProperty<Paint> promptTextFill = FACTORY.createStyleablePaintProperty(getSkinnable(), "promptTextFill", "-fx-prompt-text-fill", c -> {
         final RichTextAreaSkin skin = (RichTextAreaSkin) c.getSkin();
         return skin.promptTextFill;
     }, Color.GRAY);
-
     protected final void setPromptTextFill(Paint value) {
         promptTextFill.setValue(value);
     }
-
     protected final Paint getPromptTextFill() {
         return promptTextFill.getValue();
     }
-
     protected final ObjectProperty<Paint> promptTextFillProperty() {
         return (ObjectProperty<Paint>) promptTextFill;
     }
@@ -735,9 +735,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         if (actionCmd != null) {
             execute(actionCmd);
         }
-
     }
-
 
     /// PROPERTIES ///////////////////////////////////////////////////////////////
 
@@ -764,8 +762,6 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         getSkinnable().selectionProperty.unbind();
         getSkinnable().decorationAtCaret.unbind();
         getSkinnable().decorationAtParagraph.unbind();
-
-
         getSkinnable().setOnKeyPressed(null);
         getSkinnable().setOnKeyTyped(null);
         getSkinnable().widthProperty().removeListener(controlPrefWidthListener);
@@ -829,11 +825,9 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         promptNode.fontProperty().bind(promptFontBinding);
         getSkinnable().textLengthProperty.bind(viewModel.textLengthProperty());
         getSkinnable().modifiedProperty.bind(viewModel.savedProperty().not());
-
         getSkinnable().selectionProperty.bind(viewModel.selectionProperty());
         getSkinnable().decorationAtCaret.bind(viewModel.decorationAtCaretProperty());
         getSkinnable().decorationAtParagraph.bind(viewModel.decorationAtParagraphProperty());
-
         getSkinnable().setOnContextMenuRequested(contextMenuEventEventHandler);
         getSkinnable().editableProperty().addListener(this::editableChangeListener);
         getSkinnable().tableAllowedProperty().addListener(tableAllowedListener);
@@ -893,7 +887,6 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         try {
             nonTextNodes.set(0);
             viewModel.resetCharacterIterator();
-//            lastParagraph = paragraphSortedList.get(paragraphSortedList.size() - 1);
             // this ensures changes in decoration are applied:
             paragraphListView.updateLayout();
 
@@ -981,10 +974,10 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     }
 
     private static boolean isCharOnly(KeyEvent e) {
-        char c = e.getCharacter().isEmpty() ? 0 : e.getCharacter().charAt(0);
+        char c = e.getCharacter().isEmpty()? 0: e.getCharacter().charAt(0);
         return isPrintableChar(c) &&
-                !e.isControlDown() &&
-                !e.isMetaDown();
+               !e.isControlDown() &&
+               !e.isMetaDown();
     }
 
     private void execute(ActionCmd action) {
@@ -1033,7 +1026,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
             if ("\t".equals(e.getCharacter())) {
                 ParagraphDecoration decoration = viewModel.getDecorationAtParagraph();
                 if (decoration != null &&
-                        (decoration.getGraphicType() != ParagraphDecoration.GraphicType.NONE || decoration.hasTableDecoration())) {
+                    (decoration.getGraphicType() != ParagraphDecoration.GraphicType.NONE || decoration.hasTableDecoration())) {
                     // processed via keyPressedListener
                     e.consume();
                     return;
@@ -1162,7 +1155,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         return FACTORY.getCssMetaData();
     }
 
-    @Override
+
     public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
         return getClassCssMetaData();
     }

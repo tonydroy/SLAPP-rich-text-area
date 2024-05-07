@@ -28,6 +28,7 @@
 package com.gluonhq.richtextarea.viewmodel;
 
 import javafx.beans.binding.BooleanBinding;
+
 import java.util.Objects;
 
 class ActionCmdInsertText implements ActionCmd {

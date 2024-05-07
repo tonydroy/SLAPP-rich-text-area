@@ -28,6 +28,7 @@
 package com.gluonhq.richtextarea.model;
 
 import com.gluonhq.richtextarea.Selection;
+import com.gluonhq.richtextarea.Tools;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -200,7 +201,7 @@ public class Table {
         for (int i = rows - 1; i >= 0; i--) {
             // remove text from current column, for each row
             int posStart = currentCol == 0 && i == 0 ? 0 : positions.get(i * columns + currentCol - 1) - start;
-            int posEnd = positions.get(i * columns + currentCol) - start;
+            int posEnd = positions.get(i * columns + currentCol) - start + (currentCol == 0 && i == 0 ? 1 : 0);
             buffer.remove(posStart, posEnd);
         }
         removeLineFeed(buffer);
@@ -250,7 +251,7 @@ public class Table {
         return currentRow * columns + currentCol;
     }
 
-    private List<Integer> getTablePositions() {
+    List<Integer> getTablePositions() {
         String internalText = text.getInternalText();
         List<Integer> positions = IntStream.iterate(internalText.indexOf(TextBuffer.ZERO_WIDTH_TABLE_SEPARATOR),
                         index -> index >= 0,
