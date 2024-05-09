@@ -828,7 +828,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         getSkinnable().selectionProperty.bind(viewModel.selectionProperty());
         getSkinnable().decorationAtCaret.bind(viewModel.decorationAtCaretProperty());
         getSkinnable().decorationAtParagraph.bind(viewModel.decorationAtParagraphProperty());
-        getSkinnable().setOnContextMenuRequested(contextMenuEventEventHandler);
+//        getSkinnable().setOnContextMenuRequested(contextMenuEventEventHandler);
         getSkinnable().editableProperty().addListener(this::editableChangeListener);
         getSkinnable().tableAllowedProperty().addListener(tableAllowedListener);
         viewModel.setTableAllowed(getSkinnable().isTableAllowed());
