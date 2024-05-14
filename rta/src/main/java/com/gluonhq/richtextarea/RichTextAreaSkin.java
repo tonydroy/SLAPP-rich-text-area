@@ -144,6 +144,8 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     private final Map<KeyCodeCombination, String> SPECIAL_WITH_BLACKBOARD_MAP;
     private final Map<KeyCodeCombination, String> SPECIAL_WITH_FRAKTUR_MAP;
 
+    private DoubleProperty nodesWidth = new SimpleDoubleProperty();
+
     private BooleanProperty overlineOn = new SimpleBooleanProperty(false);
     private ObjectProperty<KeyMapValue> keyMapState = new SimpleObjectProperty<>(KeyMapValue.BASE);
     public void setMaps(KeyMapValue request) {
@@ -664,6 +666,12 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
 
         this.control = control;
 
+        nodesWidth.bind(viewModel.nodesWidthProperty());
+//        nodesWidth.addListener((ob, ov, nv) -> {
+//           System.out.println(getNodesWidth());
+//        });
+
+
         Map<KeyCodeCombination, String> tempMap = new HashMap();
         tempMap.putAll(SPECIAL_CHARACTER_MAP);
         tempMap.putAll(SANS_MAP);
@@ -890,6 +898,10 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
             // this ensures changes in decoration are applied:
             paragraphListView.updateLayout();
 
+            //
+            //System.out.println(viewModel.nodesWidth);
+            //
+
             if (nonTextNodesCount != nonTextNodes.get()) {
                 // when number of images changes, caret
                 requestLayout();
@@ -900,6 +912,8 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
             objectsCacheEvictionTimer.start();
         }
     }
+
+
 
     Paragraph getLastParagraph() {
         return paragraphSortedList.get(paragraphSortedList.size() - 1);
@@ -2016,7 +2030,11 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         return bounds;
     }
 
+    public double getNodesWidth() {
+        return nodesWidth.get();
+    }
 
-
-
+    public DoubleProperty nodesWidthProperty() {
+        return nodesWidth;
+    }
 }

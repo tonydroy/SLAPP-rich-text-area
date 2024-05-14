@@ -375,4 +375,8 @@ class RichListCell extends ListCell<Paragraph> {
             return defaultColor;
         }
     }
+
+
+
+
 }

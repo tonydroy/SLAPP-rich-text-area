@@ -40,16 +40,7 @@ import com.gluonhq.richtextarea.model.Unit;
 import com.gluonhq.richtextarea.model.UnitBuffer;
 import com.gluonhq.richtextarea.undo.CommandManager;
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.ReadOnlyIntegerWrapper;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
@@ -89,6 +80,10 @@ public class RichTextAreaViewModel {
     Paragraph lastParagraph;
     private final BiFunction<Double, Boolean, Integer> getNextRowPosition;
     private final Function<Boolean, Integer> getNextTableCellPosition;
+
+    //**
+    private DoubleProperty nodesWidth = new SimpleDoubleProperty();
+    //**
 
     /// PROPERTIES ///////////////////////////////////////////////////////////////
 
@@ -763,4 +758,19 @@ public class RichTextAreaViewModel {
         savedProperty.set(true);
         setDocument(currentDocument);
     }
+
+    //***
+    public double getNodesWidth() {
+        return nodesWidth.get();
+    }
+
+    public DoubleProperty nodesWidthProperty() {
+        return nodesWidth;
+    }
+
+    public void setNodesWidth(double nodesWidth) {
+        this.nodesWidth.set(nodesWidth);
+    }
+
+    //***
 }

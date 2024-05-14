@@ -102,6 +102,8 @@ public class ParagraphTile extends HBox {
     private final ChangeListener<Number> caretPositionListener = (o, ocp, p) -> updateCaretPosition(p.intValue());
     private final ChangeListener<Selection> selectionListener = (o, os, selection) -> updateSelection(selection);
 
+
+
     public ParagraphTile(RichTextAreaSkin richTextAreaSkin) {
         this.richTextAreaSkin = richTextAreaSkin;
         this.control = richTextAreaSkin.getSkinnable();
@@ -121,6 +123,23 @@ public class ParagraphTile extends HBox {
     }
 
     void setParagraph(Paragraph paragraph, List<Node> fragments, List<Integer> positions, List<IndexRangeColor> background) {
+
+        //***
+
+        /*
+        if (fragments != null) {
+            double nodesWidth = 0;
+            for (Node fragment : fragments) {
+                nodesWidth = nodesWidth + fragment.getLayoutBounds().getWidth();
+            }
+            viewModel.setNodesWidth(nodesWidth);
+        }
+
+         */
+
+        //***
+
+
         layers.forEach(Layer::reset);
         layers.clear();
         graphicBox.getChildren().clear();
@@ -415,6 +434,21 @@ public class ParagraphTile extends HBox {
             textFlowLayoutY = 1d + decoration.getTopInset();
 
             Platform.runLater(() -> addBackgroundPathsToLayers(background));
+
+
+//           This gets the content width.  Appears to be the number I need to grow nodes with content.
+//
+
+            if (fragments != null) {
+                double nodesWidth = 0;
+                for (Node fragment : fragments) {
+                    nodesWidth = nodesWidth + fragment.getLayoutBounds().getWidth();
+                }
+                viewModel.setNodesWidth(nodesWidth);
+            }
+
+
+
         }
 
         void reset() {
@@ -636,4 +670,6 @@ public class ParagraphTile extends HBox {
             });
         }
     }
+
+
 }
