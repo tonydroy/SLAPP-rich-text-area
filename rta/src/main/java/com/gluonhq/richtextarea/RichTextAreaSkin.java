@@ -334,6 +334,20 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 Boolean transSubscriptState = (decoration.isTransSubscript() || decoration.isSubscript()) == true ? false : true;
                 return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).transSubscript(transSubscriptState).transSuperscript(false).subscript(false).superscript(false).build());
             }),
+            //alternative
+            entry(new KeyCodeCombination(PAGE_DOWN), e -> {
+                TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
+                Boolean subscriptState = (decoration.isSubscript() || decoration.isTransSubscript()) == true ? false : true;
+                return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).subscript(subscriptState).transSubscript(false).superscript(false).transSuperscript(false).build());
+            }),
+            entry(new KeyCodeCombination(PAGE_DOWN, SHIFT_DOWN), e -> {
+                TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
+                Boolean transSubscriptState = (decoration.isTransSubscript() || decoration.isSubscript()) == true ? false : true;
+                return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).transSubscript(transSubscriptState).transSuperscript(false).subscript(false).superscript(false).build());
+            }),
+            //
+
+
             entry(new KeyCodeCombination(F7), e -> {
                 TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
                 Boolean superscriptState = (decoration.isSuperscript() || decoration.isTransSuperscript()) == true ? false : true;
@@ -344,6 +358,19 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 Boolean transSuperscriptState = (decoration.isTransSuperscript() || decoration.isSuperscript()) == true ? false : true;
                 return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).transSuperscript(transSuperscriptState).transSubscript(false).subscript(false).superscript(false).build());
             }),
+            //alternative
+            entry(new KeyCodeCombination(PAGE_UP), e -> {
+                TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
+                Boolean superscriptState = (decoration.isSuperscript() || decoration.isTransSuperscript()) == true ? false : true;
+                return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).superscript(superscriptState).transSuperscript(false).subscript(false).transSubscript(false).build());
+            }),
+            entry(new KeyCodeCombination(PAGE_UP, SHIFT_DOWN), e -> {
+                TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
+                Boolean transSuperscriptState = (decoration.isTransSuperscript() || decoration.isSuperscript()) == true ? false : true;
+                return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).transSuperscript(transSuperscriptState).transSubscript(false).subscript(false).superscript(false).build());
+            }),
+
+
 
             // to change keyboards
             entry(new KeyCodeCombination(F1), e -> {
@@ -354,6 +381,19 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 setKeyMapState(KeyMapValue.ITALIC_AND_SANS);
                 return null;
             }),
+            //alternative
+            entry(new KeyCodeCombination(HOME), e -> {
+                setKeyMapState(KeyMapValue.BASE);
+                return null;
+            }),
+            entry(new KeyCodeCombination(END), e -> {
+                setKeyMapState(KeyMapValue.ITALIC_AND_SANS);
+                return null;
+            }),
+            //
+
+
+
             entry(new KeyCodeCombination(F3), e -> {
                 setKeyMapState(KeyMapValue.SCRIPT_AND_SANS);
                 return null;
