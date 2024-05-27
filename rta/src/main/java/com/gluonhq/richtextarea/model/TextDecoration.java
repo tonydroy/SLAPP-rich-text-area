@@ -85,7 +85,7 @@ public class TextDecoration implements Decoration {
     /**
      * Gets the font size of the text.
      *
-     * @defaultValue 14
+     * @defaultValue 11
      *
      * @return the font size of the text
      */

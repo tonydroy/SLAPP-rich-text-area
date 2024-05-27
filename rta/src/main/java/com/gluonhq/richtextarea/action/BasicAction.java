@@ -47,6 +47,8 @@ import java.util.function.Function;
 class BasicAction implements Action {
 
     protected RichTextAreaViewModel viewModel;
+    protected ActionCmd actionCmd;
+
     protected final RichTextArea control;
     private final Function<Action, ActionCmd> actionCmdFunction;
 
@@ -82,7 +84,10 @@ class BasicAction implements Action {
     }
 
     protected ActionCmd getActionCmd() {
-        return actionCmdFunction.apply(this);
+        if (actionCmd == null) {
+            actionCmd = actionCmdFunction.apply(this);
+        }
+        return actionCmd;
     }
 
     @Override
