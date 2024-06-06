@@ -91,6 +91,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -128,6 +129,8 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     private final RichTextAreaViewModel viewModel = new RichTextAreaViewModel(this::getNextRowPosition, this::getNextTableCellPosition);
 
     private static final ActionCmdFactory ACTION_CMD_FACTORY = new ActionCmdFactory();
+
+
 
     private Map<KeyCodeCombination, String> keyPressedCharMap;
     private Map<Character, String> keyTypedCharMap;
@@ -712,6 +715,9 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
 //        nodesWidth.addListener((ob, ov, nv) -> {
 //           System.out.println(getNodesWidth());
 //        });
+
+
+
 
 
         Map<KeyCodeCombination, String> tempMap = new HashMap();
@@ -2041,8 +2047,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
 
         Stage stage = new Stage();
         stage.setScene(scene);
-        stage.setWidth(rtaWidth + 40);
-
+ //       stage.setWidth(rtaWidth + 40);
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.toBack();
         stage.show();
@@ -2061,6 +2066,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         stage.close();
         return height;
     }
+
 
     private Bounds bounds;
     public Bounds getCaretPosition() {
