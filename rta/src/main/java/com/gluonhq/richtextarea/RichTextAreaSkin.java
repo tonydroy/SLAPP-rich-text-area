@@ -101,6 +101,7 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -113,6 +114,8 @@ import java.util.function.Function;
 import static com.gluonhq.richtextarea.viewmodel.RichTextAreaViewModel.Direction;
 import static java.util.Map.entry;
 import javafx.scene.input.KeyCode;
+import javafx.stage.Window;
+
 import static javafx.scene.input.KeyCode.*;
 import static javafx.scene.input.KeyCombination.*;
 import static javafx.scene.text.FontPosture.ITALIC;
@@ -2037,7 +2040,10 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         viewModel.setCaretPosition(length);
     }
 
+
+
     public double getContentAreaHeight(double rtaWidth, double pageHeight) {
+
         double height;
         Group root = new Group();
         control.setContentAreaWidth(rtaWidth);
@@ -2047,7 +2053,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
 
         Stage stage = new Stage();
         stage.setScene(scene);
- //       stage.setWidth(rtaWidth + 40);
+//        stage.setWidth(rtaWidth + 40);
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.toBack();
         stage.show();
@@ -2062,7 +2068,38 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         } else {
             height = pageHeight * 10.0;
         }
+        stage.close();
+        return height;
+    }
 
+    public double getContentAreaHeight(double rtaWidth, double pageHeight, double x, double y) {
+
+        double height;
+        Group root = new Group();
+        control.setContentAreaWidth(rtaWidth);
+        control.setPrefHeight(pageHeight);
+        root.getChildren().add(control);
+        Scene scene = new Scene(root);
+
+        Stage stage = new Stage();
+        stage.setScene(scene);
+//        stage.setWidth(rtaWidth + 40);
+        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.setX(x + 10);
+        stage.setY(y + 10);
+        stage.toBack();
+        stage.show();
+
+        control.requestFocus();
+
+        int length = control.getTextLength();
+        setCaretPosition(length);
+        if (caret().isPresent()) {
+            Bounds bounds = caret().get().localToScene(caret().get().getBoundsInLocal());
+            height = bounds.getMaxY();
+        } else {
+            height = pageHeight * 10.0;
+        }
         stage.close();
         return height;
     }
