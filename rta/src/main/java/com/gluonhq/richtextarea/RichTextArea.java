@@ -101,16 +101,16 @@ public class RichTextArea extends Control {
      *
      * @return the document for this control
      */
-    public final ObjectProperty<Document> documentProperty() {
-       return documentProperty;
+
+        // documentProperty
+        final ReadOnlyObjectWrapper<Document> documentProperty = new ReadOnlyObjectWrapper<>(this, "document", new Document());
+        public final ReadOnlyObjectProperty<Document> documentProperty() {
+            return documentProperty.getReadOnlyProperty();
     }
     public final Document getDocument() {
        return documentProperty.get();
     }
-    public final void setDocument(Document value) {
-        documentProperty.set(value);
-    }
-    private final ObjectProperty<Document> documentProperty = new SimpleObjectProperty<>(this, "document", new Document());
+
 
     // autoSaveProperty
     /**
