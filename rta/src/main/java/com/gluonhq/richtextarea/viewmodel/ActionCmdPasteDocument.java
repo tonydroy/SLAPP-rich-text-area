@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Gluon
+ * Copyright (c) 2024, Gluon
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,37 +25,31 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.gluonhq.richtextarea.undo;
+package com.gluonhq.richtextarea.viewmodel;
 
-public abstract class AbstractCommand<T> {
+import com.gluonhq.richtextarea.model.Document;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 
-    protected abstract void doUndo(T context);
-    protected abstract void doRedo(T context);
+import java.util.Objects;
 
-    protected void storeContext(T context) {}
-    protected void restoreContext(T context) {}
-    protected void attachContext(T context) {}
-    protected void detachContext(T context) {}
+class ActionCmdPasteDocument implements ActionCmd {
 
-    public final void execute(T context) {
-        detachContext(context);
-        storeContext(context);
-        doRedo(context);
-        attachContext(context);
+    private final Document document;
+
+    public ActionCmdPasteDocument(Document document) {
+        this.document = document;
     }
 
-    public final void undo(T context) {
-        detachContext(context);
-        doUndo(context);
-        restoreContext(context);
-        attachContext(context);
+    @Override
+    public void apply(RichTextAreaViewModel viewModel) {
+        if (viewModel.isEditable()) {
+            viewModel.getCommandManager().execute(new PasteDocumentCmd(Objects.requireNonNull(document)));
+        }
     }
 
-    public final void redo(T context) {
-        detachContext(context);
-        restoreContext(context);
-        doRedo(context);
-        attachContext(context);
+    @Override
+    public BooleanBinding getDisabledBinding(RichTextAreaViewModel viewModel) {
+        return Bindings.createBooleanBinding(() -> !viewModel.clipboardHasDocument() || !viewModel.isEditable(), viewModel.editableProperty());
     }
-
 }

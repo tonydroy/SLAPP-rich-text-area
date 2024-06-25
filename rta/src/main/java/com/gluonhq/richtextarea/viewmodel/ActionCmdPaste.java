@@ -41,7 +41,7 @@ class ActionCmdPaste implements ActionCmd {
 
     @Override
     public BooleanBinding getDisabledBinding(RichTextAreaViewModel viewModel) {
-        return Bindings.createBooleanBinding(() -> !(viewModel.clipboardHasString() || viewModel.clipboardHasImage() || viewModel.clipboardHasUrl())
+        return Bindings.createBooleanBinding(() -> !(viewModel.clipboardHasDocument() || viewModel.clipboardHasString() || viewModel.clipboardHasImage() || viewModel.clipboardHasUrl())
                         || !viewModel.isEditable(),
                 viewModel.caretPositionProperty(), viewModel.editableProperty());
     }

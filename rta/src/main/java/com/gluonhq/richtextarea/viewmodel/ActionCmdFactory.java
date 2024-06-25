@@ -125,6 +125,10 @@ public final class ActionCmdFactory {
         return new ActionCmdInsertBlock(block, selection);
     }
 
+    public ActionCmd pasteDocument(Document document) {
+        return new ActionCmdPasteDocument(document);
+    }
+
     public ActionCmd insertTable(TableDecoration tableDecoration) {
         return new ActionCmdTable(tableDecoration);
     }

@@ -55,6 +55,15 @@ abstract class AbstractEditCmd extends com.gluonhq.richtextarea.undo.AbstractCom
     }
 
     @Override
+    protected void attachContext(RichTextAreaViewModel viewModel) {
+        Objects.requireNonNull(viewModel).attach();
+    }
+
+    @Override
+    protected void detachContext(RichTextAreaViewModel viewModel) {
+        Objects.requireNonNull(viewModel).detach();
+    }
+    @Override
     public String toString() {
         return getClass().getSimpleName() + " { " +
                 "c=" + caretPosition +

@@ -30,6 +30,7 @@ package com.gluonhq.richtextarea.viewmodel;
 import com.gluonhq.richtextarea.Selection;
 import com.gluonhq.richtextarea.Tools;
 import com.gluonhq.richtextarea.model.Decoration;
+import com.gluonhq.richtextarea.model.DecorationModel;
 import com.gluonhq.richtextarea.model.Document;
 import com.gluonhq.richtextarea.model.ImageDecoration;
 import com.gluonhq.richtextarea.model.Paragraph;
@@ -46,8 +47,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
-
 import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
@@ -302,6 +301,20 @@ public class RichTextAreaViewModel {
        return savedProperty.get();
     }
 
+    // attachedProperty
+    private final ReadOnlyBooleanWrapper attachedProperty = new ReadOnlyBooleanWrapper(this, "attached", true);
+    public final ReadOnlyBooleanProperty attachedProperty() {
+        return attachedProperty.getReadOnlyProperty();
+    }
+
+    final void attach() {
+        attachedProperty.set(true);
+    }
+
+    final void detach() {
+        attachedProperty.set(false);
+    }
+
     public RichTextAreaViewModel(BiFunction<Double, Boolean, Integer> getNextRowPosition, Function<Boolean, Integer> getNextTableCellPosition) {
         this.getNextRowPosition = Objects.requireNonNull(getNextRowPosition);
         this.getNextTableCellPosition = Objects.requireNonNull(getNextTableCellPosition);
@@ -433,10 +446,10 @@ public class RichTextAreaViewModel {
     void clipboardCopy(final boolean cutText) {
         Selection selection = getSelection();
         if (selection.isDefined()) {
-            String selectedText = getTextBuffer().getText(selection.getStart(), selection.getEnd());
+            Document currentDocument = getCurrentDocument(selection);
             final ClipboardContent content = new ClipboardContent();
-            content.put(RTA_DATA_FORMAT, selectedText);
-            content.putString(selectedText.replaceAll(TextBuffer.ZERO_WIDTH_NO_BREAK_SPACE_TEXT, ""));
+            content.put(RTA_DATA_FORMAT, currentDocument);
+            content.putString(currentDocument.getText().replaceAll(TextBuffer.ZERO_WIDTH_NO_BREAK_SPACE_TEXT, ""));
             if (cutText) {
                 commandManager.execute(new RemoveTextCmd(0));
             }
@@ -452,12 +465,18 @@ public class RichTextAreaViewModel {
         return Clipboard.getSystemClipboard().hasString();
     }
 
+    boolean clipboardHasDocument() {
+        return Clipboard.getSystemClipboard().hasContent(RTA_DATA_FORMAT);
+    }
+
     boolean clipboardHasUrl() {
         return Clipboard.getSystemClipboard().hasUrl();
     }
 
     void clipboardPaste() {
-        if (clipboardHasImage()) {
+        if (clipboardHasDocument()) {
+            commandManager.execute(new PasteDocumentCmd((Document) Clipboard.getSystemClipboard().getContent(RTA_DATA_FORMAT)));
+        } else if (clipboardHasImage()) {
             final Image image = Clipboard.getSystemClipboard().getImage();
             if (image != null) {
                 String url = image.getUrl() != null ? image.getUrl() : Clipboard.getSystemClipboard().getUrl();
@@ -477,9 +496,7 @@ public class RichTextAreaViewModel {
             }
         } else {
             String text = null;
-            if (Clipboard.getSystemClipboard().hasContent(RTA_DATA_FORMAT)) {
-                text = (String) Clipboard.getSystemClipboard().getContent(RTA_DATA_FORMAT);
-            } else if (clipboardHasString()) {
+            if (clipboardHasString()) {
                 text = Clipboard.getSystemClipboard().getString();
             }
             if (text != null) {
@@ -730,10 +747,13 @@ public class RichTextAreaViewModel {
         redoStackSizeProperty.set(commandManager.getRedoStackSize());
     }
 
-    private Document getCurrentDocument() {
+    private Document getCurrentDocument(Selection selection) {
         // text and indices should be based on the exportable text
-        int caret = getTextBuffer().getText(0, getCaretPosition()).length();
-        return new Document(getTextBuffer().getText(), getTextBuffer().getDecorationModelList(), caret);
+        int caretPosition = getCaretPosition() < 0 ? getTextLength() : getCaretPosition();
+        int caret = getTextBuffer().getText(0, caretPosition).length();
+        int start = selection.isDefined() ? selection.getStart() : 0;
+        int end = selection.isDefined() ? selection.getEnd() : getTextLength();
+        return new Document(getTextBuffer().getText(start, end), getTextBuffer().getDecorationModelList(start, end), caret);
     }
 
     void newDocument() {
@@ -753,7 +773,7 @@ public class RichTextAreaViewModel {
     }
 
     void save() {
-        Document currentDocument = getCurrentDocument();
+        Document currentDocument = getCurrentDocument(Selection.UNDEFINED);
         undoStackSizeWhenSaved = getUndoStackSize();
         savedProperty.set(true);
         setDocument(currentDocument);

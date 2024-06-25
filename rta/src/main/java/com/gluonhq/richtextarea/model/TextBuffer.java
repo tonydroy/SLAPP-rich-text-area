@@ -49,7 +49,7 @@ public interface TextBuffer {
     String getText(int start, int end);
     int getInternalPosition(int position);
     Selection getInternalSelection(Selection selection);
-    List<DecorationModel> getDecorationModelList();
+    List<DecorationModel> getDecorationModelList(int start, int end);
 
     CharacterIterator getCharacterIterator();
     char charAt(int pos);
