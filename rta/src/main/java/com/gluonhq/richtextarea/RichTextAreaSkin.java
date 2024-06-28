@@ -805,6 +805,17 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 viewModel.getParagraphWithCaret().ifPresent(this::scrollTo);
             });
         }
+
+        private double computeTotalHeight() {
+            double totalHeight = 0.0;
+
+            for (int i = 0; i < this.getItems().size(); i++) {
+                Paragraph paragraph = this.getItems().get(i);
+                totalHeight += (paragraph.getParaHeight() + 1.5);
+
+                }
+            return totalHeight;
+        }
     }
 
 
@@ -829,12 +840,6 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         this.control = control;
 
         nodesWidth.bind(viewModel.nodesWidthProperty());
-//        nodesWidth.addListener((ob, ov, nv) -> {
-//           System.out.println(getNodesWidth());
-//        });
-
-
-
 
 
         Map<KeyCodeCombination, String> tempMap = new HashMap();
@@ -1026,9 +1031,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
             // this ensures changes in decoration are applied:
             paragraphListView.updateLayout();
 
-            //
-            //System.out.println(viewModel.nodesWidth);
-            //
+
 
             if (nonTextNodesCount != nonTextNodes.get()) {
                 // when number of images changes, caret
@@ -2155,11 +2158,13 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
 
     //added by me as part of effort to get height
 
-    private void setCaretPosition(int length) {
+    public void setCaretPosition(int length) {
         viewModel.setCaretPosition(length);
     }
 
 
+
+    //*******  delete when replaced *****
 
     public double getContentAreaHeight(double rtaWidth, double pageHeight) {
 
@@ -2192,17 +2197,18 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     }
 
     public double getContentAreaHeight(double rtaWidth, double pageHeight, double x, double y) {
-
         double height;
         Group root = new Group();
         control.setContentAreaWidth(rtaWidth);
         control.setPrefHeight(pageHeight);
+
         root.getChildren().add(control);
         Scene scene = new Scene(root);
 
         Stage stage = new Stage();
         stage.setScene(scene);
-//        stage.setWidth(rtaWidth + 40);
+ //       stage.setWidth(rtaWidth + 40);
+
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.setX(x + 10);
         stage.setY(y + 10);
@@ -2223,18 +2229,39 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         return height;
     }
 
+    //*************
+
+
+    public double getComputedHeight() {
+        return paragraphListView.computeTotalHeight();
+    }
+
+
+
+
+/*
+    public double getComputedHeight() {
+        double totalHeight = 0.0;
+
+        for (Paragraph paragraph : viewModel.getParagraphList()) {
+
+            totalHeight += (paragraph.getParaHeight() + 1.5);
+
+        }
+        return totalHeight;
+    }
+
+ */
+
+
+
 
     private Bounds bounds;
     public Bounds getCaretPosition() {
-
-
         caret().ifPresentOrElse(caret ->
-
         {
         //   bounds = caret.sceneToLocal(caret.getBoundsInLocal());
             bounds = caret.localToScene(caret.getBoundsInLocal());
-
-
         }, () ->
         {
             System.out.println("caret not present");
@@ -2242,9 +2269,6 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         return bounds;
     }
 
-    public double getNodesWidth() {
-        return nodesWidth.get();
-    }
 
     public DoubleProperty nodesWidthProperty() {
         return nodesWidth;

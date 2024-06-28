@@ -93,14 +93,13 @@ public class ParagraphTile extends HBox {
     private Paragraph paragraph;
     private final HBox graphicBox;
     private final Pane contentPane;
-
     private final List<Layer> layers;
-
     private final RichTextArea control;
     private final RichTextAreaSkin richTextAreaSkin;
     private final RichTextAreaViewModel viewModel;
     private final ChangeListener<Number> caretPositionListener = (o, ocp, p) -> updateCaretPosition(p.intValue());
     private final ChangeListener<Selection> selectionListener = (o, os, selection) -> updateSelection(selection);
+
 
 
 
@@ -123,22 +122,6 @@ public class ParagraphTile extends HBox {
     }
 
     void setParagraph(Paragraph paragraph, List<Node> fragments, List<Integer> positions, List<IndexRangeColor> background) {
-
-        //***
-
-        /*
-        if (fragments != null) {
-            double nodesWidth = 0;
-            for (Node fragment : fragments) {
-                nodesWidth = nodesWidth + fragment.getLayoutBounds().getWidth();
-            }
-            viewModel.setNodesWidth(nodesWidth);
-        }
-
-         */
-
-        //***
-
 
         layers.forEach(Layer::reset);
         layers.clear();
@@ -169,6 +152,9 @@ public class ParagraphTile extends HBox {
             graphicBox.setPadding(new Insets(decoration.getTopInset(), 2, decoration.getBottomInset(), 0));
             contentPane.layout();
         }
+        //*** added by TR
+        paragraph.setParaHeight(contentPane.prefHeight(control.getPrefWidth()));
+
     }
 
     private HBox createGridBox(List<Node> fragments, List<Integer> positions, List<IndexRangeColor> background, ParagraphDecoration decoration) {
@@ -374,6 +360,7 @@ public class ParagraphTile extends HBox {
         layers.forEach(l -> l.updateSelection(selection));
     }
 
+
     private class Layer extends Pane {
 
         private final Timeline caretTimeline = new Timeline(
@@ -387,6 +374,9 @@ public class ParagraphTile extends HBox {
         private final Path selectionShape = new Path();
         private final TextFlow textFlow = new TextFlow();
         private double textFlowLayoutX, textFlowLayoutY;
+
+        //***
+        private double textFlowHeight;
 
         private final int start, end;
         private final boolean isTableCell;
@@ -424,6 +414,7 @@ public class ParagraphTile extends HBox {
             return textFlow.prefWidth(textFlow.getPrefHeight()) + 2;
         }
 
+
         void setContent(List<Node> fragments, List<IndexRangeColor> background, ParagraphDecoration decoration) {
             textFlow.getChildren().setAll(fragments);
             textFlow.setTextAlignment(decoration.getAlignment());
@@ -437,7 +428,6 @@ public class ParagraphTile extends HBox {
 
 
 //           This gets the content width.  Appears to be the number I need to grow nodes with content.
-//
 
             if (fragments != null) {
                 double nodesWidth = 0;
@@ -446,9 +436,6 @@ public class ParagraphTile extends HBox {
                 }
                 viewModel.setNodesWidth(nodesWidth);
             }
-
-
-
         }
 
         void reset() {
@@ -670,6 +657,7 @@ public class ParagraphTile extends HBox {
             });
         }
     }
+
 
 
 }

@@ -103,6 +103,9 @@ public class ActionFactory {
         return new BasicAction(control, action -> ACTION_CMD_FACTORY.open(document));
     }
 
+
+
+
     private Action save;
 
     public Action save() {
