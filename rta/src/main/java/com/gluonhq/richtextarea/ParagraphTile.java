@@ -375,8 +375,7 @@ public class ParagraphTile extends HBox {
         private final TextFlow textFlow = new TextFlow();
         private double textFlowLayoutX, textFlowLayoutY;
 
-        //***
-        private double textFlowHeight;
+
 
         private final int start, end;
         private final boolean isTableCell;

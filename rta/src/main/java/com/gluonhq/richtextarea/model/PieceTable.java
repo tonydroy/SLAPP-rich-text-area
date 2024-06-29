@@ -696,6 +696,7 @@ class InsertCmd extends AbstractCommand<PieceTable> {
         }
 
         if (insertPosition < 0 || insertPosition > pt.getTextLength()) {
+            System.out.println("insert pos: " + insertPosition + " pt.getTextLength " + pt.getTextLength());
             throw new IllegalArgumentException("Position is outside text bounds");
         }
 
