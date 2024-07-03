@@ -462,15 +462,6 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
 
 
 
-
-
-
-
-            //
-
-
-
-
             entry(new KeyCodeCombination(TAB, SHIFT_ANY), e -> {
                 ParagraphDecoration decoration = viewModel.getDecorationAtParagraph();
                 Paragraph paragraph = viewModel.getParagraphWithCaret().orElse(null);
@@ -1195,6 +1186,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     }
 
     private String getCharModification(String inString) {
+
         String outString = null;
         if (modification == NONE && !getOverlineOn()) {
             outString = inString;
@@ -1505,6 +1497,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.X, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\ud835\udc4b"),
                 entry(new KeyCodeCombination(KeyCode.Y, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\ud835\udc4c"),
                 entry(new KeyCodeCombination(KeyCode.Z, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\ud835\udc4d")
+
         );
     }
 
@@ -2053,11 +2046,17 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.DIGIT5, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u22c1"),        //big wedge
                 entry(new KeyCodeCombination(KeyCode.DIGIT6, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2135"),        //aleph
                 entry(new KeyCodeCombination(KeyCode.DIGIT7, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2136"),        //beth
-                entry(new KeyCodeCombination(KeyCode.DIGIT8, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\ud835\udcab"),  //powerset
-                entry(new KeyCodeCombination(KeyCode.DIGIT9, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2217"),        //asterisk
-                entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u22c6"),         //star
-                entry(new KeyCodeCombination(KeyCode.MINUS, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2205"),         //empty set
-                entry(new KeyCodeCombination(KeyCode.EQUALS, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u00f7"),        //divides
+
+
+ //               entry(new KeyCodeCombination(KeyCode.DIGIT8, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\ud835\udcab"),  //powerset
+
+                entry(new KeyCodeCombination(KeyCode.DIGIT8, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2217"),        //asterisk
+                entry(new KeyCodeCombination(KeyCode.DIGIT9, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u22c6"),         //star
+                entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2205"),        //empty set
+
+
+                entry(new KeyCodeCombination(KeyCode.MINUS, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u00f7"),         //divides
+                entry(new KeyCodeCombination(KeyCode.EQUALS, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2265"),        //greater than or equal
 
                 entry(new KeyCodeCombination(KeyCode.Q, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2282"),             //proper subset
                 entry(new KeyCodeCombination(KeyCode.W, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2286"),             //subset
@@ -2071,7 +2070,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.P, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u231d"),             //right corner
                 entry(new KeyCodeCombination(KeyCode.OPEN_BRACKET, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2039"),  //french quote left
                 entry(new KeyCodeCombination(KeyCode.CLOSE_BRACKET, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u203a"), //french right
-                entry(new KeyCodeCombination(KeyCode.BACK_SLASH, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2265"),    //greater than or equal
+                entry(new KeyCodeCombination(KeyCode.BACK_SLASH, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u00a0"),    //unbreakable space
 
                 entry(new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u21be"),             //harpoon
                 entry(new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2248"),             //double wave
@@ -2092,9 +2091,12 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
       //          entry(new KeyCodeCombination(KeyCode.N, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u030a"),             //combining dot
       //          entry(new KeyCodeCombination(KeyCode.M, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u0303"),             //combining tilde
                 entry(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u27e8"),     //left angle bracket
-                entry(new KeyCodeCombination(KeyCode.PERIOD, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u27e9"),         //right angle bracket
+
+
+            //    entry(new KeyCodeCombination(KeyCode.PERIOD, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u00a0"),
+                entry(new KeyCodeCombination(KeyCode.PERIOD, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u27e9")         //right angle bracket
 //                entry(new KeyCodeCombination(KeyCode.SLASH, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),                     //
-                entry(new KeyCodeCombination(KeyCode.SPACE, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u00a0")            //unbreakable space
+      //          entry(new KeyCodeCombination(KeyCode.SPACE, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u00a0")            //unbreakable space (doesn't work)
         );
     }
 
@@ -2163,97 +2165,9 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     }
 
 
-
-    //*******  delete when replaced *****
-
-    public double getContentAreaHeight(double rtaWidth, double pageHeight) {
-
-        double height;
-        Group root = new Group();
-        control.setContentAreaWidth(rtaWidth);
-        control.setPrefHeight(pageHeight);
-        root.getChildren().add(control);
-        Scene scene = new Scene(root);
-
-        Stage stage = new Stage();
-        stage.setScene(scene);
-//        stage.setWidth(rtaWidth + 40);
-        stage.initStyle(StageStyle.TRANSPARENT);
-        stage.toBack();
-        stage.show();
-
-        control.requestFocus();
-
-        int length = control.getTextLength();
-        setCaretPosition(length);
-        if (caret().isPresent()) {
-            Bounds bounds = caret().get().localToScene(caret().get().getBoundsInLocal());
-            height = bounds.getMaxY();
-        } else {
-            height = pageHeight * 10.0;
-        }
-        stage.close();
-        return height;
-    }
-
-    public double getContentAreaHeight(double rtaWidth, double pageHeight, double x, double y) {
-        double height;
-        Group root = new Group();
-        control.setContentAreaWidth(rtaWidth);
-        control.setPrefHeight(pageHeight);
-
-        root.getChildren().add(control);
-        Scene scene = new Scene(root);
-
-        Stage stage = new Stage();
-        stage.setScene(scene);
- //       stage.setWidth(rtaWidth + 40);
-
-        stage.initStyle(StageStyle.TRANSPARENT);
-        stage.setX(x + 10);
-        stage.setY(y + 10);
-        stage.toBack();
-        stage.show();
-
-        control.requestFocus();
-
-        int length = control.getTextLength();
-        setCaretPosition(length);
-        if (caret().isPresent()) {
-            Bounds bounds = caret().get().localToScene(caret().get().getBoundsInLocal());
-            height = bounds.getMaxY();
-        } else {
-            height = pageHeight * 10.0;
-        }
-        stage.close();
-        return height;
-    }
-
-    //*************
-
-
     public double getComputedHeight() {
         return paragraphListView.computeTotalHeight();
     }
-
-
-
-
-/*
-    public double getComputedHeight() {
-        double totalHeight = 0.0;
-
-        for (Paragraph paragraph : viewModel.getParagraphList()) {
-
-            totalHeight += (paragraph.getParaHeight() + 1.5);
-
-        }
-        return totalHeight;
-    }
-
- */
-
-
 
 
     private Bounds bounds;
