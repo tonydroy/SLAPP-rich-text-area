@@ -171,6 +171,11 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 keyTypedCharMap = ITALIC_MAP;
                 break;
             }
+            case SCRIPT_AND_ITALIC: {
+                keyPressedCharMap = SPECIAL_WITH_ITALIC_MAP;
+                keyTypedCharMap = SCRIPT_MAP;
+                break;
+            }
             case SCRIPT_AND_SANS: {
                 keyPressedCharMap = SPECIAL_WITH_SANS_MAP;
                 keyTypedCharMap = SCRIPT_MAP;
@@ -407,16 +412,19 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 setKeyMapState(KeyMapValue.ITALIC_AND_SANS);
                 return null;
             }),
-
             entry(new KeyCodeCombination(F3), e -> {
-                setKeyMapState(KeyMapValue.SCRIPT_AND_SANS);
+                setKeyMapState(KeyMapValue.SCRIPT_AND_ITALIC);
                 return null;
             }),
             entry(new KeyCodeCombination(F4), e -> {
-                setKeyMapState(KeyMapValue.ITALIC_AND_BLACKBOARD);
+                setKeyMapState(KeyMapValue.SCRIPT_AND_SANS);
                 return null;
             }),
             entry(new KeyCodeCombination(F5), e -> {
+                setKeyMapState(KeyMapValue.ITALIC_AND_BLACKBOARD);
+                return null;
+            }),
+            entry(new KeyCodeCombination(F6), e -> {
                 setKeyMapState(KeyMapValue.GREEK_AND_FRAKTUR);
                 return null;
             }),
@@ -2130,6 +2138,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         BASE("Base/Italic"),
 
         ITALIC_AND_SANS("Italic/Sans"),
+        SCRIPT_AND_ITALIC("Script/Italic"),
         SCRIPT_AND_SANS("Script/Sans"),
         ITALIC_AND_BLACKBOARD("Italic/Blackboard"),
         GREEK_AND_FRAKTUR("Greek/Fraktur");

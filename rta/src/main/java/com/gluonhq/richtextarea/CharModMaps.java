@@ -186,7 +186,7 @@ public class CharModMaps {
                 //script map
                 entry("\ud835\udcb6", "\ue0d2"),       //a
                 entry("\ud835\udcb7", "\ue0d3"),       //b
-                entry("\ud835\udcb8", "\ue0d4"),       //c
+                entry("\ud835\udcb8", "\ue08c"),       //c
                 entry("\ud835\udcb9", "\ue0d5"),       //d
                 entry("\u212f", "\ue0e9"),             //e
                 entry("\ud835\udcbb", "\ue0d6"),       //f
