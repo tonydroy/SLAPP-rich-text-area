@@ -166,6 +166,12 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 keyTypedCharMap = BASE_MAP;
                 break;
             }
+            case BASE_AND_SANS: {
+                keyPressedCharMap = SPECIAL_WITH_SANS_MAP;
+                keyTypedCharMap = BASE_MAP;
+                break;
+            }
+
             case ITALIC_AND_SANS: {
                 keyPressedCharMap = SPECIAL_WITH_SANS_MAP;
                 keyTypedCharMap = ITALIC_MAP;
@@ -340,24 +346,26 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).underline(underlineState).build());
             }),
 
-            entry(new KeyCodeCombination(F8), e -> {
+            entry(new KeyCodeCombination(F9), e -> {
                 TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
                 Boolean subscriptState = (decoration.isSubscript() || decoration.isTransSubscript()) == true ? false : true;
                 e.consume();
                 return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).subscript(subscriptState).transSubscript(false).superscript(false).transSuperscript(false).build());
             }),
-            entry(new KeyCodeCombination(F8, SHIFT_DOWN), e -> {
+            entry(new KeyCodeCombination(F9, SHIFT_DOWN), e -> {
                 TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
                 Boolean transSubscriptState = (decoration.isTransSubscript() || decoration.isSubscript()) == true ? false : true;
                 e.consume();
                 return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).transSubscript(transSubscriptState).transSuperscript(false).subscript(false).superscript(false).build());
             }),
+
             //alternative
             entry(new KeyCodeCombination(PAGE_DOWN), e -> {
                 TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
                 Boolean subscriptState = (decoration.isSubscript() || decoration.isTransSubscript()) == true ? false : true;
                 e.consume();
-                return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).subscript(subscriptState).transSubscript(false).superscript(false).transSuperscript(false).build());            }),
+                return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).subscript(subscriptState).transSubscript(false).superscript(false).transSuperscript(false).build());
+            }),
             entry(new KeyCodeCombination(PAGE_DOWN, SHIFT_DOWN), e -> {
                 TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
                 Boolean transSubscriptState = (decoration.isTransSubscript() || decoration.isSubscript()) == true ? false : true;
@@ -366,13 +374,13 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
             //
 
 
-            entry(new KeyCodeCombination(F7), e -> {
+            entry(new KeyCodeCombination(F8), e -> {
                 TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
                 Boolean superscriptState = (decoration.isSuperscript() || decoration.isTransSuperscript()) == true ? false : true;
                 e.consume();
                 return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).superscript(superscriptState).transSuperscript(false).subscript(false).transSubscript(false).build());
             }),
-            entry(new KeyCodeCombination(F7, SHIFT_DOWN), e -> {
+            entry(new KeyCodeCombination(F8, SHIFT_DOWN), e -> {
                 TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
                 Boolean transSuperscriptState = (decoration.isTransSuperscript() || decoration.isSuperscript()) == true ? false : true;
                 e.consume();
@@ -399,32 +407,39 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 setKeyMapState(KeyMapValue.BASE);
                 return null;
             }),
-            entry(new KeyCodeCombination(F2), e -> {
-                setKeyMapState(KeyMapValue.ITALIC_AND_SANS);
-                return null;
-            }),
             //alternative
             entry(new KeyCodeCombination(HOME), e -> {
                 setKeyMapState(KeyMapValue.BASE);
                 return null;
             }),
+            entry(new KeyCodeCombination(F2), e-> {
+                setKeyMapState(KeyMapValue.BASE_AND_SANS);
+                return null;
+            }),
+            entry(new KeyCodeCombination(F3), e -> {
+                setKeyMapState(KeyMapValue.ITALIC_AND_SANS);
+                return null;
+            }),
+            //alternative
             entry(new KeyCodeCombination(END), e -> {
                 setKeyMapState(KeyMapValue.ITALIC_AND_SANS);
                 return null;
             }),
-            entry(new KeyCodeCombination(F3), e -> {
-                setKeyMapState(KeyMapValue.SCRIPT_AND_ITALIC);
-                return null;
-            }),
             entry(new KeyCodeCombination(F4), e -> {
-                setKeyMapState(KeyMapValue.SCRIPT_AND_SANS);
-                return null;
-            }),
-            entry(new KeyCodeCombination(F5), e -> {
                 setKeyMapState(KeyMapValue.ITALIC_AND_BLACKBOARD);
                 return null;
             }),
+
+            entry(new KeyCodeCombination(F5), e -> {
+                setKeyMapState(KeyMapValue.SCRIPT_AND_ITALIC);
+                return null;
+            }),
             entry(new KeyCodeCombination(F6), e -> {
+                setKeyMapState(KeyMapValue.SCRIPT_AND_SANS);
+                return null;
+            }),
+
+            entry(new KeyCodeCombination(F7), e -> {
                 setKeyMapState(KeyMapValue.GREEK_AND_FRAKTUR);
                 return null;
             }),
@@ -2039,10 +2054,6 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.DIGIT3, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2192"),                                      //arrow
                 entry(new KeyCodeCombination(KeyCode.DIGIT4, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2194"),                                      //double arrow
                 entry(new KeyCodeCombination(KeyCode.DIGIT5, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u22a5"),                                      //bottom
-
-
-      //          entry(new KeyCodeCombination(KeyCode.DIGIT6, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u22a4"),                                      //top
-
                 entry(new KeyCodeCombination(KeyCode.DIGIT6, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2200"),                                      //universal quantifier
                 entry(new KeyCodeCombination(KeyCode.DIGIT7, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2203"),                                      //existential quantifier
                 entry(new KeyCodeCombination(KeyCode.DIGIT8, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u226e"),                                      //not less than
@@ -2050,6 +2061,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2270"),                                      //not less than or equal
                 entry(new KeyCodeCombination(KeyCode.MINUS, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2265"),                                       //greater than or equal
                 entry(new KeyCodeCombination(KeyCode.EQUALS, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2260"),                                      //not equals
+
                 entry(new KeyCodeCombination(KeyCode.OPEN_BRACKET, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u27e6"),                                //open double bracket
                 entry(new KeyCodeCombination(KeyCode.CLOSE_BRACKET, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u27e7"),                               //close double bracket
                 entry(new KeyCodeCombination(KeyCode.BACK_SLASH, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2224"),                                  //not factor
@@ -2070,37 +2082,28 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.DIGIT8, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2217"),        //asterisk
                 entry(new KeyCodeCombination(KeyCode.DIGIT9, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u22c6"),         //star
                 entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2205"),        //empty set
-
-
                 entry(new KeyCodeCombination(KeyCode.MINUS, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u00f7"),         //divides
                 entry(new KeyCodeCombination(KeyCode.EQUALS, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2238"),        //dot minus
 
-                //              entry(new KeyCodeCombination(KeyCode.EQUALS, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2265"),        //greater than or equal
+                      entry(new KeyCodeCombination(KeyCode.Q, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),             //can't use because of Mac shortcut
 
-
-
-
-                entry(new KeyCodeCombination(KeyCode.Q, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),             //can't use because of Mac shortcut
                 entry(new KeyCodeCombination(KeyCode.W, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u21be"),             //harpoon
 
+                entry(new KeyCodeCombination(KeyCode.E, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2208"),             //element
+                entry(new KeyCodeCombination(KeyCode.R, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2209"),             //not element
+                entry(new KeyCodeCombination(KeyCode.T, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2282"),             //proper subset
+                entry(new KeyCodeCombination(KeyCode.Y, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2286"),             //subset
 
-                entry(new KeyCodeCombination(KeyCode.E, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2282"),             //proper subset
-                entry(new KeyCodeCombination(KeyCode.R, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2286"),             //subset
 
-                entry(new KeyCodeCombination(KeyCode.T, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2208"),             //element
-                entry(new KeyCodeCombination(KeyCode.Y, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2209"),             //not element
                 entry(new KeyCodeCombination(KeyCode.U, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u222a"),             //union
                 entry(new KeyCodeCombination(KeyCode.I, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u22c3"),             //big union
                 entry(new KeyCodeCombination(KeyCode.O, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2229"),             //intersection
                 entry(new KeyCodeCombination(KeyCode.P, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u22c2"),             //big intersection
                 entry(new KeyCodeCombination(KeyCode.OPEN_BRACKET, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u231c"),   //left corner
                 entry(new KeyCodeCombination(KeyCode.CLOSE_BRACKET, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u231d"),  //right corner
-
-          //      entry(new KeyCodeCombination(KeyCode.OPEN_BRACKET, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2039"),  //french quote left
-          //      entry(new KeyCodeCombination(KeyCode.CLOSE_BRACKET, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u203a"), //french right
                 entry(new KeyCodeCombination(KeyCode.BACK_SLASH, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u00a0"),    //unbreakable space
 
-      //          entry(new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u21be"),             //harpoon
+
                 entry(new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2248"),            //double wave
                 entry(new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2243"),             //wave above line
                 entry(new KeyCodeCombination(KeyCode.D, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2245"),             //wave above equals
@@ -2112,35 +2115,21 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.L, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u227c"),             //set less than or equal
 
                 entry(new KeyCodeCombination(KeyCode.SEMICOLON, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2039"),        //french quote left
-
-
                 entry(new KeyCodeCombination(KeyCode.QUOTE, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u203a"),            //french quote right
-                //          entry(new KeyCodeCombination(KeyCode.QUOTE, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2238"),         //dot minus
-
-      //          entry(new KeyCodeCombination(KeyCode.Z, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u0305"),             //combining overline
-      //          entry(new KeyCodeCombination(KeyCode.X, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u033f"),             //combining double overline
-      //          entry(new KeyCodeCombination(KeyCode.C, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u20d7"),             //combining arrow above
-      //          entry(new KeyCodeCombination(KeyCode.V, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u0302"),             //combining hat
-      //          entry(new KeyCodeCombination(KeyCode.B, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u0338"),             //combining slash
-      //          entry(new KeyCodeCombination(KeyCode.N, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u030a"),             //combining dot
-      //          entry(new KeyCodeCombination(KeyCode.M, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u0303"),             //combining tilde
                 entry(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u27e8"),     //left angle bracket
-
-
-            //    entry(new KeyCodeCombination(KeyCode.PERIOD, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u00a0"),
                 entry(new KeyCodeCombination(KeyCode.PERIOD, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u27e9")         //right angle bracket
-//                entry(new KeyCodeCombination(KeyCode.SLASH, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),                     //
-      //          entry(new KeyCodeCombination(KeyCode.SPACE, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u00a0")            //unbreakable space (doesn't work)
+
         );
     }
 
     public enum KeyMapValue {
         BASE("Base/Italic"),
+        BASE_AND_SANS("Base/Sans"),
 
         ITALIC_AND_SANS("Italic/Sans"),
+        ITALIC_AND_BLACKBOARD("Italic/Blackboard"),
         SCRIPT_AND_ITALIC("Script/Italic"),
         SCRIPT_AND_SANS("Script/Sans"),
-        ITALIC_AND_BLACKBOARD("Italic/Blackboard"),
         GREEK_AND_FRAKTUR("Greek/Fraktur");
 
         private String name;
