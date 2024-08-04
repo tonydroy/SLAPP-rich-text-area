@@ -1819,6 +1819,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(')', ")"),
                 entry('_', "_"),
                 entry('+', "+"),
+                entry('{', "{"),
                 entry('}', "}"),
                 entry('|', "|"),
                 entry(':', ":"),
@@ -2085,7 +2086,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.MINUS, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u00f7"),         //divides
                 entry(new KeyCodeCombination(KeyCode.EQUALS, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2238"),        //dot minus
 
-                      entry(new KeyCodeCombination(KeyCode.Q, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), ""),             //can't use because of Mac shortcut
+                      entry(new KeyCodeCombination(KeyCode.Q, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\ue898"),             //can't use because of Mac shortcut (hidden PC char)
 
                 entry(new KeyCodeCombination(KeyCode.W, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u21be"),             //harpoon
 
