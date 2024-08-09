@@ -161,6 +161,8 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
 
     private BooleanProperty overlineOn = new SimpleBooleanProperty(false);
     private ObjectProperty<KeyMapValue> keyMapState = new SimpleObjectProperty<>(KeyMapValue.BASE);
+    private ObjectProperty<KeyMapValue> lastKeyMapState = new SimpleObjectProperty<>(KeyMapValue.BASE);
+
     public void setMaps(KeyMapValue request) {
         switch (request) {
             case BASE: {
@@ -447,6 +449,13 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 setKeyMapState(KeyMapValue.GREEK_AND_FRAKTUR);
                 return null;
             }),
+            entry(new KeyCodeCombination(F9), e-> {
+                KeyMapValue temp = keyMapState.get();
+                keyMapState.set(lastKeyMapState.get());
+                lastKeyMapState.set(temp);
+                return null;
+            }),
+
             entry(new KeyCodeCombination(DIGIT0, SHORTCUT_DOWN), e -> {
                 toggleOverlineOn();
                 return null;
@@ -2263,6 +2272,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     }
 
     public final void setKeyMapState(KeyMapValue mapValue) {
+        lastKeyMapState.set(keyMapState.get());
         keyMapState.set(mapValue);
     }
 
