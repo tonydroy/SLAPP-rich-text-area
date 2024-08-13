@@ -104,6 +104,15 @@ public class ActionFactory {
     }
 
 
+    /*
+    public Action openNow(Document document) {
+        return new ImmediateBasicAction(control, action -> ACTION_CMD_FACTORY.open(document));
+    }
+
+     */
+
+
+
 
 
     private Action save;
