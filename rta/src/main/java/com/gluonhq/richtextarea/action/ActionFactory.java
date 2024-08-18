@@ -99,6 +99,18 @@ public class ActionFactory {
         return newDocument;
     }
 
+
+    public Action newDocumentNow() {
+        if (newDocument == null) {
+            newDocument = new ImmediateBasicAction(control, action -> ACTION_CMD_FACTORY.newDocument());
+        }
+        return newDocument;
+    }
+
+
+
+
+
     public Action open(Document document) {
         return new BasicAction(control, action -> ACTION_CMD_FACTORY.open(document));
     }

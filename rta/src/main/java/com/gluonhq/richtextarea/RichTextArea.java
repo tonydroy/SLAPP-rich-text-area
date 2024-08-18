@@ -79,7 +79,7 @@ public class RichTextArea extends Control {
     public static final String STYLE_CLASS = "rich-text-area";
     public static final DataFormat RTA_DATA_FORMAT = new DataFormat("text/rich-text-area");
     private static final PseudoClass PSEUDO_CLASS_READONLY = PseudoClass.getPseudoClass("readonly");
-    private static Stage mainStage;
+    public static Stage mainStage;
 
     private final ActionFactory actionFactory = new ActionFactory(this);
 

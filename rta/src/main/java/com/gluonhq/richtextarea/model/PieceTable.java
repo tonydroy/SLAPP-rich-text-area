@@ -27,6 +27,8 @@
  */
 package com.gluonhq.richtextarea.model;
 
+import com.gluonhq.richtextarea.Alerts;
+import com.gluonhq.richtextarea.RichTextArea;
 import com.gluonhq.richtextarea.Selection;
 import com.gluonhq.richtextarea.Tools;
 import com.gluonhq.richtextarea.undo.AbstractCommand;
@@ -696,8 +698,10 @@ class InsertCmd extends AbstractCommand<PieceTable> {
         }
 
         if (insertPosition < 0 || insertPosition > pt.getTextLength()) {
-            System.out.println("insert pos: " + insertPosition + " pt.getTextLength " + pt.getTextLength());
-            throw new IllegalArgumentException("Position is outside text bounds");
+            String message = "IllegalArgumentException (PieceTable 01).  From Copy/Paste of indented paragraph.  Please save your work and restart SLAPP.  You should not have lost any of your work.";
+            Alerts.showSimpleAlert("RTA Error", message, RichTextArea.mainStage);
+ //           System.out.println("insert pos: " + insertPosition + " pt.getTextLength " + pt.getTextLength());
+ //           throw new IllegalArgumentException("Position is outside text bounds");
         }
 
         if (insertPosition == pt.getTextLength()) {

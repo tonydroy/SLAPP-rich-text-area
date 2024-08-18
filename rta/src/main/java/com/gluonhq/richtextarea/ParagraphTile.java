@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2022, Gluon
  *
@@ -27,6 +28,7 @@
  */
 package com.gluonhq.richtextarea;
 
+import com.gluonhq.richtextarea.RichTextArea;
 import com.gluonhq.richtextarea.model.Paragraph;
 import com.gluonhq.richtextarea.model.ParagraphDecoration;
 import com.gluonhq.richtextarea.model.TextDecoration;
@@ -67,11 +69,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -267,12 +265,19 @@ public class ParagraphTile extends HBox {
         if (control.isDisabled()) {
             return;
         }
-        layers.forEach(l -> {
-            Point2D localEvent = l.screenToLocal(e.getScreenX(), e.getScreenY());
-            if (l.getLayoutBounds().contains(localEvent)) {
-                l.mousePressedListener(e);
-            }
-        });
+        //the try-catch is from me to help user
+        try {
+            layers.forEach(l -> {
+                Point2D localEvent = l.screenToLocal(e.getScreenX(), e.getScreenY());
+                if (l.getLayoutBounds().contains(localEvent)) {
+                    l.mousePressedListener(e);
+                }
+            });
+        }
+        catch (ConcurrentModificationException ex) {
+            String message = "Concurrent Modification Exception (Paragraph Tile, 002).  Please save your work and restart SLAPP.  You should not have lost any of your work.";
+            Alerts.showSimpleAlert("RTA Error", message, RichTextArea.mainStage);
+        }
     }
 
     void mouseDraggedListener(MouseEvent e) {
@@ -294,7 +299,14 @@ public class ParagraphTile extends HBox {
     }
 
     void evictUnusedObjects(Set<Font> usedFonts, Set<Image> usedImages) {
-        layers.forEach(layer -> layer.evictUnusedObjects(usedFonts, usedImages));
+        //the try-catch is from me to help user
+        try {
+            layers.forEach(layer -> layer.evictUnusedObjects(usedFonts, usedImages));
+        }
+        catch (ConcurrentModificationException e) {
+            String message = "Concurrent Modification Exception (Paragraph Tile, 001).  Please save your work and restart SLAPP.  You should not have lost any of your work.";
+            Alerts.showSimpleAlert("RTA Error", message, RichTextArea.mainStage);
+        }
     }
 
     void updateLayout() {

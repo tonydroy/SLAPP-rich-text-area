@@ -757,11 +757,12 @@ public class RichTextAreaViewModel {
     }
 
     void newDocument() {
-        Platform.runLater(() -> {
+        //comment out runLater to have the effect of newDocumentNow
+ //       Platform.runLater(() -> {
             // invalidate documentProperty
             setDocument(null);
             setDocument(new Document());
-        });
+//        });
     }
 
     void open(Document document) {
