@@ -35,6 +35,7 @@ import java.util.Objects;
  * defined by a start position and a length.
  */
 public class DecorationModel implements Serializable {
+    private static final long serialVersionUID = 100L;
     private final int start;
     private final int length;
     private final Decoration decoration;    // TextDecoration or ImageDecoration

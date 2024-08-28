@@ -48,9 +48,7 @@ import java.util.stream.Collectors;
  *
  */
 public class Document implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
+    private static final long serialVersionUID = 100L;
     private final String text;
     private final List<DecorationModel> decorationList;
     private final int caretPosition;

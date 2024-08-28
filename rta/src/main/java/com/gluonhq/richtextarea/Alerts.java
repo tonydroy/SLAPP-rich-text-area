@@ -12,7 +12,7 @@ public class Alerts {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.initModality(Modality.APPLICATION_MODAL);
-        alert.initOwner(stage);
+//        alert.initOwner(stage);
         alert.showAndWait();
     }
 }
