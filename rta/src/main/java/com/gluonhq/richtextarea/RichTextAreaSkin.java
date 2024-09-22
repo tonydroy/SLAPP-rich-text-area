@@ -1233,6 +1233,9 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         }
     }
 
+    /*
+
+     */
     private String getCharModification(String inString) {
 
         String outString = null;
