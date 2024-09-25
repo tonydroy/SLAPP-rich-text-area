@@ -11,10 +11,16 @@ public class CharModMaps {
     private final Map<String, String> macMap = initializeMacMap();
     private final Map<String, String> vecMap = initializeVecMap();
     private final Map<String, String> hatMap = initializeHatMap();
-    private final Map<String, String> slashMap = initializeSlashMap();
-    private final Map<String, String> circMap = initializeCircMap();
-    private final Map<String, String> tilMap = initializeTilMap();
-    private final  Map<String, String> doubleMap = initializeDoubleMap();
+    private final Map<String, String> slashBaseItalMap = initializeSlashBaseItalMap();
+    private final Map<String, String> slashBaseScriptMap = initializeSlashBaseScriptMap();
+    private final Map<String, String> slashBaseSansMap = initializeSlashBaseSansMap();
+    private final Map<String, String> slashItalSansMap = initializeSlashItalSansMap();
+    private final Map<String, String> slashItalBBMap = initializeSlashItalBBMap();
+    private final Map<String, String> slashScriptItalMap = initializeSlashScriptItalMap();
+    private final Map<String, String> slashScriptSansMap = initializeSlashScriptSansMap();
+    private final Map<String, String> slashGreekFrakMap = initializeSlashGreekFrakMap();
+
+
 
 
     private Map<String, String> initializeOverlineMap() {
@@ -126,7 +132,7 @@ public class CharModMaps {
                 entry("\ud835\udc52", "\ue08e"),      //e
                 entry("\ud835\udc53", "\ue08f"),      //f
                 entry("\ud835\udc54", "\ue090"),      //g
-                entry("\u210e", "\ue083"),            //h
+                entry("\u210e", "\ue0a3"),            //h
                 entry("\ud835\udc56", "\ue091"),      //i
                 entry("\ud835\udc57", "\ue092"),      //j
                 entry("\ud835\udc58", "\ue093"),      //k
@@ -145,16 +151,7 @@ public class CharModMaps {
                 entry("\ud835\udc65", "\ue0a0"),      //x
                 entry("\ud835\udc66", "\ue0a1"),      //y
                 entry("\ud835\udc67", "\ue0a2"),      //z
-                entry("\u211d", "\ue215"),            //bb R
-                //               entry("\u2112", ""),            //script L
-                entry("\u21d0", "\ue0b1"),            //back arrow
-                entry("\u27f9", "\ue0b3"),            //long arrow
-                entry("\u27f8", "\ue0b2"),            //long back arrow
-                entry("\u27fa", "\ue0b4"),            //long double arrow
-                entry("\u2115", "\ue211"),            //bb N
-                entry("\u2124", "\ue212"),            //bb Z
-                entry("\u2119", "\ue213"),            //bb P
-                entry("\u211a", "\ue214"),            //bb Q
+
                 entry("\ud835\udc34", "\ue070"),      //A
                 entry("\ud835\udc35", "\ue071"),      //B
                 entry("\ud835\udc36", "\ue072"),      //C
@@ -181,7 +178,6 @@ public class CharModMaps {
                 entry("\ud835\udc4b", "\ue087"),      //X
                 entry("\ud835\udc4c", "\ue088"),      //Y
                 entry("\ud835\udc4d", "\ue089"),      //Z
-
 
                 //script map
                 entry("\ud835\udcb6", "\ue0d2"),       //a
@@ -276,7 +272,7 @@ public class CharModMaps {
                 entry("\u0399", "\ue108"),      //Iota
                 entry("\u039a", "\ue109"),      //Kappa
                 entry("\u039b", "\ue10a"),      //Lambda
-                entry("\u039c", "\ue10b"),      //Mu
+                entry("\u039c", "\ue14c"),      //Mu
                 entry("\u039d", "\ue10c"),      //Nu
                 entry("\u039e", "\ue10d"),      //Xi
                 entry("\u039f", "\ue10e"),      //Omicron
@@ -289,6 +285,7 @@ public class CharModMaps {
                 entry("\u03a7", "\ue115"),      //Chi
                 entry("\u03a8", "\ue116"),      //Psi
                 entry("\u03a9", "\ue117"),      //Omega
+                entry("\uf8d5", "\ue210"),  //double mu
 
                 //Sans
                 entry("\ud835\uddba", "\ue15a"),      //a
@@ -354,7 +351,6 @@ public class CharModMaps {
                 entry("\ud835\uddb8", "\ue158"),      //Y
                 entry("\ud835\uddb9", "\ue159"),      //Z
 
-
                 //Fraktur
                 entry("\ud835\udd1e", "\ue1a5"),      //a
                 entry("\ud835\udd1f", "\ue1a6"),      //b
@@ -382,9 +378,6 @@ public class CharModMaps {
                 entry("\ud835\udd35", "\ue1bc"),      //x
                 entry("\ud835\udd36", "\ue1bd"),      //y
                 entry("\ud835\udd37", "\ue1be"),      //z
-                entry("\uf8d3", "\ue20e"),            //bb universal
-                entry("\uf8d4", "\ue20f"),            //bb existential
-                entry("\uf8d5", "\ue210"),            //bb mu
                 entry("\ud835\udd04", "\ue190"),      //A
                 entry("\ud835\udd05", "\ue191"),      //B
                 entry("\u212d", "\ue1fd"),            //C
@@ -392,7 +385,7 @@ public class CharModMaps {
                 entry("\ud835\udd08", "\ue193"),      //E
                 entry("\ud835\udd09", "\ue194"),      //F
                 entry("\ud835\udd0a", "\ue195"),      //G
-                entry("\u210c", "\ue1fe"),            //H
+                entry("\u210c", "\ue1c0"),            //H
                 entry("\u2111", "\ue1c1"),            //I
                 entry("\ud835\udd0d", "\ue196"),      //J
                 entry("\ud835\udd0e", "\ue197"),      //K
@@ -488,54 +481,57 @@ public class CharModMaps {
                 entry("\u22a8", "\ue228"),      //entails
                 entry("\u22ad", "\ue229"),      //not entails
                 entry("\uf8d0", "\ue22a"),      //replacement rule
-                //               entry("\u223c", "\ue22b"),      //tilde
                 entry("\u2227", "\ue22c"),      //caret
                 entry("\u2228", "\ue22d"),      //wedge
                 entry("\u2192", "\ue22e"),      //arrow
                 entry("\u2194", "\ue22f"),      //double arrow
                 entry("\u22a5", "\ue230"),      //bottom
-                entry("\u22a4", "\ue231"),      //top
                 entry("\u2200", "\ue232"),      //universal
                 entry("\u2203", "\ue233"),      //existential
-                entry("\u226e", "\ue234"),      //not less than
-                entry("\u2264", "\ue235"),      //less than or equal
-                entry("\u2270", "\ue236"),      //not less than or equal
-                entry("\u2260", "\ue237"),      //not equal
-                entry("\u27e6", "\ue238"),      //open double bracket
-                entry("\u27e7", "\ue239"),      //close double bracket
-                entry("\u2224", "\ue23a"),      //not factor
+                entry("\ue8a5", "\ue8af"),      //big not less than
+                entry("\ue8a7", "\ue8b0"),      //big not less than or equal
+                entry("\ue886", "\ue899"),      //zero with slash
+                entry("\ue8ad", "\ue8b7"),      //big not equals
+                entry("\ue8ac", "\ue8b6"),      //big equals
+
                 entry("\u00d7", "\ue23b"),      //times
                 entry("\u2032", "\ue23c"),      //prime
-                entry("\u2191", "\ue23d"),      //up arrow
-                entry("\u2193", "\ue23e"),      //down arrow
-                entry("\u00d8", "\ue23f"),      //zero with slash
+                entry("\u2224", "\ue23a"),      //not factor
+                entry("\u2264", "\ue235"),      //less than or equal
+                entry("\u2265", "\ue259"),      //greater than or equal
+                entry("\ue8a4", "\ue8ae"),      //big less than
+                entry("\ue8a6", "\ue8b0"),      //big less than or equal
+                entry("\u2260", "\ue237"),      //not equal
+
                 entry("\u25fb", "\ue240"),      //box
                 entry("\u25ca", "\ue241"),      //diamond
                 entry("\u2261", "\ue242"),      //triple bar
                 entry("\u2283", "\ue243"),      //horseshoe
                 entry("\u22c0", "\ue244"),      //big caret
                 entry("\u22c1", "\ue245"),      //big wedge
-                entry("\u2135", "\ue246"),      //aleph
-                entry("\u2136", "\ue247"),      //beth
+                entry("\u2191", "\ue23d"),      //up arrow
+                entry("\u2193", "\ue23e"),      //down arrow
+ //               entry("\u2135", "\ue246"),      //aleph
+ //               entry("\u2136", "\ue247"),      //beth
 //                entry("\ud835\udcab", ""),       //powerset
                 entry("\u2217", "\ue249"),      //asterisk
                 entry("\u22c6", "\ue24a"),      //star
                 entry("\u2205", "\ue24b"),      //empty set
                 entry("\u00f7", "\ue24c"),      //divides
-                entry("\u2282", "\ue24d"),      //proper subset
-                entry("\u2286", "\ue24e"),      //subset
+                entry("\u2238", "\ue264"),      //dot minus
+
+                entry("\u21be", "\ue25a"),      //harpoon
                 entry("\u2208", "\ue24f"),      //element
                 entry("\u2209", "\ue250"),      //not element
+                entry("\u2282", "\ue24d"),      //proper subset
+                entry("\u2286", "\ue24e"),      //subset
                 entry("\u222a", "\ue252"),      //union
                 entry("\u22c3", "\ue254"),      //big union
                 entry("\u2229", "\ue251"),      //intersection
                 entry("\u22c2", "\ue253"),      //big intersection
-                entry("\u231c", "\ue255"),      //left corner
-                entry("\u231d", "\ue256"),      //right corner
-                entry("\u2039", "\ue257"),      //french left
-                entry("\u203a", "\ue258"),      //french right
-                entry("\u2265", "\ue259"),      //greater than or equal
-                entry("\u21be", "\ue25a"),      //harpoon
+                entry("\u27e6", "\ue238"),      //open double bracket
+                entry("\u27e7", "\ue239"),      //close double bracket
+
                 entry("\u2248", "\ue25b"),      //double wave
                 entry("\u2243", "\ue25c"),      //wave above line
                 entry("\u2245", "\ue25d"),      //wave above equals
@@ -545,11 +541,15 @@ public class CharModMaps {
                 entry("\uf8d2", "\ue261"),      //elementary submodel
                 entry("\u227e", "\ue262"),      //elementary embedding
                 entry("\u227c", "\ue263"),      //set less than or equal
-                entry("\u2238", "\ue264"),      //dot minus
+                entry("\u231c", "\ue255"),      //left corner
+                entry("\u231d", "\ue256"),      //right corner
+
+                entry("\u22a4", "\ue231"),      //top
+                entry("\u2039", "\ue257"),      //french left
+                entry("\u203a", "\ue258"),      //french right
                 entry("\u27e8", "\ue265"),      //left angle
                 entry("\u27e9", "\ue266"),      //right angle
                 entry("\u00a0", "\ue267")       //unbreakable space
-
         );
     }
 
@@ -787,6 +787,7 @@ public class CharModMaps {
                 entry("\u03a7", "\ue385"),      //Chi
                 entry("\u03a8", "\ue386"),      //Psi
                 entry("\u03a9", "\ue387"),      //Omega
+                entry("\uf8d5", "\ue480"),  //double mu
 
                 //Sans
                 entry("\ud835\uddba", "\ue3ca"),      //a
@@ -880,9 +881,6 @@ public class CharModMaps {
                 entry("\ud835\udd35", "\ue42c"),      //x
                 entry("\ud835\udd36", "\ue42d"),      //y
                 entry("\ud835\udd37", "\ue42e"),      //z
-                entry("\uf8d3", "\ue47e"),            //bb universal
-                entry("\uf8d4", "\ue47f"),            //bb existential
-                entry("\uf8d5", "\ue480"),            //bb mu
                 entry("\ud835\udd04", "\ue400"),      //A
                 entry("\ud835\udd05", "\ue401"),      //B
                 entry("\u212d", "\ue42f"),            //C
@@ -1214,6 +1212,7 @@ public class CharModMaps {
                 entry("\u03a7", "\ue5a7"),      //Chi
                 entry("\u03a8", "\ue5a8"),      //Psi
                 entry("\u03a9", "\ue5a9"),      //Omega
+                entry("\uf8d5", "\ue677"),  //double mu
 
                 //Sans
                 entry("\ud835\uddba", "\ue5df"),      //a
@@ -1307,9 +1306,6 @@ public class CharModMaps {
                 entry("\ud835\udd35", "\ue62f"),      //x
                 entry("\ud835\udd36", "\ue630"),      //y
                 entry("\ud835\udd37", "\ue631"),      //z
-                entry("\uf8d3", "\ue675"),            //bb universal
-                entry("\uf8d4", "\ue676"),            //bb existential
-                entry("\uf8d5", "\ue677"),            //bb mu
                 entry("\ud835\udd04", "\ue603"),      //A
                 entry("\ud835\udd05", "\ue604"),      //B
                 entry("\u212d", "\ue632"),            //C
@@ -1643,6 +1639,7 @@ public class CharModMaps {
                 entry("\u03a7", "\ue757"),      //Chi
                 entry("\u03a8", "\ue758"),      //Psi
                 entry("\u03a9", "\ue759"),      //Omega
+                entry("\uf8d5", "\ue827"),  //double mu
 
                 //Sans
                 entry("\ud835\uddba", "\ue78f"),      //a
@@ -1736,9 +1733,6 @@ public class CharModMaps {
                 entry("\ud835\udd35", "\ue7df"),      //x
                 entry("\ud835\udd36", "\ue7e0"),      //y
                 entry("\ud835\udd37", "\ue7e1"),      //z
-                entry("\uf8d3", "\ue825"),            //bb universal
-                entry("\uf8d4", "\ue826"),            //bb existential
-                entry("\uf8d5", "\ue827"),            //bb mu
                 entry("\ud835\udd04", "\ue7b3"),      //A
                 entry("\ud835\udd05", "\ue7b4"),      //B
                 entry("\u212d", "\ue7e2"),            //C
@@ -1838,73 +1832,581 @@ public class CharModMaps {
 
         );
     }
-    private Map<String, String> initializeSlashMap() {
+    private Map<String, String> initializeSlashBaseItalMap() {
         return Map.ofEntries(
-                entry("0", "\ue886"),                    //zero
-                entry("=", "\u2260"),                    //equal
-                entry("\u003c", "\u226e"),                //less than
-                entry("\u003e", "\ue878"),               //greater than
-                entry("\u21d0", "\ue872"),               //back arrow
-                entry("\u27f9", "\ue874"),               //long arrow
-                entry("\u27f8", "\ue873"),               //long back arrow
-                entry("\u27fa", "\ue873"),               //long double arrow
-                entry("\u21d2", "\ue876"),               //meta arrow
-                entry("\u21d4", "\ue877"),               //meta double arrow
-                entry("\u22a2", "\u22ac"),               //proves
-                entry("\u22a8", "\u22ad"),               //entails
-                entry("\u2264", "\u2270"),               //less than or equal
-                entry("\u2283", "\ue87a"),               //proper superset
-                entry("\u2282", "\ue87b"),               //proper subset
-                entry("\u2286", "\ue87c"),               //subset
-                entry("\u2208", "\u2209"),               //element of
-                entry("\u2265", "\ue879"),               //greater than or equal
-                entry("\u2248", "\ue87d"),               //double wave
-                entry("\u2243", "\ue87e"),               //wave above line
-                entry("\u2245", "\ue87f"),               //wave above equals
-                entry("\u2291", "\ue880"),               //submodle
-                entry("\uf8d1", "\ue881"),               //embedding
-                entry("\u227a", "\ue882"),               //set smaller than
-                entry("\uf8d2", "\ue883"),               //elementary submodel
-                entry("\u227e", "\ue884"),               //elementary embedding
-                entry("\u227c", "\ue885")                //set less than or equal
+
+                //base
+                entry("b", "\uf8b4"),
+                entry("c", "\ue845"), //
+                entry("i", "\ue849"),  //
+                entry("m", "\uf8b5"),
+                entry("n","\u03bc"),
+                entry("s", "\ue843"), //
+                entry("u", "\ue847"),  //
+                entry("v", "\u03b2"),
+                entry("A", "\u2135"), //
+                entry("B", "\u2136"), //
+                entry("C", "\ue844"), //
+                entry("I", "\ue848"), //
+                entry("N", "\u2115"), //
+                entry("P", "\u2119"), //
+                entry("Q", "\u211a"),  //
+                entry("R", "\u211d"),  //
+                entry("S", "\ue842"), //
+                entry("U", "\ue846"), //
+                entry("Z", "\u2124"), //
+                entry("-", "\u21d0"),  //
+                entry("=", "\u27f8"),  //
+                entry("[", "\u27f9"), //
+                entry("]", "\u27fa"), //
+                entry("_", "\ue872"), //
+                entry("+", "\ue873"),  //
+                entry("{", "\ue874"), //
+                entry("}", "\ue875"), //
+                entry("|", "\ue898"), //
+                entry("<", "\u226e"), //
+                entry(">", "\u226f"), //
+
+                //italic
+                entry("\ud835\udc50", "\ue855"),      //c  *
+                entry("\ud835\udc56", "\ue859"),      //i  *
+                entry("\ud835\udc5a", "\uf8d5"),      //m  *
+                entry("\ud835\udc5b", "\uf8db"),      //n  *
+                entry("\ud835\udc60", "\ue853"),      //s  *
+                entry("\ud835\udc62", "\ue857"),      //u  *
+                entry("\ud835\udc36", "\ue854"),      //C  *
+                entry("\ud835\udc3c", "\ue858"),      //I  *
+                entry("\ud835\udc43", "\ud835\udcab"),  //P  *
+                entry("\ud835\udc46", "\ue852"),      //S  *
+                entry("\ud835\udc48", "\ue856"),      //U  *
+
+                //Special
+                entry("\u21d2", "\ue876"),      //meta arrow
+                entry("\u21d4", "\ue877"),      //meta double
+                entry("\u2200", "\uf8d3"),      //universal
+                entry("\u2203", "\uf8d4"),      //existential
+                entry("\u2264", "\u2270"),      //less than or equal
+                entry("\u2265", "\u2271"),      //greater than or equal
+                entry("\u2261", "\u2262"),      //triple bar
+                entry("\u2283", "\u2285"),      //horseshoe
+                entry("\u2282", "\u2284"),      //proper subset
+                entry("\u2286", "\u2288"),      //subset
+                entry("\u2248", "\ue87d"),      //double wave
+                entry("\u2243", "\ue87e"),      //wave above line
+                entry("\u2245", "\ue87f"),      //wave above equals
+                entry("\u2291", "\ue880"),      //submodel
+                entry("\uf8d1", "\ue881"),      //embedding
+                entry("\u227a", "\ue882"),      //set smaller than
+                entry("\uf8d2", "\ue883"),      //elementary submodel
+                entry("\u227e", "\ue884"),      //elementary embedding
+                entry("\u227c", "\ue885")      //set less than or equal
         );
     }
-    private Map<String, String> initializeCircMap() {
+
+
+
+    private Map<String, String> initializeSlashBaseScriptMap() {
         return Map.ofEntries(
-                entry("S", "\ue842" ),
-                entry("s", "\ue843"),
-                entry("C", "\ue844"),
-                entry("c", "\ue845"),
-                entry("U", "\ue846"),
-                entry("u", "\ue847"),
-                entry("I", "\ue848"),
-                entry("i", "\ue849")
+
+                //base
+                entry("b", "\uf8b4"),
+                entry("c", "\ue845"), //
+                entry("i", "\ue849"),  //
+                entry("m", "\uf8b5"),
+                entry("n","\u03bc"),
+                entry("s", "\ue843"), //
+                entry("u", "\ue847"),  //
+                entry("v", "\u03b2"),
+                entry("A", "\u2135"), //
+                entry("B", "\u2136"), //
+                entry("C", "\ue844"), //
+                entry("I", "\ue848"), //
+                entry("N", "\u2115"), //
+                entry("P", "\u2119"), //
+                entry("Q", "\u211a"),  //
+                entry("R", "\u211d"),  //
+                entry("S", "\ue842"), //
+                entry("U", "\ue846"), //
+                entry("Z", "\u2124"), //
+                entry("-", "\u21d0"),  //
+                entry("=", "\u27f8"),  //
+                entry("[", "\u27f9"), //
+                entry("]", "\u27fa"), //
+                entry("_", "\ue872"), //
+                entry("+", "\ue873"),  //
+                entry("{", "\ue874"), //
+                entry("}", "\ue875"), //
+                entry("|", "\ue898"), //
+                entry("<", "\u226e"), //
+                entry(">", "\u226f"), //
+
+                //script
+                entry("\ud835\udcb8", "\ue855"),      //c  *
+                entry("\ud835\udcbe", "\ue859"),      //i  *
+                entry("\ud835\udcc2", "\uf8d5"),      //m  *
+                entry("\ud835\udcc3", "\uf8db"),      //n  *
+                entry("\ud835\udcc8", "\ue853"),      //s  *
+                entry("\ud835\udcca", "\ue857"),      //u  *
+                entry("\ud835\udc9e", "\ue854"),      //C  *
+                entry("\u2110", "\ue858"),      //I  *
+                entry("\ud835\udcab", "\ud835\udcab"),  //P  *
+                entry("\ud835\udcae", "\ue852"),      //S  *
+                entry("\ud835\udcb0", "\ue856"),      //U  *
+
+                //Special
+                entry("\u21d2", "\ue876"),      //meta arrow
+                entry("\u21d4", "\ue877"),      //meta double
+                entry("\u2200", "\uf8d3"),      //universal
+                entry("\u2203", "\uf8d4"),      //existential
+                entry("\u2264", "\u2270"),      //less than or equal
+                entry("\u2265", "\u2271"),      //greater than or equal
+                entry("\u2261", "\u2262"),      //triple bar
+                entry("\u2283", "\u2285"),      //horseshoe
+                entry("\u2282", "\u2284"),      //proper subset
+                entry("\u2286", "\u2288"),      //subset
+                entry("\u2248", "\ue87d"),      //double wave
+                entry("\u2243", "\ue87e"),      //wave above line
+                entry("\u2245", "\ue87f"),      //wave above equals
+                entry("\u2291", "\ue880"),      //submodel
+                entry("\uf8d1", "\ue881"),      //embedding
+                entry("\u227a", "\ue882"),      //set smaller than
+                entry("\uf8d2", "\ue883"),      //elementary submodel
+                entry("\u227e", "\ue884"),      //elementary embedding
+                entry("\u227c", "\ue885")      //set less than or equal
 
         );
     }
-    private Map<String, String> initializeTilMap() {
+
+    private Map<String, String> initializeSlashBaseSansMap() {
         return Map.ofEntries(
-                entry("S", "\ue852" ),
-                entry("s", "\ue853"),
-                entry("C", "\ue854"),
-                entry("c", "\ue855"),
-                entry("U", "\ue856"),
-                entry("u", "\ue857"),
-                entry("I", "\ue858"),
-                entry("i", "\ue859")
+
+                //base
+                entry("b", "\uf8b4"),
+                entry("c", "\ue845"), //
+                entry("i", "\ue849"),  //
+                entry("m", "\uf8b5"),
+                entry("n","\u03bc"),
+                entry("s", "\ue843"), //
+                entry("u", "\ue847"),  //
+                entry("v", "\u03b2"),
+                entry("A", "\u2135"), //
+                entry("B", "\u2136"), //
+                entry("C", "\ue844"), //
+                entry("I", "\ue848"), //
+                entry("N", "\u2115"), //
+                entry("P", "\u2119"), //
+                entry("Q", "\u211a"),  //
+                entry("R", "\u211d"),  //
+                entry("S", "\ue842"), //
+                entry("U", "\ue846"), //
+                entry("Z", "\u2124"), //
+                entry("-", "\u21d0"),  //
+                entry("=", "\u27f8"),  //
+                entry("[", "\u27f9"), //
+                entry("]", "\u27fa"), //
+                entry("_", "\ue872"), //
+                entry("+", "\ue873"),  //
+                entry("{", "\ue874"), //
+                entry("}", "\ue875"), //
+                entry("|", "\ue898"), //
+                entry("<", "\u226e"), //
+                entry(">", "\u226f"), //
+
+                //sans
+                entry("\ud835\uddbc", "\ue855"),      //c  *
+                entry("\ud835\uddc2", "\ue859"),      //i  *
+                entry("\ud835\uddc6", "\uf8d5"),      //m  *
+                entry("\ud835\uddc7", "\uf8db"),      //n  *
+                entry("\ud835\uddcc", "\ue853"),      //s  *
+                entry("\ud835\uddce", "\ue857"),      //u  *
+                entry("\ud835\udda2", "\ue854"),      //C  *
+                entry("\ud835\udda8", "\ue858"),      //I  *
+                entry("\ud835\uddaf", "\ud835\udcab"),  //P  *
+                entry("\ud835\uddb2", "\ue852"),      //S  *
+                entry("\ud835\uddb4", "\ue856"),      //U  *
+
+                //Special
+                entry("\u21d2", "\ue876"),      //meta arrow
+                entry("\u21d4", "\ue877"),      //meta double
+                entry("\u2200", "\uf8d3"),      //universal
+                entry("\u2203", "\uf8d4"),      //existential
+                entry("\u2264", "\u2270"),      //less than or equal
+                entry("\u2265", "\u2271"),      //greater than or equal
+                entry("\u2261", "\u2262"),      //triple bar
+                entry("\u2283", "\u2285"),      //horseshoe
+                entry("\u2282", "\u2284"),      //proper subset
+                entry("\u2286", "\u2288"),      //subset
+                entry("\u2248", "\ue87d"),      //double wave
+                entry("\u2243", "\ue87e"),      //wave above line
+                entry("\u2245", "\ue87f"),      //wave above equals
+                entry("\u2291", "\ue880"),      //submodel
+                entry("\uf8d1", "\ue881"),      //embedding
+                entry("\u227a", "\ue882"),      //set smaller than
+                entry("\uf8d2", "\ue883"),      //elementary submodel
+                entry("\u227e", "\ue884"),      //elementary embedding
+                entry("\u227c", "\ue885")      //set less than or equal
         );
     }
-    private Map<String, String> initializeDoubleMap() {
+
+    private Map<String, String> initializeSlashItalSansMap() {
         return Map.ofEntries(
-                entry("\u2200", "\uf8d3"),
-                entry("\u2203", "\uf8d4"),
-                entry("\u03bc", "\uf8d5"),
-                entry("\ud835\uddc7", "\uf8db")
+
+                //ital
+                entry("\ud835\udc4f", "\uf8b4"),
+                entry("\ud835\udc50", "\ue845"), //c
+                entry("\ud835\udc56", "\ue849"),  //i
+                entry("\ud835\udc5a", "\uf8b5"),
+                entry("\ud835\udc5b", "\u03bc"),
+                entry("\ud835\udc60", "\ue843"), //s
+                entry("\ud835\udc62", "\ue847"),  //u
+                entry("\ud835\udc63", "\u03b2"),
+
+                entry("\ud835\udc34", "\u2135"), //A
+                entry("\ud835\udc35", "\u2136"), //B
+                entry("\ud835\udc36", "\ue844"), //C
+                entry("\ud835\udc3c", "\ue848"), //I
+                entry("\ud835\udc41", "\u2115"), //N
+                entry("\ud835\udc43", "\u2119"), //P
+                entry("\ud835\udc44", "\u211a"),  //Q
+                entry("\ud835\udc45", "\u211d"),  //R
+                entry("\ud835\udc46", "\ue842"), //S
+                entry("\ud835\udc48", "\ue846"), //U
+                entry("\ud835\udc4d", "\u2124"), //Z
+                entry("-", "\u21d0"),  //
+                entry("=", "\u27f8"),  //
+                entry("[", "\u27f9"), //
+                entry("]", "\u27fa"), //
+                entry("_", "\ue872"), //
+                entry("+", "\ue873"),  //
+                entry("{", "\ue874"), //
+                entry("}", "\ue875"), //
+                entry("|", "\ue898"), //
+                entry("<", "\u226e"), //
+                entry(">", "\u226f"), //
+
+                //sans
+                entry("\ud835\uddbc", "\ue855"),      //c  *
+                entry("\ud835\uddc2", "\ue859"),      //i  *
+                entry("\ud835\uddc6", "\uf8d5"),      //m  *
+                entry("\ud835\uddc7", "\uf8db"),      //n  *
+                entry("\ud835\uddcc", "\ue853"),      //s  *
+                entry("\ud835\uddce", "\ue857"),      //u  *
+                entry("\ud835\udda2", "\ue854"),      //C  *
+                entry("\ud835\udda8", "\ue858"),      //I  *
+                entry("\ud835\uddaf", "\ud835\udcab"),  //P  *
+                entry("\ud835\uddb2", "\ue852"),      //S  *
+                entry("\ud835\uddb4", "\ue856"),      //U  *
+
+                //Special
+                entry("\u21d2", "\ue876"),      //meta arrow
+                entry("\u21d4", "\ue877"),      //meta double
+                entry("\u2200", "\uf8d3"),      //universal
+                entry("\u2203", "\uf8d4"),      //existential
+                entry("\u2264", "\u2270"),      //less than or equal
+                entry("\u2265", "\u2271"),      //greater than or equal
+                entry("\u2261", "\u2262"),      //triple bar
+                entry("\u2283", "\u2285"),      //horseshoe
+                entry("\u2282", "\u2284"),      //proper subset
+                entry("\u2286", "\u2288"),      //subset
+                entry("\u2248", "\ue87d"),      //double wave
+                entry("\u2243", "\ue87e"),      //wave above line
+                entry("\u2245", "\ue87f"),      //wave above equals
+                entry("\u2291", "\ue880"),      //submodel
+                entry("\uf8d1", "\ue881"),      //embedding
+                entry("\u227a", "\ue882"),      //set smaller than
+                entry("\uf8d2", "\ue883"),      //elementary submodel
+                entry("\u227e", "\ue884"),      //elementary embedding
+                entry("\u227c", "\ue885")      //set less than or equal
+
         );
     }
 
+    private Map<String, String> initializeSlashItalBBMap() {
+        return Map.ofEntries(
 
+                //ital
+                entry("\ud835\udc4f", "\uf8b4"),
+                entry("\ud835\udc50", "\ue845"), //c
+                entry("\ud835\udc56", "\ue849"),  //i
+                entry("\ud835\udc5a", "\uf8b5"),
+                entry("\ud835\udc5b", "\u03bc"),
+                entry("\ud835\udc60", "\ue843"), //s
+                entry("\ud835\udc62", "\ue847"),  //u
+                entry("\ud835\udc63", "\u03b2"),
+                entry("\ud835\udc34", "\u2135"), //A
+                entry("\ud835\udc35", "\u2136"), //B
+                entry("\ud835\udc36", "\ue844"), //C
+                entry("\ud835\udc3c", "\ue848"), //I
+                entry("\ud835\udc41", "\u2115"), //N
+                entry("\ud835\udc43", "\u2119"), //P
+                entry("\ud835\udc44", "\u211a"),  //Q
+                entry("\ud835\udc45", "\u211d"),  //R
+                entry("\ud835\udc46", "\ue842"), //S
+                entry("\ud835\udc48", "\ue846"), //U
+                entry("\ud835\udc4d", "\u2124"), //Z
+                entry("-", "\u21d0"),  //
+                entry("=", "\u27f8"),  //
+                entry("[", "\u27f9"), //
+                entry("]", "\u27fa"), //
+                entry("_", "\ue872"), //
+                entry("+", "\ue873"),  //
+                entry("{", "\ue874"), //
+                entry("}", "\ue875"), //
+                entry("|", "\ue898"), //
+                entry("<", "\u226e"), //
+                entry(">", "\u226f"), //
 
+                //bb
+                entry("\uf895", "\ue855"),      //c  *
+                entry("\uf89b", "\ue859"),      //i  *
+                entry("\uf89f", "\uf8d5"),      //m  *
+                entry("\uf8a0", "\uf8db"),      //n  *
+                entry("\uf8a5", "\ue853"),      //s  *
+                entry("\uf8a7", "\ue857"),      //u  *
+                entry("\uf8ad", "\ue854"),      //C  *
+                entry("\uf886", "\ue858"),      //I  *
+                entry("\uf8b0", "\ud835\udcab"),  //P  *
+                entry("\uf88c", "\ue852"),      //S  *
+                entry("\uf88e", "\ue856"),      //U  *
+
+                //Special
+                entry("\u21d2", "\ue876"),      //meta arrow
+                entry("\u21d4", "\ue877"),      //meta double
+                entry("\u2200", "\uf8d3"),      //universal
+                entry("\u2203", "\uf8d4"),      //existential
+                entry("\u2264", "\u2270"),      //less than or equal
+                entry("\u2265", "\u2271"),      //greater than or equal
+                entry("\u2261", "\u2262"),      //triple bar
+                entry("\u2283", "\u2285"),      //horseshoe
+                entry("\u2282", "\u2284"),      //proper subset
+                entry("\u2286", "\u2288"),      //subset
+                entry("\u2248", "\ue87d"),      //double wave
+                entry("\u2243", "\ue87e"),      //wave above line
+                entry("\u2245", "\ue87f"),      //wave above equals
+                entry("\u2291", "\ue880"),      //submodel
+                entry("\uf8d1", "\ue881"),      //embedding
+                entry("\u227a", "\ue882"),      //set smaller than
+                entry("\uf8d2", "\ue883"),      //elementary submodel
+                entry("\u227e", "\ue884"),      //elementary embedding
+                entry("\u227c", "\ue885")      //set less than or equal
+
+        );
+    }
+
+    private Map<String, String> initializeSlashScriptItalMap() {
+        return Map.ofEntries(
+
+                //script
+                entry("\ud835\udcb7", "\uf8b4"),  //b
+                entry("\ud835\udcb8", "\ue845"), //c
+                entry("\ud835\udcbe", "\ue849"),  //i
+                entry("\ud835\udcc2", "\uf8b5"),  //m
+                entry("\ud835\udcc3", "\u03bc"), //n
+                entry("\ud835\udcc8", "\ue843"), //s
+                entry("\ud835\udcca", "\ue847"),  //u
+                entry("\ud835\udccb", "\u03b2"), //v
+                entry("\ud835\udc9c", "\u2135"), // A
+                entry("\u212c", "\u2136"), //  B
+                entry("\ud835\udc9e", "\ue844"), //
+                entry("\u2110", "\ue848"), //
+                entry("\ud835\udca9", "\u2115"), //
+                entry("\ud835\udcab", "\u2119"), //
+                entry("\ud835\udcac", "\u211a"),  //
+                entry("\u211b", "\u211d"),  //
+                entry("\ud835\udcae", "\ue842"), //
+                entry("\ud835\udcb0", "\ue846"), //
+                entry("\ud835\udcb5", "\u2124"), //
+                entry("-", "\u21d0"),  //
+                entry("=", "\u27f8"),  //
+                entry("[", "\u27f9"), //
+                entry("]", "\u27fa"), //
+                entry("_", "\ue872"), //
+                entry("+", "\ue873"),  //
+                entry("{", "\ue874"), //
+                entry("}", "\ue875"), //
+                entry("|", "\ue898"), //
+                entry("<", "\u226e"), //
+                entry(">", "\u226f"), //
+
+                //italic
+                entry("\ud835\udc50", "\ue855"),      //c  *
+                entry("\ud835\udc56", "\ue859"),      //i  *
+                entry("\ud835\udc5a", "\uf8d5"),      //m  *
+                entry("\ud835\udc5b", "\uf8db"),      //n  *
+                entry("\ud835\udc60", "\ue853"),      //s  *
+                entry("\ud835\udc62", "\ue857"),      //u  *
+                entry("\ud835\udc36", "\ue854"),      //C  *
+                entry("\ud835\udc3c", "\ue858"),      //I  *
+                entry("\ud835\udc43", "\ud835\udcab"),  //P  *
+                entry("\ud835\udc46", "\ue852"),      //S  *
+                entry("\ud835\udc48", "\ue856"),      //U  *
+
+                //Special
+                entry("\u21d2", "\ue876"),      //meta arrow
+                entry("\u21d4", "\ue877"),      //meta double
+                entry("\u2200", "\uf8d3"),      //universal
+                entry("\u2203", "\uf8d4"),      //existential
+                entry("\u2264", "\u2270"),      //less than or equal
+                entry("\u2265", "\u2271"),      //greater than or equal
+                entry("\u2261", "\u2262"),      //triple bar
+                entry("\u2283", "\u2285"),      //horseshoe
+                entry("\u2282", "\u2284"),      //proper subset
+                entry("\u2286", "\u2288"),      //subset
+                entry("\u2248", "\ue87d"),      //double wave
+                entry("\u2243", "\ue87e"),      //wave above line
+                entry("\u2245", "\ue87f"),      //wave above equals
+                entry("\u2291", "\ue880"),      //submodel
+                entry("\uf8d1", "\ue881"),      //embedding
+                entry("\u227a", "\ue882"),      //set smaller than
+                entry("\uf8d2", "\ue883"),      //elementary submodel
+                entry("\u227e", "\ue884"),      //elementary embedding
+                entry("\u227c", "\ue885")      //set less than or equal
+
+        );
+    }
+
+    private Map<String, String> initializeSlashScriptSansMap() {
+        return Map.ofEntries(
+
+                //script
+                entry("\ud835\udcb7", "\uf8b4"),  //b
+                entry("\ud835\udcb8", "\ue845"), //c
+                entry("\ud835\udcbe", "\ue849"),  //i
+                entry("\ud835\udcc2", "\uf8b5"),  //m
+                entry("\ud835\udcc3", "\u03bc"), //n
+                entry("\ud835\udcc8", "\ue843"), //s
+                entry("\ud835\udcca", "\ue847"),  //u
+                entry("\ud835\udccb", "\u03b2"), //v
+                entry("\ud835\udc9c", "\u2135"), //
+                entry("\u212c", "\u2136"), //
+                entry("\ud835\udc9e", "\ue844"), //
+                entry("\u2110", "\ue848"), //
+                entry("\ud835\udca9", "\u2115"), //
+                entry("\ud835\udcab", "\u2119"), //
+                entry("\ud835\udcac", "\u211a"),  //
+                entry("\u211b", "\u211d"),  //
+                entry("\ud835\udcae", "\ue842"), //
+                entry("\ud835\udcb0", "\ue846"), //
+                entry("\ud835\udcb5", "\u2124"), //
+                entry("-", "\u21d0"),  //
+                entry("=", "\u27f8"),  //
+                entry("[", "\u27f9"), //
+                entry("]", "\u27fa"), //
+                entry("_", "\ue872"), //
+                entry("+", "\ue873"),  //
+                entry("{", "\ue874"), //
+                entry("}", "\ue875"), //
+                entry("|", "\ue898"), //
+                entry("<", "\u226e"), //
+                entry(">", "\u226f"), //
+
+                //sans
+                entry("\ud835\uddbc", "\ue855"),      //c  *
+                entry("\ud835\uddc2", "\ue859"),      //i  *
+                entry("\ud835\uddc6", "\uf8d5"),      //m  *
+                entry("\ud835\uddc7", "\uf8db"),      //n  *
+                entry("\ud835\uddcc", "\ue853"),      //s  *
+                entry("\ud835\uddce", "\ue857"),      //u  *
+                entry("\ud835\udda2", "\ue854"),      //C  *
+                entry("\ud835\udda8", "\ue858"),      //I  *
+                entry("\ud835\uddaf", "\ud835\udcab"),  //P  *
+                entry("\ud835\uddb2", "\ue852"),      //S  *
+                entry("\ud835\uddb4", "\ue856"),      //U  *
+
+                //Special
+                entry("\u21d2", "\ue876"),      //meta arrow
+                entry("\u21d4", "\ue877"),      //meta double
+                entry("\u2200", "\uf8d3"),      //universal
+                entry("\u2203", "\uf8d4"),      //existential
+                entry("\u2264", "\u2270"),      //less than or equal
+                entry("\u2265", "\u2271"),      //greater than or equal
+                entry("\u2261", "\u2262"),      //triple bar
+                entry("\u2283", "\u2285"),      //horseshoe
+                entry("\u2282", "\u2284"),      //proper subset
+                entry("\u2286", "\u2288"),      //subset
+                entry("\u2248", "\ue87d"),      //double wave
+                entry("\u2243", "\ue87e"),      //wave above line
+                entry("\u2245", "\ue87f"),      //wave above equals
+                entry("\u2291", "\ue880"),      //submodel
+                entry("\uf8d1", "\ue881"),      //embedding
+                entry("\u227a", "\ue882"),      //set smaller than
+                entry("\uf8d2", "\ue883"),      //elementary submodel
+                entry("\u227e", "\ue884"),      //elementary embedding
+                entry("\u227c", "\ue885")      //set less than or equal
+
+        );
+    }
+
+    private Map<String, String> initializeSlashGreekFrakMap() {
+        return Map.ofEntries(
+
+                entry("\u03b2", "\uf8b4"),  //b
+                entry("\u03c8", "\ue845"), //c
+                entry("\u03b9", "\ue849"),  //i
+                entry("\u03bd", "\u03bc"),  //n
+                entry("\u03bc", "\uf8b5"),  //m
+                entry("\u03c3", "\ue843"), //s
+                entry("\u03b8", "\ue847"),  //u
+                entry("\u03c9", "\u03b2"),  //v
+                entry("\u0391", "\u2135"), //A
+                entry("\u0392", "\u2136"), //B
+                entry("\u03a8", "\ue844"), //C
+                entry("\u0399", "\ue848"), //I
+                entry("\u039d", "\u2115"), //N
+                entry("\u03a0", "\u2119"), //P
+                entry("\uf8d5", "\u211a"),  //Q
+                entry("\u03a1", "\u211d"),  //R
+                entry("\u03a3", "\ue842"), //S
+                entry("\u0398", "\ue846"), //U
+                entry("\u0396", "\u2124"), //Z
+                entry("-", "\u21d0"),  //
+                entry("=", "\u27f8"),  //
+                entry("[", "\u27f9"), //
+                entry("]", "\u27fa"), //
+                entry("_", "\ue872"), //
+                entry("+", "\ue873"),  //
+                entry("{", "\ue874"), //
+                entry("}", "\ue875"), //
+                entry("|", "\ue898"), //
+                entry("<", "\u226e"), //
+                entry(">", "\u226f"), //
+
+                //frak
+                entry("\ud835\udd20", "\ue855"),      //c  *
+                entry("\ud835\udd26", "\ue859"),      //i  *
+                entry("\ud835\udd2a", "\uf8d5"),      //m  *
+                entry("\ud835\udd2b", "\uf8db"),      //n  *
+                entry("\ud835\udd30", "\ue853"),      //s  *
+                entry("\ud835\udd32", "\ue857"),      //u  *
+                entry("\u212d", "\ue854"),      //C  *
+                entry("\u2111", "\ue858"),      //I  *
+                entry("\ud835\udd13", "\ud835\udcab"),  //P  *
+                entry("\ud835\udd16", "\ue852"),      //S  *
+                entry("\ud835\udd18", "\ue856"),      //U  *
+
+                //Special
+                entry("\u21d2", "\ue876"),      //meta arrow
+                entry("\u21d4", "\ue877"),      //meta double
+                entry("\u2200", "\uf8d3"),      //universal
+                entry("\u2203", "\uf8d4"),      //existential
+                entry("\u2264", "\u2270"),      //less than or equal
+                entry("\u2265", "\u2271"),      //greater than or equal
+                entry("\u2261", "\u2262"),      //triple bar
+                entry("\u2283", "\u2285"),      //horseshoe
+                entry("\u2282", "\u2284"),      //proper subset
+                entry("\u2286", "\u2288"),      //subset
+                entry("\u2248", "\ue87d"),      //double wave
+                entry("\u2243", "\ue87e"),      //wave above line
+                entry("\u2245", "\ue87f"),      //wave above equals
+                entry("\u2291", "\ue880"),      //submodel
+                entry("\uf8d1", "\ue881"),      //embedding
+                entry("\u227a", "\ue882"),      //set smaller than
+                entry("\uf8d2", "\ue883"),      //elementary submodel
+                entry("\u227e", "\ue884"),      //elementary embedding
+                entry("\u227c", "\ue885")      //set less than or equal
+
+        );
+    }
 
 
 
@@ -1924,19 +2426,19 @@ public class CharModMaps {
         return hatMap;
     }
 
-    public Map<String, String> getSlashMap() {
-        return slashMap;
-    }
+    public Map<String, String> getSlashBaseItalMap() { return slashBaseItalMap;  }
 
-    public Map<String, String> getCircMap() {
-        return circMap;
-    }
+    public Map<String, String> getSlashBaseScriptMap() {     return slashBaseScriptMap;  }
 
-    public Map<String, String> getTilMap() {
-        return tilMap;
-    }
+    public Map<String, String> getSlashBaseSansMap() {     return slashBaseSansMap;  }
 
-    public Map<String, String> getDoubleMap() {
-        return doubleMap;
-    }
+    public Map<String, String> getSlashItalSansMap() {     return slashItalSansMap;  }
+
+    public Map<String, String> getSlashItalBBMap() {     return slashItalBBMap;  }
+
+    public Map<String, String> getSlashScriptItalMap() {    return slashScriptItalMap;   }
+
+    public Map<String, String> getSlashScriptSansMap() {     return slashScriptSansMap;  }
+
+    public Map<String, String> getSlashGreekFrakMap() {     return slashGreekFrakMap;  }
 }

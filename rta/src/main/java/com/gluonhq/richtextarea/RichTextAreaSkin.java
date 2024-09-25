@@ -72,7 +72,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -102,8 +101,6 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -135,8 +132,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     private static final ActionCmdFactory ACTION_CMD_FACTORY = new ActionCmdFactory();
 
 
-    private CharModification modification = NONE;
-    private CharModMaps charModMaps = new CharModMaps();
+    
 
 
     private Map<KeyCodeCombination, String> keyPressedCharMap;
@@ -162,6 +158,11 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     private BooleanProperty overlineOn = new SimpleBooleanProperty(false);
     private ObjectProperty<KeyMapValue> keyMapState = new SimpleObjectProperty<>(KeyMapValue.BASE);
     private ObjectProperty<KeyMapValue> lastKeyMapState = new SimpleObjectProperty<>(KeyMapValue.BASE);
+
+//    private CharModification modification = NONE;
+    
+    private ObjectProperty<CharModification> modification = new SimpleObjectProperty<>(CharModification.NONE);
+    private CharModMaps charModMaps = new CharModMaps();
 
     public void setMaps(KeyMapValue request) {
         switch (request) {
@@ -208,6 +209,8 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
             }
         }
     }
+
+
 
     private final Map<KeyCombination, ActionBuilder> INPUT_MAP = Map.ofEntries(
             entry(new KeyCodeCombination(RIGHT, SHIFT_ANY, ALT_ANY, CONTROL_ANY, SHORTCUT_ANY), e -> ACTION_CMD_FACTORY.caretMove(Direction.FORWARD, e)),
@@ -355,23 +358,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).underline(underlineState).build());
             }),
 
-            /*
-            entry(new KeyCodeCombination(F9), e -> {
-                TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
-                Boolean subscriptState = (decoration.isSubscript() || decoration.isTransSubscript()) == true ? false : true;
-                e.consume();
-                return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).subscript(subscriptState).transSubscript(false).superscript(false).transSuperscript(false).build());
-            }),
-            entry(new KeyCodeCombination(F9, SHIFT_DOWN), e -> {
-                TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
-                Boolean transSubscriptState = (decoration.isTransSubscript() || decoration.isSubscript()) == true ? false : true;
-                e.consume();
-                return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).transSubscript(transSubscriptState).transSuperscript(false).subscript(false).superscript(false).build());
-            }),
 
-             */
-
-            //alternative
             entry(new KeyCodeCombination(PAGE_DOWN), e -> {
                 TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
                 Boolean subscriptState = (decoration.isSubscript() || decoration.isTransSubscript()) == true ? false : true;
@@ -385,22 +372,6 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
             }),
 
 
-/*
-            entry(new KeyCodeCombination(F8), e -> {
-                TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
-                Boolean superscriptState = (decoration.isSuperscript() || decoration.isTransSuperscript()) == true ? false : true;
-                e.consume();
-                return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).superscript(superscriptState).transSuperscript(false).subscript(false).transSubscript(false).build());
-            }),
-            entry(new KeyCodeCombination(F8, SHIFT_DOWN), e -> {
-                TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
-                Boolean transSuperscriptState = (decoration.isTransSuperscript() || decoration.isSuperscript()) == true ? false : true;
-                e.consume();
-                return ACTION_CMD_FACTORY.decorate(TextDecoration.builder().fromDecoration(decoration).transSuperscript(transSuperscriptState).transSubscript(false).subscript(false).superscript(false).build());
-            }),
-
- */
-            //alternative
             entry(new KeyCodeCombination(PAGE_UP), e -> {
                 TextDecoration decoration = (TextDecoration) viewModel.getDecorationAtCaret();
                 Boolean superscriptState = (decoration.isSuperscript() || decoration.isTransSuperscript()) == true ? false : true;
@@ -463,42 +434,45 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
 
             //to set character modifications
             entry(new KeyCodeCombination(Z, SHORTCUT_DOWN, ALT_DOWN, SHIFT_DOWN), e -> {
-                modification = OVERLINE;
+                setModification(OVERLINE);
                 return null;
             }),
 
             entry(new KeyCodeCombination(X, SHORTCUT_DOWN, ALT_DOWN, SHIFT_DOWN), e -> {
-                modification = MAC;
+                setModification(MAC);
                 return null;
             }),
 
             entry(new KeyCodeCombination(C, SHORTCUT_DOWN, ALT_DOWN, SHIFT_DOWN), e -> {
-                modification = VEC;
+                setModification(VEC);
                 return null;
             }),
 
             entry(new KeyCodeCombination(V, SHORTCUT_DOWN, ALT_DOWN, SHIFT_DOWN), e -> {
-                modification = HAT;
+                setModification(HAT);
                 return null;
             }),
 
+            /*
             entry(new KeyCodeCombination(B, SHORTCUT_DOWN, ALT_DOWN, SHIFT_DOWN), e -> {
-                modification = DOUBLE;
+                setModification(DOUBLE);
                 return null;
             }),
 
             entry(new KeyCodeCombination(N, SHORTCUT_DOWN, ALT_DOWN, SHIFT_DOWN), e -> {
-                modification = CIRC;
+                setModification(CIRC);
                 return null;
             }),
 
             entry(new KeyCodeCombination(M, SHORTCUT_DOWN, ALT_DOWN, SHIFT_DOWN), e -> {
-                modification = TIL;
+                setModification(TIL);
                 return null;
             }),
 
-            entry(new KeyCodeCombination(KeyCode.SLASH, SHORTCUT_DOWN, ALT_DOWN, SHIFT_DOWN), e -> {
-                modification = SLASH;
+             */
+
+            entry(new KeyCodeCombination(KeyCode.B, SHORTCUT_DOWN, ALT_DOWN, SHIFT_DOWN), e -> {
+                setModification(SLASH);
                 return null;
             }),
 
@@ -874,6 +848,12 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
 
         nodesWidth.bind(viewModel.nodesWidthProperty());
 
+        overlineOnProperty().addListener((ob, ov, nv) -> {
+            if (nv) setModification(OVERLINE);
+            else setModification(NONE);
+
+        });
+
 
         Map<KeyCodeCombination, String> tempMap = new HashMap();
         tempMap.putAll(SPECIAL_CHARACTER_MAP);
@@ -1174,7 +1154,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         //Print character assigned to key
         for (KeyCombination kc : keyPressedCharMap.keySet()) {
             if (kc.match(e)) {
-                String text = getCharModification(keyPressedCharMap.get(kc));
+                String text = getTypedCharModification(keyPressedCharMap.get(kc));
                 sendKeyboardContent(text);
                 e.consume();
                 return;
@@ -1201,7 +1181,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         for (Character key : keyTypedCharMap.keySet()) {
             boolean test = Character.toString(key).equals(e.getCharacter());
             if (test) {
-                text = getCharModification(keyTypedCharMap.get(key));
+                text = getTypedCharModification(keyTypedCharMap.get(key));
                 sendKeyboardContent(text);
                 e.consume();
                 return;
@@ -1217,7 +1197,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                     return;
                 }
             }
-            text = getCharModification(e.getCharacter());
+            text = getTypedCharModification(e.getCharacter());
   //          if (getOverlineOn()) text = "\u035e" + text;
             sendKeyboardContent(text);
             e.consume();
@@ -1233,42 +1213,87 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
         }
     }
 
-    /*
 
+    /*
+     * Get modified string and reset the modification flag
+     * @param inString the string to be modified
+     * @return the modified string
      */
-    private String getCharModification(String inString) {
+    private String getTypedCharModification(String inString) {
 
         String outString = null;
-        if (modification == NONE && !getOverlineOn()) {
+        if (getModification() == NONE) {
             outString = inString;
         }
-        else if (getOverlineOn() || modification == OVERLINE) {
+        else if (getModification() == OVERLINE) {
             outString = charModMaps.getOverlineMap().get(inString);
+            if (!getOverlineOn()) setModification(NONE);
         }
-        else if (modification == MAC) {
+        else if (getModification() == MAC) {
             outString = charModMaps.getMacMap().get(inString);
+            setModification(NONE);
         }
-        else if (modification == VEC) {
+        else if (getModification() == VEC) {
             outString = charModMaps.getVecMap().get(inString);
+            setModification(NONE);
         }
-        else if (modification == HAT) {
+        else if (getModification() == HAT) {
             outString = charModMaps.getHatMap().get(inString);
+            setModification(NONE);
         }
-        else if (modification == CharModification.SLASH) {
-            outString = charModMaps.getSlashMap().get(inString);
-        }
-        else if (modification == CIRC) {
-            outString = charModMaps.getCircMap().get(inString);
-        }
-        else if (modification == TIL) {
-            outString = charModMaps.getTilMap().get(inString);
-        }
-        else if (modification == DOUBLE) {
-            outString = charModMaps.getDoubleMap().get(inString);
+        else if (getModification() == SLASH) {
+
+            if (getKeyMapState() == KeyMapValue.BASE ) outString = charModMaps.getSlashBaseItalMap().get(inString);
+            else if (getKeyMapState() == KeyMapValue.BASE_AND_SCRIPT ) outString = charModMaps.getSlashBaseScriptMap().get(inString);
+            else if (getKeyMapState() == KeyMapValue.BASE_AND_SANS ) outString = charModMaps.getSlashBaseSansMap().get(inString);
+            else if (getKeyMapState() == KeyMapValue.ITALIC_AND_SANS ) outString = charModMaps.getSlashItalSansMap().get(inString);
+            else if (getKeyMapState() == KeyMapValue.ITALIC_AND_BLACKBOARD ) outString = charModMaps.getSlashItalBBMap().get(inString);
+            else if (getKeyMapState() == KeyMapValue.SCRIPT_AND_ITALIC ) outString = charModMaps.getSlashScriptItalMap().get(inString);
+            else if (getKeyMapState() == KeyMapValue.SCRIPT_AND_SANS ) outString = charModMaps.getSlashScriptSansMap().get(inString);
+            else if (getKeyMapState() == KeyMapValue.GREEK_AND_FRAKTUR ) outString = charModMaps.getSlashGreekFrakMap().get(inString);
+
+            setModification(NONE);
         }
 
-        modification = NONE;
         if (outString == null) outString = "\ud835";     //not a defined print character (shows box)
+        return outString;
+    }
+
+    /*
+     *Get char for keyboard diagram 
+     * @param inString the string to be modified
+     * @return the modified string
+     */
+    public String getModifiedChar(String inString) {
+
+        String outString = null;
+        if (getModification() == NONE) {
+            outString = inString;
+        }
+        else if (getModification() == OVERLINE) {
+            outString = charModMaps.getOverlineMap().get(inString);
+        }
+        else if (getModification() == MAC) {
+            outString = charModMaps.getMacMap().get(inString);
+        }
+        else if (getModification() == VEC) {
+            outString = charModMaps.getVecMap().get(inString);
+        }
+        else if (getModification() == HAT) {
+            outString = charModMaps.getHatMap().get(inString);
+        }
+        else if (getModification() == SLASH) {
+            if (getKeyMapState() == KeyMapValue.BASE ) outString = charModMaps.getSlashBaseItalMap().get(inString);
+            else if (getKeyMapState() == KeyMapValue.BASE_AND_SCRIPT ) outString = charModMaps.getSlashBaseScriptMap().get(inString);
+            else if (getKeyMapState() == KeyMapValue.BASE_AND_SANS ) outString = charModMaps.getSlashBaseSansMap().get(inString);
+            else if (getKeyMapState() == KeyMapValue.ITALIC_AND_SANS ) outString = charModMaps.getSlashItalSansMap().get(inString);
+            else if (getKeyMapState() == KeyMapValue.ITALIC_AND_BLACKBOARD ) outString = charModMaps.getSlashItalBBMap().get(inString);
+            else if (getKeyMapState() == KeyMapValue.SCRIPT_AND_ITALIC ) outString = charModMaps.getSlashScriptItalMap().get(inString);
+            else if (getKeyMapState() == KeyMapValue.SCRIPT_AND_SANS ) outString = charModMaps.getSlashScriptSansMap().get(inString);
+            else if (getKeyMapState() == KeyMapValue.GREEK_AND_FRAKTUR ) outString = charModMaps.getSlashGreekFrakMap().get(inString);
+        }
+
+        if (outString == null) outString = "";     //keyboard diagram has empty block
         return outString;
     }
 
@@ -1513,16 +1538,16 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.Y, KeyCombination.ALT_DOWN), "\ud835\udc66"),
                 entry(new KeyCodeCombination(KeyCode.Z, KeyCombination.ALT_DOWN), "\ud835\udc67"),
 
-                entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.ALT_DOWN), "\u211d"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT1, KeyCombination.ALT_DOWN), "\u21d0"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT2, KeyCombination.ALT_DOWN), "\u27f9"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT3, KeyCombination.ALT_DOWN), "\u27f8"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT4, KeyCombination.ALT_DOWN), "\u27fa"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT5, KeyCombination.ALT_DOWN), "\u22a4"),    //top
-                entry(new KeyCodeCombination(KeyCode.DIGIT6, KeyCombination.ALT_DOWN), "\u2115"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT7, KeyCombination.ALT_DOWN), "\u2124"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT8, KeyCombination.ALT_DOWN), "\u2119"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT9, KeyCombination.ALT_DOWN), "\u211a"),
+                entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT1, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT2, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT3, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT4, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT5, KeyCombination.ALT_DOWN), ""),    //top
+                entry(new KeyCodeCombination(KeyCode.DIGIT6, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT7, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT8, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT9, KeyCombination.ALT_DOWN), ""),
                 entry(new KeyCodeCombination(KeyCode.A, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\ud835\udc34"),
                 entry(new KeyCodeCombination(KeyCode.B, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\ud835\udc35"),
                 entry(new KeyCodeCombination(KeyCode.C, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\ud835\udc36"),
@@ -1682,14 +1707,14 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.Y, KeyCombination.ALT_DOWN), "\ud835\udcce"),
                 entry(new KeyCodeCombination(KeyCode.Z, KeyCombination.ALT_DOWN), "\ud835\udccf"),
 
-                entry(new KeyCodeCombination(KeyCode.DIGIT1, KeyCombination.ALT_DOWN), "\ue842"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT2, KeyCombination.ALT_DOWN), "\ue852"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT3, KeyCombination.ALT_DOWN), "\ue846"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT4, KeyCombination.ALT_DOWN), "\ue856"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT5, KeyCombination.ALT_DOWN), "\ue844"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT6, KeyCombination.ALT_DOWN), "\ue854"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT7, KeyCombination.ALT_DOWN), "\ue848"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT8, KeyCombination.ALT_DOWN), "\ue858"),
+                entry(new KeyCodeCombination(KeyCode.DIGIT1, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT2, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT3, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT4, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT5, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT6, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT7, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT8, KeyCombination.ALT_DOWN), ""),
                 entry(new KeyCodeCombination(KeyCode.DIGIT9, KeyCombination.ALT_DOWN), ""),
                 entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.ALT_DOWN), ""),
 
@@ -1863,7 +1888,7 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry('p', "\u03c0"),
                 entry('P', "\u03a0"),
                 entry('q', "\uf8b4"),
-                entry('Q', ""),
+                entry('Q', "\uf8d5"),
                 entry('r', "\u03c1"),
                 entry('R', "\u03a1"),
                 entry('s', "\u03c3"),
@@ -2023,13 +2048,11 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.X, KeyCombination.ALT_DOWN), "\ud835\udd35"),
                 entry(new KeyCodeCombination(KeyCode.Y, KeyCombination.ALT_DOWN), "\ud835\udd36"),
                 entry(new KeyCodeCombination(KeyCode.Z, KeyCombination.ALT_DOWN), "\ud835\udd37"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT1, KeyCombination.ALT_DOWN), "\uf8db"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT2, KeyCombination.ALT_DOWN), "\uf8d3"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT3, KeyCombination.ALT_DOWN), "\uf8d4"),
-                entry(new KeyCodeCombination(KeyCode.DIGIT4, KeyCombination.ALT_DOWN), "\uf8d5"),
-
-
-                entry(new KeyCodeCombination(KeyCode.DIGIT5, KeyCombination.ALT_DOWN), "\ue898"),
+                entry(new KeyCodeCombination(KeyCode.DIGIT1, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT2, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT3, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT4, KeyCombination.ALT_DOWN), ""),
+                entry(new KeyCodeCombination(KeyCode.DIGIT5, KeyCombination.ALT_DOWN), ""),
                 entry(new KeyCodeCombination(KeyCode.DIGIT6, KeyCombination.ALT_DOWN), ""),
                 entry(new KeyCodeCombination(KeyCode.DIGIT7, KeyCombination.ALT_DOWN), ""),
                 entry(new KeyCodeCombination(KeyCode.DIGIT8, KeyCombination.ALT_DOWN), ""),
@@ -2155,20 +2178,20 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.DIGIT5, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u22a5"),                                      //bottom
                 entry(new KeyCodeCombination(KeyCode.DIGIT6, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2200"),                                      //universal quantifier
                 entry(new KeyCodeCombination(KeyCode.DIGIT7, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2203"),                                      //existential quantifier
-                entry(new KeyCodeCombination(KeyCode.DIGIT8, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u226e"),                                      //not less than
-                entry(new KeyCodeCombination(KeyCode.DIGIT9, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2264"),                                      //less than or equal
-                entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2270"),                                      //not less than or equal
-                entry(new KeyCodeCombination(KeyCode.MINUS, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2265"),                                       //greater than or equal
-                entry(new KeyCodeCombination(KeyCode.EQUALS, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2260"),                                      //not equals
+                entry(new KeyCodeCombination(KeyCode.DIGIT8, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\ue8a5"),                                      //big not less than
+                entry(new KeyCodeCombination(KeyCode.DIGIT9, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\ue8a7"),                                      //big not less than or equal
+                entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\ue886"),                                      //zero with slash
+                entry(new KeyCodeCombination(KeyCode.MINUS, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\ue8ad"),                                       //big not equals
+                entry(new KeyCodeCombination(KeyCode.EQUALS, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\ue8ac"),                                      //big equals
 
-                entry(new KeyCodeCombination(KeyCode.OPEN_BRACKET, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u27e6"),                                //open double bracket
-                entry(new KeyCodeCombination(KeyCode.CLOSE_BRACKET, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u27e7"),                               //close double bracket
+                entry(new KeyCodeCombination(KeyCode.OPEN_BRACKET, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u00d7"),                                //times
+                entry(new KeyCodeCombination(KeyCode.CLOSE_BRACKET, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2032"),                               //prime
                 entry(new KeyCodeCombination(KeyCode.BACK_SLASH, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2224"),                                  //not factor
-                entry(new KeyCodeCombination(KeyCode.SEMICOLON, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u00d7"),                                   //times
-                entry(new KeyCodeCombination(KeyCode.QUOTE, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2032"),                                       //prime
-                entry(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2191"),                                       //up arrow
-                entry(new KeyCodeCombination(KeyCode.PERIOD, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2193"),                                      //down arrow
-                entry(new KeyCodeCombination(KeyCode.SLASH, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\ue886"),                                       //zero with slash
+                entry(new KeyCodeCombination(KeyCode.SEMICOLON, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2264"),                                   //less than or equal
+                entry(new KeyCodeCombination(KeyCode.QUOTE, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2265"),                                       //greater than or equal
+                entry(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\ue8a4"),                                       //big less than
+                entry(new KeyCodeCombination(KeyCode.PERIOD, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\ue8a6"),                                      //big less than or equal
+                entry(new KeyCodeCombination(KeyCode.SLASH, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2260"),                                       //not equal
 
                 entry(new KeyCodeCombination(KeyCode.BACK_QUOTE, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u25fb"),    //box
                 entry(new KeyCodeCombination(KeyCode.DIGIT1, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u25ca"),        //diamond
@@ -2176,8 +2199,8 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.DIGIT3, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2283"),        //horseshoe
                 entry(new KeyCodeCombination(KeyCode.DIGIT4, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u22c0"),        //big caret
                 entry(new KeyCodeCombination(KeyCode.DIGIT5, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u22c1"),        //big wedge
-                entry(new KeyCodeCombination(KeyCode.DIGIT6, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2135"),        //aleph
-                entry(new KeyCodeCombination(KeyCode.DIGIT7, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2136"),        //beth
+                entry(new KeyCodeCombination(KeyCode.DIGIT6, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2191"),        //up arrow
+                entry(new KeyCodeCombination(KeyCode.DIGIT7, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2193"),        //down arrow
                 entry(new KeyCodeCombination(KeyCode.DIGIT8, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2217"),        //asterisk
                 entry(new KeyCodeCombination(KeyCode.DIGIT9, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u22c6"),         //star
                 entry(new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2205"),        //empty set
@@ -2198,8 +2221,8 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.I, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u22c3"),             //big union
                 entry(new KeyCodeCombination(KeyCode.O, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2229"),             //intersection
                 entry(new KeyCodeCombination(KeyCode.P, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u22c2"),             //big intersection
-                entry(new KeyCodeCombination(KeyCode.OPEN_BRACKET, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u231c"),   //left corner
-                entry(new KeyCodeCombination(KeyCode.CLOSE_BRACKET, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u231d"),  //right corner
+                entry(new KeyCodeCombination(KeyCode.OPEN_BRACKET, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u27e6"),   //left double bracket
+                entry(new KeyCodeCombination(KeyCode.CLOSE_BRACKET, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u27e7"),  //right double bracket
                 entry(new KeyCodeCombination(KeyCode.BACK_SLASH, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u00a0"),    //unbreakable space
 
 
@@ -2213,11 +2236,18 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 entry(new KeyCodeCombination(KeyCode.K, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u227e"),             //elementary embedding
                 entry(new KeyCodeCombination(KeyCode.L, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u227c"),             //set less than or equal
 
-                entry(new KeyCodeCombination(KeyCode.SEMICOLON, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2039"),        //french quote left
-                entry(new KeyCodeCombination(KeyCode.QUOTE, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u203a"),            //french quote right
-                entry(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u27e8"),     //left angle bracket
-                entry(new KeyCodeCombination(KeyCode.PERIOD, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u27e9")         //right angle bracket
+                entry(new KeyCodeCombination(KeyCode.SEMICOLON, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u231c"),        //left corner
+                entry(new KeyCodeCombination(KeyCode.QUOTE, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u231d"),            //right corner
 
+
+
+                entry(new KeyCodeCombination(KeyCode.N, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u2039"),             //french quote left
+                entry(new KeyCodeCombination(KeyCode.M, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u203a"),             //french quote right
+
+
+                entry(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u27e8"),     //left angle bracket
+                entry(new KeyCodeCombination(KeyCode.PERIOD, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u27e9"),         //right angle bracket
+                entry(new KeyCodeCombination(KeyCode.SLASH, KeyCombination.SHORTCUT_DOWN, KeyCombination.ALT_DOWN, KeyCombination.SHIFT_DOWN), "\u22a4")             //top
         );
     }
 
@@ -2266,8 +2296,14 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     }
 
     private final void toggleOverlineOn() {
-        if (getOverlineOn()) setOverlineOn(false);
-        else setOverlineOn(true);
+        if (getOverlineOn()) {
+            setOverlineOn(false);
+            setModification(NONE);
+        }
+        else {
+            setOverlineOn(true);
+            setModification(OVERLINE);
+        }
     }
 
     public final KeyMapValue getKeyMapState() {
@@ -2281,6 +2317,18 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
 
     public final ObjectProperty<KeyMapValue> keyMapStateProperty() {
         return keyMapState;
+    }
+
+    public CharModification getModification() {
+        return modification.get();
+    }
+
+    public ObjectProperty<CharModification> modificationProperty() {
+        return modification;
+    }
+
+    public void setModification(CharModification modification) {
+        this.modification.set(modification);
     }
 
     //added by me as part of effort to get height
