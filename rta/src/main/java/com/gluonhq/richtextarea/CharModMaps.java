@@ -495,8 +495,8 @@ public class CharModMaps {
                 entry("\ue8ac", "\ue8b6"),      //big equals
 
                 entry("\u00d7", "\ue23b"),      //times
-                entry("\u2032", "\ue23c"),      //prime
-                entry("\u2224", "\ue23a"),      //not factor
+                entry("\ue8b8", "\ue8b9"),      //big plus
+                entry("\ue8ba", "\ue8bb"),      //big times
                 entry("\u2264", "\ue235"),      //less than or equal
                 entry("\u2265", "\ue259"),      //greater than or equal
                 entry("\ue8a4", "\ue8ae"),      //big less than
@@ -975,7 +975,8 @@ public class CharModMaps {
                 //Special
                 entry("\u00d8", "\ue894"),      //zero with slash
                 entry("\u2135", "\ue4b6"),      //aleph
-                entry("\u2136", "\ue4b7")      //beth
+                entry("\u2136", "\ue4b7"),      //beth
+                entry("\u00a0", "\u00a0")            //unbreakable space
                 );
     }
     private Map<String, String> initializeVecMap() {
@@ -1400,8 +1401,8 @@ public class CharModMaps {
                 //Special
                 entry("\u00d8", "\ue895"),      //zero with slash
                 entry("\u2135", "\ue67d"),      //aleph
-                entry("\u2136", "\ue67e")      //beth
-
+                entry("\u2136", "\ue67e"),      //beth
+                entry("\u00a0", "\u00a0")            //unbreakable space
 
         );
     }
@@ -1827,7 +1828,8 @@ public class CharModMaps {
                 //Special
                 entry("\u00d8", "\ue897"),      //zero with slash
                 entry("\u2135", "\ue82d"),      //aleph
-                entry("\u2136", "\ue82e")      //beth
+                entry("\u2136", "\ue82e"),      //beth
+                entry("\u00a0", "\u00a0")            //unbreakable space
 
 
         );
@@ -1859,6 +1861,7 @@ public class CharModMaps {
                 entry("=", "\u27f8"),  //
                 entry("[", "\u27f9"), //
                 entry("]", "\u27fa"), //
+                entry("\\", "\uf8d0"),
                 entry("_", "\ue872"), //
                 entry("+", "\ue873"),  //
                 entry("{", "\ue874"), //
@@ -1885,6 +1888,7 @@ public class CharModMaps {
                 entry("\u21d4", "\ue877"),      //meta double
                 entry("\u2200", "\uf8d3"),      //universal
                 entry("\u2203", "\uf8d4"),      //existential
+                entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
                 entry("\u2261", "\u2262"),      //triple bar
@@ -1899,7 +1903,8 @@ public class CharModMaps {
                 entry("\u227a", "\ue882"),      //set smaller than
                 entry("\uf8d2", "\ue883"),      //elementary submodel
                 entry("\u227e", "\ue884"),      //elementary embedding
-                entry("\u227c", "\ue885")      //set less than or equal
+                entry("\u227c", "\ue885"),      //set less than or equal
+                entry("\u00a0", "\u00a0")            //unbreakable space
         );
     }
 
@@ -1932,6 +1937,7 @@ public class CharModMaps {
                 entry("=", "\u27f8"),  //
                 entry("[", "\u27f9"), //
                 entry("]", "\u27fa"), //
+                entry("\\", "\uf8d0"),
                 entry("_", "\ue872"), //
                 entry("+", "\ue873"),  //
                 entry("{", "\ue874"), //
@@ -1958,6 +1964,7 @@ public class CharModMaps {
                 entry("\u21d4", "\ue877"),      //meta double
                 entry("\u2200", "\uf8d3"),      //universal
                 entry("\u2203", "\uf8d4"),      //existential
+                entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
                 entry("\u2261", "\u2262"),      //triple bar
@@ -1972,7 +1979,8 @@ public class CharModMaps {
                 entry("\u227a", "\ue882"),      //set smaller than
                 entry("\uf8d2", "\ue883"),      //elementary submodel
                 entry("\u227e", "\ue884"),      //elementary embedding
-                entry("\u227c", "\ue885")      //set less than or equal
+                entry("\u227c", "\ue885"),      //set less than or equal
+                entry("\u00a0", "\u00a0")            //unbreakable space
 
         );
     }
@@ -2004,6 +2012,7 @@ public class CharModMaps {
                 entry("=", "\u27f8"),  //
                 entry("[", "\u27f9"), //
                 entry("]", "\u27fa"), //
+                entry("\\", "\uf8d0"),
                 entry("_", "\ue872"), //
                 entry("+", "\ue873"),  //
                 entry("{", "\ue874"), //
@@ -2030,6 +2039,7 @@ public class CharModMaps {
                 entry("\u21d4", "\ue877"),      //meta double
                 entry("\u2200", "\uf8d3"),      //universal
                 entry("\u2203", "\uf8d4"),      //existential
+                entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
                 entry("\u2261", "\u2262"),      //triple bar
@@ -2044,7 +2054,8 @@ public class CharModMaps {
                 entry("\u227a", "\ue882"),      //set smaller than
                 entry("\uf8d2", "\ue883"),      //elementary submodel
                 entry("\u227e", "\ue884"),      //elementary embedding
-                entry("\u227c", "\ue885")      //set less than or equal
+                entry("\u227c", "\ue885"),      //set less than or equal
+                entry("\u00a0", "\u00a0")            //unbreakable space
         );
     }
 
@@ -2076,6 +2087,7 @@ public class CharModMaps {
                 entry("=", "\u27f8"),  //
                 entry("[", "\u27f9"), //
                 entry("]", "\u27fa"), //
+                entry("\\", "\uf8d0"),
                 entry("_", "\ue872"), //
                 entry("+", "\ue873"),  //
                 entry("{", "\ue874"), //
@@ -2102,6 +2114,7 @@ public class CharModMaps {
                 entry("\u21d4", "\ue877"),      //meta double
                 entry("\u2200", "\uf8d3"),      //universal
                 entry("\u2203", "\uf8d4"),      //existential
+                entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
                 entry("\u2261", "\u2262"),      //triple bar
@@ -2116,7 +2129,8 @@ public class CharModMaps {
                 entry("\u227a", "\ue882"),      //set smaller than
                 entry("\uf8d2", "\ue883"),      //elementary submodel
                 entry("\u227e", "\ue884"),      //elementary embedding
-                entry("\u227c", "\ue885")      //set less than or equal
+                entry("\u227c", "\ue885"),      //set less than or equal
+                entry("\u00a0", "\u00a0")            //unbreakable space
 
         );
     }
@@ -2148,6 +2162,7 @@ public class CharModMaps {
                 entry("=", "\u27f8"),  //
                 entry("[", "\u27f9"), //
                 entry("]", "\u27fa"), //
+                entry("\\", "\uf8d0"),
                 entry("_", "\ue872"), //
                 entry("+", "\ue873"),  //
                 entry("{", "\ue874"), //
@@ -2174,6 +2189,7 @@ public class CharModMaps {
                 entry("\u21d4", "\ue877"),      //meta double
                 entry("\u2200", "\uf8d3"),      //universal
                 entry("\u2203", "\uf8d4"),      //existential
+                entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
                 entry("\u2261", "\u2262"),      //triple bar
@@ -2188,7 +2204,8 @@ public class CharModMaps {
                 entry("\u227a", "\ue882"),      //set smaller than
                 entry("\uf8d2", "\ue883"),      //elementary submodel
                 entry("\u227e", "\ue884"),      //elementary embedding
-                entry("\u227c", "\ue885")      //set less than or equal
+                entry("\u227c", "\ue885"),      //set less than or equal
+                entry("\u00a0", "\u00a0")            //unbreakable space
 
         );
     }
@@ -2220,6 +2237,7 @@ public class CharModMaps {
                 entry("=", "\u27f8"),  //
                 entry("[", "\u27f9"), //
                 entry("]", "\u27fa"), //
+                entry("\\", "\uf8d0"),
                 entry("_", "\ue872"), //
                 entry("+", "\ue873"),  //
                 entry("{", "\ue874"), //
@@ -2246,6 +2264,7 @@ public class CharModMaps {
                 entry("\u21d4", "\ue877"),      //meta double
                 entry("\u2200", "\uf8d3"),      //universal
                 entry("\u2203", "\uf8d4"),      //existential
+                entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
                 entry("\u2261", "\u2262"),      //triple bar
@@ -2260,7 +2279,8 @@ public class CharModMaps {
                 entry("\u227a", "\ue882"),      //set smaller than
                 entry("\uf8d2", "\ue883"),      //elementary submodel
                 entry("\u227e", "\ue884"),      //elementary embedding
-                entry("\u227c", "\ue885")      //set less than or equal
+                entry("\u227c", "\ue885"),     //set less than or equal
+                entry("\u00a0", "\u00a0")            //unbreakable space
 
         );
     }
@@ -2292,6 +2312,7 @@ public class CharModMaps {
                 entry("=", "\u27f8"),  //
                 entry("[", "\u27f9"), //
                 entry("]", "\u27fa"), //
+                entry("\\", "\uf8d0"),
                 entry("_", "\ue872"), //
                 entry("+", "\ue873"),  //
                 entry("{", "\ue874"), //
@@ -2318,6 +2339,7 @@ public class CharModMaps {
                 entry("\u21d4", "\ue877"),      //meta double
                 entry("\u2200", "\uf8d3"),      //universal
                 entry("\u2203", "\uf8d4"),      //existential
+                entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
                 entry("\u2261", "\u2262"),      //triple bar
@@ -2332,7 +2354,8 @@ public class CharModMaps {
                 entry("\u227a", "\ue882"),      //set smaller than
                 entry("\uf8d2", "\ue883"),      //elementary submodel
                 entry("\u227e", "\ue884"),      //elementary embedding
-                entry("\u227c", "\ue885")      //set less than or equal
+                entry("\u227c", "\ue885"),      //set less than or equal
+                entry("\u00a0", "\u00a0")            //unbreakable space
 
         );
     }
@@ -2363,6 +2386,7 @@ public class CharModMaps {
                 entry("=", "\u27f8"),  //
                 entry("[", "\u27f9"), //
                 entry("]", "\u27fa"), //
+                entry("\\", "\uf8d0"),
                 entry("_", "\ue872"), //
                 entry("+", "\ue873"),  //
                 entry("{", "\ue874"), //
@@ -2389,6 +2413,7 @@ public class CharModMaps {
                 entry("\u21d4", "\ue877"),      //meta double
                 entry("\u2200", "\uf8d3"),      //universal
                 entry("\u2203", "\uf8d4"),      //existential
+                entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
                 entry("\u2261", "\u2262"),      //triple bar
@@ -2403,7 +2428,8 @@ public class CharModMaps {
                 entry("\u227a", "\ue882"),      //set smaller than
                 entry("\uf8d2", "\ue883"),      //elementary submodel
                 entry("\u227e", "\ue884"),      //elementary embedding
-                entry("\u227c", "\ue885")      //set less than or equal
+                entry("\u227c", "\ue885"),      //set less than or equal
+                entry("\u00a0", "\u00a0")            //unbreakable space
 
         );
     }
