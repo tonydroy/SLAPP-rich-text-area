@@ -1888,6 +1888,7 @@ public class CharModMaps {
                 entry("\u21d4", "\ue877"),      //meta double
                 entry("\u2200", "\uf8d3"),      //universal
                 entry("\u2203", "\uf8d4"),      //existential
+                entry("\u00d7", "\u00b7"),       //times
                 entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
@@ -1964,6 +1965,7 @@ public class CharModMaps {
                 entry("\u21d4", "\ue877"),      //meta double
                 entry("\u2200", "\uf8d3"),      //universal
                 entry("\u2203", "\uf8d4"),      //existential
+                entry("\u00d7", "\u00b7"),       //times
                 entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
@@ -2039,6 +2041,7 @@ public class CharModMaps {
                 entry("\u21d4", "\ue877"),      //meta double
                 entry("\u2200", "\uf8d3"),      //universal
                 entry("\u2203", "\uf8d4"),      //existential
+                entry("\u00d7", "\u00b7"),       //times
                 entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
@@ -2114,6 +2117,7 @@ public class CharModMaps {
                 entry("\u21d4", "\ue877"),      //meta double
                 entry("\u2200", "\uf8d3"),      //universal
                 entry("\u2203", "\uf8d4"),      //existential
+                entry("\u00d7", "\u00b7"),       //times
                 entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
@@ -2189,6 +2193,7 @@ public class CharModMaps {
                 entry("\u21d4", "\ue877"),      //meta double
                 entry("\u2200", "\uf8d3"),      //universal
                 entry("\u2203", "\uf8d4"),      //existential
+                entry("\u00d7", "\u00b7"),       //times
                 entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
@@ -2264,6 +2269,7 @@ public class CharModMaps {
                 entry("\u21d4", "\ue877"),      //meta double
                 entry("\u2200", "\uf8d3"),      //universal
                 entry("\u2203", "\uf8d4"),      //existential
+                entry("\u00d7", "\u00b7"),       //times
                 entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
@@ -2339,6 +2345,7 @@ public class CharModMaps {
                 entry("\u21d4", "\ue877"),      //meta double
                 entry("\u2200", "\uf8d3"),      //universal
                 entry("\u2203", "\uf8d4"),      //existential
+                entry("\u00d7", "\u00b7"),       //times
                 entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
@@ -2413,6 +2420,7 @@ public class CharModMaps {
                 entry("\u21d4", "\ue877"),      //meta double
                 entry("\u2200", "\uf8d3"),      //universal
                 entry("\u2203", "\uf8d4"),      //existential
+                entry("\u00d7", "\u00b7"),       //times
                 entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
