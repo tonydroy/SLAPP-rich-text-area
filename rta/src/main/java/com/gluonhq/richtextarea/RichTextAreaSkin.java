@@ -453,29 +453,15 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
                 return null;
             }),
 
-            /*
-            entry(new KeyCodeCombination(B, SHORTCUT_DOWN, ALT_DOWN, SHIFT_DOWN), e -> {
-                setModification(DOUBLE);
-                return null;
-            }),
-
-            entry(new KeyCodeCombination(N, SHORTCUT_DOWN, ALT_DOWN, SHIFT_DOWN), e -> {
-                setModification(CIRC);
-                return null;
-            }),
-
-            entry(new KeyCodeCombination(M, SHORTCUT_DOWN, ALT_DOWN, SHIFT_DOWN), e -> {
-                setModification(TIL);
-                return null;
-            }),
-
-             */
-
             entry(new KeyCodeCombination(KeyCode.B, SHORTCUT_DOWN, ALT_DOWN, SHIFT_DOWN), e -> {
                 setModification(SLASH);
                 return null;
             }),
 
+            entry(new KeyCodeCombination(KeyCode.ESCAPE), e -> {
+                setModification(NONE);
+                return null;
+            }),
 
 
             entry(new KeyCodeCombination(TAB, SHIFT_ANY), e -> {

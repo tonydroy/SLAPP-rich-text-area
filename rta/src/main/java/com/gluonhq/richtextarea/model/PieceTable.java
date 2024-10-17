@@ -698,7 +698,7 @@ class InsertCmd extends AbstractCommand<PieceTable> {
         }
 
         if (insertPosition < 0 || insertPosition > pt.getTextLength()) {
-            String message = "IllegalArgumentException (PieceTable 01).  From Copy/Paste of indented paragraph.  Please save your work and restart SLAPP.  You should not have lost any of your work.";
+            String message = "IllegalArgumentException (PieceTable 01).  Copy/Paste failure.  Please save your work and restart SLAPP.  You should not have lost any of your work.";
             Alerts.showSimpleAlert("RTA Error", message, RichTextArea.mainStage);
  //           System.out.println("insert pos: " + insertPosition + " pt.getTextLength " + pt.getTextLength());
  //           throw new IllegalArgumentException("Position is outside text bounds");

@@ -1892,6 +1892,7 @@ public class CharModMaps {
                 entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
+                entry("\ue8a6", "\u22ee"),        //big less than or equal
                 entry("\u2261", "\u2262"),      //triple bar
                 entry("\u2283", "\u2285"),      //horseshoe
                 entry("\u2282", "\u2284"),      //proper subset
@@ -1969,6 +1970,7 @@ public class CharModMaps {
                 entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
+                entry("\ue8a6", "\u22ee"),        //big less than or equal
                 entry("\u2261", "\u2262"),      //triple bar
                 entry("\u2283", "\u2285"),      //horseshoe
                 entry("\u2282", "\u2284"),      //proper subset
@@ -2045,6 +2047,7 @@ public class CharModMaps {
                 entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
+                entry("\ue8a6", "\u22ee"),        //big less than or equal
                 entry("\u2261", "\u2262"),      //triple bar
                 entry("\u2283", "\u2285"),      //horseshoe
                 entry("\u2282", "\u2284"),      //proper subset
@@ -2121,6 +2124,7 @@ public class CharModMaps {
                 entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
+                entry("\ue8a6", "\u22ee"),        //big less than or equal
                 entry("\u2261", "\u2262"),      //triple bar
                 entry("\u2283", "\u2285"),      //horseshoe
                 entry("\u2282", "\u2284"),      //proper subset
@@ -2198,6 +2202,7 @@ public class CharModMaps {
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
                 entry("\u2261", "\u2262"),      //triple bar
+                entry("\ue8a6", "\u22ee"),        //big less than or equal
                 entry("\u2283", "\u2285"),      //horseshoe
                 entry("\u2282", "\u2284"),      //proper subset
                 entry("\u2286", "\u2288"),      //subset
@@ -2273,6 +2278,7 @@ public class CharModMaps {
                 entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
+                entry("\ue8a6", "\u22ee"),        //big less than or equal
                 entry("\u2261", "\u2262"),      //triple bar
                 entry("\u2283", "\u2285"),      //horseshoe
                 entry("\u2282", "\u2284"),      //proper subset
@@ -2349,6 +2355,7 @@ public class CharModMaps {
                 entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
+                entry("\ue8a6", "\u22ee"),        //big less than or equal
                 entry("\u2261", "\u2262"),      //triple bar
                 entry("\u2283", "\u2285"),      //horseshoe
                 entry("\u2282", "\u2284"),      //proper subset
@@ -2424,6 +2431,7 @@ public class CharModMaps {
                 entry("\ue8ba", "\u2224"),      //big times
                 entry("\u2264", "\u2270"),      //less than or equal
                 entry("\u2265", "\u2271"),      //greater than or equal
+                entry("\ue8a6", "\u22ee"),        //big less than or equal
                 entry("\u2261", "\u2262"),      //triple bar
                 entry("\u2283", "\u2285"),      //horseshoe
                 entry("\u2282", "\u2284"),      //proper subset
