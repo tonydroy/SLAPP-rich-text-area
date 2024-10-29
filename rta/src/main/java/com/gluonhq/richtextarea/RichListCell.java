@@ -275,8 +275,7 @@ class RichListCell extends ListCell<Paragraph> {
                 decoration.getFontPosture(),
                 actualFontSize);
 
-        Font font = richTextAreaSkin.getFontCache().computeIfAbsent(hash,
-                h -> Font.font(
+        Font font = richTextAreaSkin.getFontCache().computeIfAbsent(hash, h -> Font.font(
                         decoration.getFontFamily(),
                         decoration.getFontWeight(),
                         decoration.getFontPosture(),

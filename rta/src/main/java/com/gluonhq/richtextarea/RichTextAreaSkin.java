@@ -434,27 +434,32 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
 
             //to set character modifications
             entry(new KeyCodeCombination(Z, SHORTCUT_DOWN, ALT_DOWN, SHIFT_DOWN), e -> {
-                setModification(OVERLINE);
+                if (getModification() != OVERLINE) setModification(OVERLINE);
+                else setModification(NONE);
                 return null;
             }),
 
             entry(new KeyCodeCombination(X, SHORTCUT_DOWN, ALT_DOWN, SHIFT_DOWN), e -> {
-                setModification(MAC);
+                if (getModification() != MAC) setModification(MAC);
+                else setModification(NONE);
                 return null;
             }),
 
             entry(new KeyCodeCombination(C, SHORTCUT_DOWN, ALT_DOWN, SHIFT_DOWN), e -> {
-                setModification(VEC);
+                if (getModification() != VEC) setModification(VEC);
+                else setModification(NONE);
                 return null;
             }),
 
             entry(new KeyCodeCombination(V, SHORTCUT_DOWN, ALT_DOWN, SHIFT_DOWN), e -> {
-                setModification(HAT);
+                if (getModification() != HAT) setModification(HAT);
+                else setModification(NONE);
                 return null;
             }),
 
             entry(new KeyCodeCombination(KeyCode.B, SHORTCUT_DOWN, ALT_DOWN, SHIFT_DOWN), e -> {
-                setModification(SLASH);
+                if (getModification() != SLASH) setModification(SLASH);
+                else setModification(NONE);
                 return null;
             }),
 
