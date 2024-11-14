@@ -2242,15 +2242,14 @@ public class RichTextAreaSkin extends SkinBase<RichTextArea> {
     }
 
     public enum KeyMapValue {
-        BASE("Base/Italic"),
-        BASE_AND_SCRIPT("Base/Script"),
-        BASE_AND_SANS("Base/Sans"),
-
-        ITALIC_AND_SANS("Italic/Sans"),
-        ITALIC_AND_BLACKBOARD("Italic/Blackboard"),
-        SCRIPT_AND_ITALIC("Script/Italic"),
-        SCRIPT_AND_SANS("Script/Sans"),
-        GREEK_AND_FRAKTUR("Greek/Fraktur");
+        BASE("Base/Italic (F1)"),
+        BASE_AND_SCRIPT("Base/Script (F2)"),
+        BASE_AND_SANS("Base/Sans (F3)"),
+        ITALIC_AND_SANS("Italic/Sans (F4)"),
+        ITALIC_AND_BLACKBOARD("Italic/Blackboard (F5)"),
+        SCRIPT_AND_ITALIC("Script/Italic (F6)"),
+        SCRIPT_AND_SANS("Script/Sans (F7)"),
+        GREEK_AND_FRAKTUR("Greek/Fraktur (F8)");
 
         private String name;
 
